@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:allscreens/src/components/gradient_box.dart';
+import 'package:allscreens/src/start/trip_info.dart';
+
+import 'budget_info.dart';
 
 class Start extends StatefulWidget {
   @override
@@ -10,15 +13,18 @@ class _StartState extends State<Start> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(14),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           GradientBox(
-            child: Container(
-              height: 200,
-              width: 200,
-              child: Text('Hej'),
-            ),
+            action: Icon(Icons.settings),
+            child: TripInfo(),
           ),
+          GradientBox(
+            child: BudgetInfo(),
+          ),
+          SizedBox(height: 330),
         ],
       ),
     );
