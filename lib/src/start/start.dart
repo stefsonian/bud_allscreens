@@ -18,13 +18,25 @@ class _StartState extends State<Start> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           GradientBox(
+            name: 'Trip',
             action: Icon(Icons.settings),
             child: TripInfo(),
           ),
           GradientBox(
+            name: 'Budget',
+            action: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  'AUD',
+                  textScaleFactor: 1.4,
+                ),
+                Icon(Icons.keyboard_arrow_down),
+              ],
+            ),
             child: BudgetInfo(),
           ),
-          SizedBox(height: 330),
+          SizedBox(height: 250),
         ],
       ),
     );

@@ -24,7 +24,7 @@ class _TripInfoState extends State<TripInfo> {
           children: <Widget>[
             Factoid(fact: "14 Aug '19", label: 'Start'),
             Factoid(fact: "27 Oct '19", label: 'End'),
-            Factoid(fact: '5', label: 'Day'),
+            Factoid(fact: '5', label: 'Day', center: true),
           ],
         ),
       ],
