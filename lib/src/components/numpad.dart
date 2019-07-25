@@ -4,6 +4,7 @@ import '../helpers/colors.dart';
 class Numpad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Container(
       child: Column(
         children: <Widget>[
@@ -15,7 +16,7 @@ class Numpad extends StatelessWidget {
               _NumpadButton(label: '9'),
             ],
           ),
-          SizedBox(height: 20),
+          SizedBox(height: screenHeight > 850 ? 18 : 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -24,7 +25,7 @@ class Numpad extends StatelessWidget {
               _NumpadButton(label: '6'),
             ],
           ),
-          SizedBox(height: 20),
+          SizedBox(height: screenHeight > 850 ? 18 : 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -33,7 +34,7 @@ class Numpad extends StatelessWidget {
               _NumpadButton(label: '3'),
             ],
           ),
-          SizedBox(height: 20),
+          SizedBox(height: screenHeight > 850 ? 18 : 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -42,6 +43,7 @@ class Numpad extends StatelessWidget {
               _NumpadButton(label: 'C'),
             ],
           ),
+          SizedBox(height: 2),
         ],
       ),
     );
@@ -53,9 +55,10 @@ class _NumpadButton extends StatelessWidget {
   final String label;
 
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: 66,
-      width: 66,
+      height: screenHeight > 850 ? 66 : 60,
+      width: screenHeight > 850 ? 66 : 60,
       child: FloatingActionButton(
         onPressed: () {},
         backgroundColor: col_background1,

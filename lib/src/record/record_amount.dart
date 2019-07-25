@@ -20,7 +20,7 @@ class _RecordAmountState extends State<RecordAmount> {
           children: <Widget>[
             Text(
               'AUD',
-              textScaleFactor: 1.4,
+              textScaleFactor: 1.3,
             ),
             Icon(Icons.keyboard_arrow_down),
           ],

@@ -16,6 +16,7 @@ class GradientBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -33,18 +34,20 @@ class GradientBox extends StatelessWidget {
           )
         ],
       ),
-      padding: EdgeInsets.fromLTRB(26, 12, 26, 26),
+      padding: screenHeight > 850
+          ? EdgeInsets.fromLTRB(24, 11, 24, 20)
+          : EdgeInsets.fromLTRB(18, 10, 18, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             children: <Widget>[
               Expanded(
-                flex: 2,
+                flex: 8,
                 child: name == null ? Container() : Text(name),
               ),
               Expanded(
-                flex: 1,
+                flex: 7,
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: action == null ? Container() : action,
@@ -52,7 +55,7 @@ class GradientBox extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 18),
+          SizedBox(height: screenHeight > 850 ? 18 : 12),
           child,
         ],
       ),
