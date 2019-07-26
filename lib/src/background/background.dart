@@ -18,9 +18,7 @@ class Background extends StatelessWidget {
       ),
       height: double.infinity,
       width: double.infinity,
-      child: SafeArea(
-        child: child,
-      ),
+      child: child,
     );
   }
 }

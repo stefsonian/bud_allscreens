@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:allscreens/src/background/background.dart';
 import 'package:allscreens/src/start/start.dart';
 
+import 'navigation/stack_index_home.dart';
+
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,8 +15,8 @@ class App extends StatelessWidget {
       ),
       home: Scaffold(
         body: Container(
-          color: Colors.white70,
-          child: Background(child: AddRecord()),
+          // color: Colors.white70,
+          child: Background(child: HomePage()),
         ),
       ),
     );
