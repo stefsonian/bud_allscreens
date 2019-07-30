@@ -5,33 +5,40 @@ import 'package:flutter/material.dart';
 import 'display_amount.dart';
 
 class RecordAmount extends StatefulWidget {
-  @override
+  const RecordAmount({this.showNumpad});
+  final bool showNumpad;
+
   _RecordAmountState createState() => _RecordAmountState();
 }
 
 class _RecordAmountState extends State<RecordAmount> {
-  @override
   Widget build(BuildContext context) {
     return Container(
-      child: GradientBox(
-        name: 'Amount',
-        action: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Text(
-              'AUD',
-              textScaleFactor: 1.3,
+      child: Column(
+        children: <Widget>[
+          DisplayAmount(),
+          // widget.showNumpad ? SizedBox(height: 26) : Container(),
+          AnimatedCrossFade(
+            // use AnimatedSwitcher instead
+            duration: Duration(milliseconds: 150),
+            firstChild: SizedBox(
+              height: 26,
             ),
-            Icon(Icons.keyboard_arrow_down),
-          ],
-        ),
-        child: Column(
-          children: <Widget>[
-            DisplayAmount(),
-            SizedBox(height: 26),
-            Numpad(),
-          ],
-        ),
+            secondChild: Container(),
+            crossFadeState: widget.showNumpad
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+          ),
+          AnimatedCrossFade(
+            duration: Duration(milliseconds: 100),
+            firstChild: Numpad(),
+            secondChild: Container(),
+            crossFadeState: widget.showNumpad
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+          ),
+          // widget.showNumpad ? Numpad() : Container(),
+        ],
       ),
     );
   }
