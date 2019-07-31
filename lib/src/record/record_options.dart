@@ -27,8 +27,8 @@ Widget _tallRecordOptions() {
               onPressed: () {},
               label: Text("Today"),
               icon: Icon(Icons.calendar_today),
-              color: col_background1,
-              textColor: col_box2,
+              color: col_purple,
+              textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
@@ -38,8 +38,8 @@ Widget _tallRecordOptions() {
               onPressed: () {},
               label: Text('AUD'),
               icon: Icon(Icons.donut_small),
-              color: col_background1,
-              textColor: col_box2,
+              color: col_purple,
+              textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
@@ -49,8 +49,8 @@ Widget _tallRecordOptions() {
               onPressed: () {},
               label: Text('Card'),
               icon: Icon(Icons.payment),
-              color: col_background1,
-              textColor: col_box2,
+              color: col_purple,
+              textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),

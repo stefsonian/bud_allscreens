@@ -1,5 +1,6 @@
 import 'package:allscreens/src/record/add_record.dart';
 import 'package:allscreens/src/record/record_categories.dart';
+import 'package:allscreens/src/record/record_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'destination.dart';
@@ -32,7 +33,7 @@ class _DestinationViewState extends State<DestinationView> {
         builder: (BuildContext context) {
           switch (settings.name) {
             case '/':
-              return AddRecord();
+              return RecordScreen();
             case '/categories':
               return RecordCategories();
             //   return RootPage(destination: widget.destination);

@@ -1,3 +1,4 @@
+import 'package:allscreens/src/components/gradient_box_simple.dart';
 import 'package:flutter/material.dart';
 import '../helpers/colors.dart';
 
@@ -11,18 +12,8 @@ class DisplayAmount extends StatefulWidget {
 }
 
 class _DisplayAmountState extends State<DisplayAmount> {
-  @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      height: screenHeight > 850 ? 62 : 58,
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: col_background1,
-        boxShadow: kElevationToShadow[3],
-      ),
+    return GradientBoxSimple(
       child: _DisplayAmount(amount: '77.30', prefix: '\$'),
     );
   }
@@ -41,9 +32,9 @@ class _DisplayAmount extends StatelessWidget {
           '$prefix$amount',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 26,
+            fontSize: 22,
             letterSpacing: 2.0,
-            color: col_box2,
+            color: col_purple,
           ),
         ),
       ],

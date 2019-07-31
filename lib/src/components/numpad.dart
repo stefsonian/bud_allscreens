@@ -6,6 +6,7 @@ class Numpad extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: <Widget>[
           Row(
@@ -61,8 +62,8 @@ class _NumpadButton extends StatelessWidget {
       width: screenHeight > 850 ? 66 : 60,
       child: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: col_background1,
-        foregroundColor: col_box2,
+        backgroundColor: Colors.white,
+        foregroundColor: col_purple,
         child: Text(label, textScaleFactor: 2),
       ),
     );
