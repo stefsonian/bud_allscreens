@@ -11,7 +11,7 @@ class _RecordOptionsState extends State<RecordOptions> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    print('Screen height: $screenHeight');
+    // print('Screen height: $screenHeight');
     return screenHeight > 850 ? _tallRecordOptions() : _tallRecordOptions();
   }
 }

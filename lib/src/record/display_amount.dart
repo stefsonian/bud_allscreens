@@ -7,7 +7,10 @@ import '../helpers/colors.dart';
 // const Color _kAmbientShadowOpacity = Color(0x1F000000); // alpha = 0.12
 
 class DisplayAmount extends StatefulWidget {
-  @override
+  const DisplayAmount({this.col1, this.col2});
+  final Color col1;
+  final Color col2;
+
   _DisplayAmountState createState() => _DisplayAmountState();
 }
 
