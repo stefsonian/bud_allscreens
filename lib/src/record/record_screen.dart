@@ -1,11 +1,17 @@
-import 'package:allscreens/src/components/Ikon_button.dart';
 import 'package:allscreens/src/components/gradient_box_simple.dart';
 import 'package:allscreens/src/components/numpad.dart';
+import 'package:allscreens/src/record/record_amount.dart';
+import 'package:allscreens/src/record/record_categories.dart';
 import 'package:allscreens/src/record/record_options.dart';
+import 'package:allscreens/src/record/record_other.dart';
+import 'package:allscreens/src/record/record_submit.dart';
+import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:provider/provider.dart';
 
 import 'display_amount.dart';
+import 'display_categories.dart';
 
 class RecordScreen extends StatefulWidget {
   @override
@@ -13,119 +19,122 @@ class RecordScreen extends StatefulWidget {
 }
 
 class _RecordScreenState extends State<RecordScreen> {
-  double screenHeight;
-  int activeWidget = 0;
-  List<Widget> widgets;
-  double bufferHeight;
+  RecordState recordState;
+  final inputWidgets = [
+    RecordAmount(),
+    RecordMainCategory(),
+    RecordSubCategory(),
+    // RecordOther(),
+    RecordSubmit(),
+    Container()
+  ];
 
   didChangeDependencies() {
     super.didChangeDependencies();
-    screenHeight = MediaQuery.of(context).size.height;
-    setBufferHeight();
-    widgets = [Numpad(), _mainCategoryOnly(), _subcategoryOnly()];
+    recordState = Provider.of<RecordState>(context);
   }
 
-  setBufferHeight() {
-    double newHeight = 16.0;
-    if (activeWidget == 0) {
-      newHeight = screenHeight < 830 ? 28.0 : 58.0;
-    }
-    setState(() => bufferHeight = newHeight);
-  }
-
-  switchWidget() {
-    if (activeWidget == widgets.length - 1) {
-      setState(() => activeWidget = 0);
-    } else {
-      setState(() => activeWidget++);
-    }
-    setBufferHeight();
-    print('Switching to widget $activeWidget');
+  tapNextButton() => recordState.isAmountRecorded = true;
+  tapAmountBox() => recordState.isAmountRecorded = false;
+  tapMainCat() => recordState.isMainCatRecorded = true;
+  tapSubCat() => recordState.isSubCatRecorded = true;
+  tapCategoriesBox() {
+    recordState.isMainCatRecorded = false;
+    recordState.isSubCatRecorded = false;
   }
 
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(8),
-        child: Column(
+        child: Stack(
           children: <Widget>[
-            FlatButton(
-              child: Text('Test'),
-              onPressed: () => switchWidget(),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                height: 70,
+                child: GradientBoxSimple(
+                  child: RecordOptions(),
+                ),
+              ),
             ),
-            _recordOptions(),
-            AnimatedContainer(
+            AnimatedPositioned(
               duration: Duration(milliseconds: 300),
-              height: bufferHeight,
+              top: recordState.isAmountRecorded ? 86 : 172,
+              left: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: tapAmountBox,
+                child: SizedBox(
+                  height: 70,
+                  child: DisplayAmount(),
+                ),
+              ),
             ),
-            _amount(),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
-                      return ScaleTransition(child: child, scale: animation);
-                    },
-                    child: widgets[activeWidget],
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 300),
+              top: recordState.isAmountRecorded ? 172 : 86,
+              left: 0,
+              right: 0,
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.linear,
+                opacity: recordState.isCategoriesRecorded ? 1 : 0,
+                child: GestureDetector(
+                  onTap: tapCategoriesBox,
+                  child: SizedBox(
+                    height: 70,
+                    child: DisplayCategories(
+                      label: 'Excursion',
+                      mainIcon: Icons.camera_alt,
+                      subIcon: Icons.landscape,
+                    ),
                   ),
-                  if (activeWidget == 0) _nextButton(),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 242,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        return ScaleTransition(child: child, scale: animation);
+                      },
+                      child: inputWidgets[recordState.recordStage],
+                    ),
+                  ),
+                  // if (!recordState.isAmountRecorded) _nextButton(),
                 ],
               ),
             ),
+            // Positioned(
+            //   bottom: 0,
+            //   left: 0,
+            //   right: 0,
+            //   child: FlatButton(
+            //     child: Text('Test: ${appState.isAmountRecorded.toString()}'),
+            //     onPressed: updateRecordStage,
+            //   ),
+            // ),
           ],
         ),
       ),
     );
   }
 
-  Widget _widgetShifter(List<Widget> widgets, int active) {
-    return AnimatedCrossFade(
-      duration: const Duration(milliseconds: 200),
-      firstChild: widgets[0],
-      secondChild: widgets[1],
-      crossFadeState:
-          active == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-    );
-  }
-
-  Widget _widgetSwitcher(Widget w) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return ScaleTransition(child: child, scale: animation);
-      },
-      child: w,
-    );
-  }
-
-  Widget _amount() {
-    return SizedBox(
-      height: 70,
-      child: DisplayAmount(),
-    );
-  }
-
-  Widget _buffer(double screenHeight) {
-    double boxHeight = 28.0;
-    if (screenHeight > 830) boxHeight = 84.0;
-    return SizedBox(height: boxHeight);
-  }
-
-  Widget _recordOptions() {
-    return SizedBox(
-      height: 70,
-      child: GradientBoxSimple(
-        child: RecordOptions(),
-      ),
-    );
-  }
-
   Widget _nextButton() {
     return SizedBox(
-      width: 150,
+      width: 180,
       child: FloatingActionButton.extended(
         label: Text(
           'Next',
@@ -133,151 +142,7 @@ class _RecordScreenState extends State<RecordScreen> {
         ),
         backgroundColor: Colors.yellow,
         foregroundColor: col_purple,
-        onPressed: () {},
-      ),
-    );
-  }
-
-  Widget _mainCategoryOnly() {
-    return Center(
-      key: Key('mainCat'),
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Choose a category',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                wordSpacing: 2,
-                letterSpacing: 2,
-              ),
-            ),
-            SizedBox(height: 60),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                IkonButton(
-                  icon: Icons.restaurant,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.hotel,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.train,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-              ],
-            ),
-            SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                IkonButton(
-                  icon: Icons.camera_alt,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.scatter_plot,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _subcategoryOnly() {
-    return Center(
-      key: Key('subCats'),
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Choose a sub-category',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                wordSpacing: 2,
-                letterSpacing: 2,
-              ),
-            ),
-            SizedBox(height: 60),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                IkonButton(
-                  icon: Icons.train,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.tram,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.directions_bus,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                IkonButton(
-                  icon: Icons.directions_subway,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.flight,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.directions_boat,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                IkonButton(
-                  icon: Icons.directions_car,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.directions_bike,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-                IkonButton(
-                  icon: Icons.directions_run,
-                  color: col_purple,
-                  backColor: Colors.white,
-                ),
-              ],
-            ),
-          ],
-        ),
+        onPressed: tapNextButton,
       ),
     );
   }

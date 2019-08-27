@@ -28,16 +28,32 @@ class _DisplayAmount extends StatelessWidget {
   final String prefix;
 
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      // mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Text(
-          '$prefix$amount',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            letterSpacing: 2.0,
+        Positioned(
+          left: 0,
+          child: RaisedButton(
+            onPressed: () {},
+            child: Text('AUD'),
+            // icon: Icon(Icons.donut_small),
             color: col_purple,
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            elevation: 4,
+          ),
+        ),
+        Center(
+          child: Text(
+            '$prefix$amount',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              letterSpacing: 2.0,
+              color: col_purple,
+            ),
           ),
         ),
       ],

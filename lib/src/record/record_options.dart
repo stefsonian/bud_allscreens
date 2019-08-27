@@ -36,8 +36,8 @@ Widget _tallRecordOptions() {
             ),
             RaisedButton.icon(
               onPressed: () {},
-              label: Text('AUD'),
-              icon: Icon(Icons.donut_small),
+              label: Text('Card'),
+              icon: Icon(Icons.payment),
               color: col_purple,
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -47,8 +47,8 @@ Widget _tallRecordOptions() {
             ),
             RaisedButton.icon(
               onPressed: () {},
-              label: Text('Card'),
-              icon: Icon(Icons.payment),
+              label: Text('Options'),
+              icon: Icon(Icons.menu),
               color: col_purple,
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
