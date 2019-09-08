@@ -1,4 +1,5 @@
 import 'package:allscreens/src/record/record_screen.dart';
+import 'package:allscreens/src/start/start.dart';
 import 'package:flutter/material.dart';
 
 import 'destination.dart';
@@ -31,7 +32,8 @@ class _DestinationViewState extends State<DestinationView> {
         builder: (BuildContext context) {
           switch (settings.name) {
             case '/':
-              return RecordScreen();
+              // return RecordScreen();
+              return Start();
             //   return RootPage(destination: widget.destination);
             // case '/list':
             //   return ListPage(destination: widget.destination);
