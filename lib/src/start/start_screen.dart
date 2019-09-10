@@ -1,6 +1,8 @@
+import 'package:allscreens/src/services/home_state.dart';
 import 'package:flutter/material.dart';
 import 'package:allscreens/src/components/gradient_box.dart';
 import 'package:allscreens/src/start/trip_info.dart';
+import 'package:provider/provider.dart';
 
 import 'budget_info.dart';
 import 'budget_today.dart';
@@ -11,13 +13,20 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
+  HomeState homeState;
+
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    homeState = Provider.of<HomeState>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(14),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             GradientBox(
               name: 'Trip',
@@ -38,7 +47,6 @@ class _StartState extends State<Start> {
               ),
               child: BudgetToday(),
             ),
-            SizedBox(height: 250),
           ],
         ),
       ),

@@ -1,4 +1,10 @@
+import 'package:allscreens/src/components/bar_indicator.dart';
+import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/services/home_state.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:provider/provider.dart';
+import 'dart:math';
 
 const List<IconData> icons = [
   Icons.restaurant,
@@ -9,53 +15,38 @@ const List<IconData> icons = [
 ];
 const List<String> amounts = ['\$33', '\$76', '\$7', '\$25', '\$4'];
 
-class BudgetToday extends StatelessWidget {
+class BudgetToday extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 200,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Icon(Icons.donut_large),
-            ),
-          ),
-          SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              ...[0, 1, 2, 3, 4]
-                  .map((i) => BudgetIcon(icon: icons[i], amount: amounts[i]))
-                  .toList(),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  _BudgetTodayState createState() => _BudgetTodayState();
 }
 
-class BudgetIcon extends StatelessWidget {
-  const BudgetIcon({Key key, this.icon, this.amount}) : super(key: key);
-  final IconData icon;
-  final String amount;
+class _BudgetTodayState extends State<BudgetToday> {
+  HomeState homeState;
+
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    homeState = Provider.of<HomeState>(context);
+  }
+
+  double get barWidth {
+    if (homeState.dayBudget <= 0.0) return 1.0; // handle zero-division
+    return min(homeState.daySpend / homeState.dayBudget, 1.0);
+  }
+
+  testSetDaySpend() {
+    double r = max(Random().nextDouble() * homeState.dayBudget, 20);
+    homeState.daySpend = r; // for testing only
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          height: 30,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Icon(icon),
-          ),
-        ),
-        SizedBox(height: 8),
-        Text(amount, textScaleFactor: 0.8),
-      ],
+    return GestureDetector(
+      onTap: testSetDaySpend,
+      child: BarIndicator(
+        fillRatio: barWidth,
+        color: col_purple,
+        height: 40,
+      ),
     );
   }
 }
