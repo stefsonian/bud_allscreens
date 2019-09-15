@@ -9,7 +9,7 @@ class Destination {
 
 const List<Destination> allDestinations = <Destination>[
   Destination('Home', Icons.home, Colors.teal),
-  Destination('Business', Icons.business, Colors.cyan),
-  Destination('School', Icons.school, Colors.orange),
-  Destination('Flight', Icons.flight, Colors.blue)
+  Destination('Expense', Icons.add, Colors.cyan),
+  Destination('Stats', Icons.show_chart, Colors.orange),
+  Destination('Settings', Icons.settings, Colors.blue)
 ];

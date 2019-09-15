@@ -1,3 +1,4 @@
+import 'package:allscreens/src/navigation/bottom_nav.dart';
 import 'package:allscreens/src/services/home_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,6 @@ import 'package:allscreens/src/record/add_record.dart';
 import 'package:allscreens/src/background/background.dart';
 import 'package:allscreens/src/start/start_screen.dart';
 import 'package:allscreens/src/services/app_state.dart';
-
-import 'navigation/stack_index_home.dart';
 
 class App extends StatelessWidget {
   final appState = AppState();
@@ -35,7 +34,7 @@ class App extends StatelessWidget {
         home: Scaffold(
           body: Container(
             // color: Colors.white70,
-            child: Background(child: HomePage()),
+            child: Background(child: BottomNav()),
           ),
         ),
       ),

@@ -7,21 +7,12 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
 import 'dart:math';
 
-const List<IconData> icons = [
-  Icons.restaurant,
-  Icons.hotel,
-  Icons.train,
-  Icons.camera_alt,
-  Icons.scatter_plot
-];
-const List<String> amounts = ['\$33', '\$76', '\$7', '\$25', '\$4'];
-
-class BudgetToday extends StatefulWidget {
+class BudgetSeven extends StatefulWidget {
   @override
-  _BudgetTodayState createState() => _BudgetTodayState();
+  _BudgetSevenState createState() => _BudgetSevenState();
 }
 
-class _BudgetTodayState extends State<BudgetToday> {
+class _BudgetSevenState extends State<BudgetSeven> {
   HomeState homeState;
 
   didChangeDependencies() {
@@ -56,19 +47,19 @@ class _BudgetTodayState extends State<BudgetToday> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             InfoBubble(
-              text: 'Spend: \$77',
+              text: 'Spend: \$689',
               backcolor: col_purple,
               textcolor: Colors.white,
               width: 150.0,
             ),
             InfoBubble(
-              text: 'Budget: \$100',
+              text: 'Budget: \$700',
               backcolor: col_purple.withOpacity(0.4),
               textcolor: Colors.white,
               width: 150.0,
             ),
           ],
-        )
+        ),
       ],
     );
   }

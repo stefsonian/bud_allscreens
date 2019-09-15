@@ -131,19 +131,4 @@ class _RecordScreenState extends State<RecordScreen> {
       ),
     );
   }
-
-  Widget _nextButton() {
-    return SizedBox(
-      width: 180,
-      child: FloatingActionButton.extended(
-        label: Text(
-          'Next',
-          textScaleFactor: 1.5,
-        ),
-        backgroundColor: Colors.yellow,
-        foregroundColor: col_purple,
-        onPressed: tapNextButton,
-      ),
-    );
-  }
 }
