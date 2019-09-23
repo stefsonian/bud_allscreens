@@ -13,7 +13,7 @@ class Background extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           stops: [0, 1],
-          colors: [col_background1, col_background2],
+          colors: [col_aqua_lighter.withOpacity(0.5), col_aqua_lighter],
         ),
       ),
       height: double.infinity,

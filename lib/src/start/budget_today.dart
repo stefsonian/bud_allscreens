@@ -56,13 +56,13 @@ class _BudgetTodayState extends State<BudgetToday> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             InfoBubble(
-              text: 'Spend: \$77',
+              text1: 'Spend: \$77',
               backcolor: col_purple,
               textcolor: Colors.white,
               width: 150.0,
             ),
             InfoBubble(
-              text: 'Budget: \$100',
+              text1: 'Budget: \$100',
               backcolor: col_purple.withOpacity(0.4),
               textcolor: Colors.white,
               width: 150.0,

@@ -1,3 +1,4 @@
+import 'package:allscreens/src/front/front_screen.dart';
 import 'package:allscreens/src/start/start_screen.dart';
 import 'package:allscreens/src/trip/edit_participants_screen.dart';
 import 'package:allscreens/src/trip/edit_trip_screen.dart';
@@ -13,7 +14,7 @@ class StartNav extends StatelessWidget {
           builder: (BuildContext context) {
             switch (settings.name) {
               case '/':
-                return Start();
+                return FrontScreen();
                 break;
               case 'edit trip':
                 return EditTripScreen();

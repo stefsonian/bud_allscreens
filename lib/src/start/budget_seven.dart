@@ -47,13 +47,13 @@ class _BudgetSevenState extends State<BudgetSeven> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             InfoBubble(
-              text: 'Spend: \$689',
+              text1: 'Spend: \$689',
               backcolor: col_purple,
               textcolor: Colors.white,
               width: 150.0,
             ),
             InfoBubble(
-              text: 'Budget: \$700',
+              text1: 'Budget: \$700',
               backcolor: col_purple.withOpacity(0.4),
               textcolor: Colors.white,
               width: 150.0,

@@ -1,81 +1,26 @@
+import 'package:animator/animator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/animation.dart';
 
-class AnimatedSpacer extends StatefulWidget {
-  const AnimatedSpacer({Key key, this.expanded, this.max, this.min})
+class AnimatedSpacer extends StatelessWidget {
+  const AnimatedSpacer(
+      {Key key,
+      this.begin,
+      this.end,
+      this.ms = 500,
+      this.curve = Curves.linear})
       : super(key: key);
-  final bool expanded;
-  final int max;
-  final int min;
-
-  _AnimatedSpacerState createState() => _AnimatedSpacerState();
-}
-
-class _AnimatedSpacerState extends State<AnimatedSpacer>
-    with SingleTickerProviderStateMixin {
-  Animation animation;
-  AnimationController animationController;
-  var expandedStatus;
-  var forwardNext = true;
-  int begin;
-  int end;
-
-  void initState() {
-    super.initState();
-    animationController =
-        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
-
-    CurvedAnimation curve =
-        CurvedAnimation(parent: animationController, curve: Curves.easeOut);
-
-    animation = IntTween(begin: 1, end: 1000).animate(curve);
-    animationController.forward();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    expandedStatus = widget.expanded;
-    begin = expandedStatus ? widget.max : widget.min;
-    end = expandedStatus ? widget.min : widget.max;
-  }
-
-  updateController() {
-    if (forwardNext) {
-      setState(() {
-        // controller = 'Forward: I was ${expandedStatus.toString()}';
-        animationController.forward();
-        forwardNext = false;
-      });
-    } else if (!forwardNext) {
-      setState(() {
-        // controller = 'Reverse: I was ${expandedStatus.toString()}';
-        animationController.reverse();
-        forwardNext = true;
-      });
-    }
-    expandedStatus = !expandedStatus;
-  }
+  final int begin;
+  final int end;
+  final int ms; // milliseconds
+  final Curve curve;
 
   Widget build(BuildContext context) {
-    if (expandedStatus != widget.expanded) updateController();
-    return AnimatedEntity(
-      animation: animation,
+    return Animator<int>(
+      duration: Duration(milliseconds: ms),
+      tween: IntTween(begin: begin, end: end),
+      cycles: 1,
+      builder: (anim) => Spacer(flex: anim.value),
+      triggerOnInit: true,
     );
-  }
-
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
-}
-
-class AnimatedEntity extends AnimatedWidget {
-  AnimatedEntity({Key key, Animation animation})
-      : super(key: key, listenable: animation);
-
-  Widget build(BuildContext context) {
-    Animation animation = listenable;
-    return Spacer(flex: animation.value);
   }
 }
