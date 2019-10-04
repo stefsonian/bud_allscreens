@@ -1,3 +1,4 @@
+import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/components/gradient_box_simple.dart';
 import 'package:flutter/material.dart';
 import '../helpers/colors.dart';
@@ -16,7 +17,7 @@ class DisplayAmount extends StatefulWidget {
 
 class _DisplayAmountState extends State<DisplayAmount> {
   Widget build(BuildContext context) {
-    return GradientBoxSimple(
+    return ContentBox(
       child: _DisplayAmount(amount: '77.30', prefix: '\$'),
     );
   }
@@ -37,7 +38,7 @@ class _DisplayAmount extends StatelessWidget {
             onPressed: () {},
             child: Text('AUD'),
             // icon: Icon(Icons.donut_small),
-            color: col_purple,
+            color: col_aqua,
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
@@ -52,7 +53,7 @@ class _DisplayAmount extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 22,
               letterSpacing: 2.0,
-              color: col_purple,
+              color: col_aqua,
             ),
           ),
         ),

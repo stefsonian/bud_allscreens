@@ -4,6 +4,9 @@ import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+const Color col_content = col_aqua;
+const Color col_back = Colors.white;
+
 class RecordMainCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     final RecordState recordState = Provider.of<RecordState>(context);
@@ -21,18 +24,18 @@ class RecordMainCategory extends StatelessWidget {
                 children: <Widget>[
                   IkonButton(
                     icon: Icons.restaurant,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.hotel,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.train,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                 ],
               ),
@@ -42,13 +45,13 @@ class RecordMainCategory extends StatelessWidget {
                 children: <Widget>[
                   IkonButton(
                     icon: Icons.camera_alt,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.scatter_plot,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                 ],
               ),
@@ -56,7 +59,7 @@ class RecordMainCategory extends StatelessWidget {
               Text(
                 'Choose a category',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: col_content,
                   fontSize: 20,
                   wordSpacing: 2,
                   letterSpacing: 2,
@@ -86,18 +89,18 @@ class RecordSubCategory extends StatelessWidget {
                 children: <Widget>[
                   IkonButton(
                     icon: Icons.train,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.tram,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.directions_bus,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                 ],
               ),
@@ -107,18 +110,18 @@ class RecordSubCategory extends StatelessWidget {
                 children: <Widget>[
                   IkonButton(
                     icon: Icons.directions_subway,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.flight,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.directions_boat,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                 ],
               ),
@@ -128,18 +131,18 @@ class RecordSubCategory extends StatelessWidget {
                 children: <Widget>[
                   IkonButton(
                     icon: Icons.directions_car,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.directions_bike,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                   IkonButton(
                     icon: Icons.directions_run,
-                    color: col_purple,
-                    backColor: Colors.white,
+                    color: col_content,
+                    backColor: col_back,
                   ),
                 ],
               ),
@@ -147,7 +150,7 @@ class RecordSubCategory extends StatelessWidget {
               Text(
                 'Choose a sub-category',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: col_content,
                   fontSize: 20,
                   wordSpacing: 2,
                   letterSpacing: 2,

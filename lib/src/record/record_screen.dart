@@ -1,3 +1,4 @@
+import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/components/gradient_box_simple.dart';
 import 'package:allscreens/src/components/numpad.dart';
 import 'package:allscreens/src/record/record_amount.dart';
@@ -20,12 +21,14 @@ class RecordScreen extends StatefulWidget {
 
 class _RecordScreenState extends State<RecordScreen> {
   RecordState recordState;
+
   final inputWidgets = [
     RecordAmount(),
     RecordMainCategory(),
     RecordSubCategory(),
     // RecordOther(),
     RecordSubmit(),
+    // Container(),
     Container()
   ];
 
@@ -46,7 +49,7 @@ class _RecordScreenState extends State<RecordScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.fromLTRB(15, 22, 15, 15),
         child: Stack(
           children: <Widget>[
             Positioned(
@@ -54,28 +57,31 @@ class _RecordScreenState extends State<RecordScreen> {
               left: 0,
               right: 0,
               child: SizedBox(
-                height: 70,
-                child: GradientBoxSimple(
+                height: 76,
+                child: ContentBox(
                   child: RecordOptions(),
                 ),
               ),
             ),
             AnimatedPositioned(
               duration: Duration(milliseconds: 300),
-              top: recordState.isAmountRecorded ? 86 : 172,
+              top: (recordState.isCategoriesRecorded &&
+                      !recordState.isAmountRecorded)
+                  ? 200
+                  : 100,
               left: 0,
               right: 0,
               child: GestureDetector(
                 onTap: tapAmountBox,
                 child: SizedBox(
-                  height: 70,
+                  height: 76,
                   child: DisplayAmount(),
                 ),
               ),
             ),
             AnimatedPositioned(
               duration: Duration(milliseconds: 300),
-              top: recordState.isAmountRecorded ? 172 : 86,
+              top: recordState.recordStage == 3 ? 200 : 100,
               left: 0,
               right: 0,
               child: AnimatedOpacity(
@@ -85,7 +91,7 @@ class _RecordScreenState extends State<RecordScreen> {
                 child: GestureDetector(
                   onTap: tapCategoriesBox,
                   child: SizedBox(
-                    height: 70,
+                    height: 76,
                     child: DisplayCategories(
                       label: 'Excursion',
                       mainIcon: Icons.camera_alt,
@@ -96,7 +102,7 @@ class _RecordScreenState extends State<RecordScreen> {
               ),
             ),
             Positioned(
-              top: 242,
+              top: recordState.isCategoriesRecorded ? 300 : 200,
               left: 0,
               right: 0,
               bottom: 0,
@@ -132,3 +138,9 @@ class _RecordScreenState extends State<RecordScreen> {
     );
   }
 }
+
+final BoxDecoration _boxDecor = BoxDecoration(
+  color: Colors.white,
+  borderRadius: BorderRadius.circular(25),
+  boxShadow: kElevationToShadow[1],
+);

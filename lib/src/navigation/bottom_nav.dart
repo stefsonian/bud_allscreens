@@ -1,3 +1,4 @@
+import 'package:allscreens/src/expenses/expenses_screen.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/navigation/start_nav.dart';
 import 'package:allscreens/src/record/record_screen.dart';
@@ -28,11 +29,14 @@ class _BottomNavState extends State<BottomNav>
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: col_orange,
-        child: Icon(Icons.add),
-        onPressed: () => appState.activeTabIndex = 2,
-      ),
+      floatingActionButton: appState.activeTabIndex == 2
+          ? null
+          : FloatingActionButton(
+              backgroundColor:
+                  appState.activeTabIndex == 2 ? col_aqua : col_orange,
+              child: Icon(Icons.add),
+              onPressed: () => appState.activeTabIndex = 2,
+            ),
       body: SafeArea(
         top: false,
         child: IndexedStack(
@@ -40,7 +44,13 @@ class _BottomNavState extends State<BottomNav>
           // children: allDestinations.map<Widget>((Destination destination) {
           //   return DestinationView(destination: destination);
           // }).toList(),
-          children: [StartNav(), StartNav(), RecordScreen(), Start(), Start()],
+          children: [
+            StartNav(),
+            ExpensesScreen(),
+            RecordScreen(),
+            Start(),
+            Start()
+          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(

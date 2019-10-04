@@ -1,3 +1,4 @@
+import 'package:allscreens/src/front/front_averages.dart';
 import 'package:allscreens/src/front/front_stats.dart';
 import 'package:allscreens/src/front/front_trip.dart';
 import 'package:allscreens/src/helpers/colors.dart';
@@ -13,16 +14,18 @@ class _FrontScreenState extends State<FrontScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.fromLTRB(12, 20, 12, 10),
+        padding: EdgeInsets.fromLTRB(8, 14, 8, 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             FrontTrip(),
-            SizedBox(height: 36),
+            SizedBox(height: 14),
             Expanded(child: FrontStats()),
+            SizedBox(height: 14),
+            FrontAverages(),
             // SizedBox(height: 50),
             // _addExpenseButton(),
-            SizedBox(height: 36),
+            SizedBox(height: 30),
           ],
         ),
       ),

@@ -40,11 +40,12 @@ class _FrontStatsState extends State<FrontStats> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.all(14),
       // height: 300,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: kElevationToShadow[1],
       ),
       child: Column(
         children: <Widget>[
@@ -82,3 +83,17 @@ class _FrontStatsState extends State<FrontStats> {
     );
   }
 }
+
+const Color col1 = Color(0xFF56ab2f);
+const Color col2 = Color(0xFFa8e063);
+
+final BoxDecoration _boxDecor = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    stops: [0, 1],
+    colors: [col1.withOpacity(0.8), col2],
+  ),
+  borderRadius: BorderRadius.circular(16),
+  // boxShadow: kElevationToShadow[1],
+);

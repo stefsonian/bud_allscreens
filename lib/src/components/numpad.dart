@@ -63,7 +63,7 @@ class _NumpadButton extends StatelessWidget {
       child: FloatingActionButton(
         onPressed: () {},
         backgroundColor: Colors.white,
-        foregroundColor: col_purple,
+        foregroundColor: col_aqua,
         child: Text(label, textScaleFactor: 2),
       ),
     );

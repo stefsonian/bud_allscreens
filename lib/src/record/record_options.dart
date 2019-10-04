@@ -27,7 +27,7 @@ Widget _tallRecordOptions() {
               onPressed: () {},
               label: Text("Today"),
               icon: Icon(Icons.calendar_today),
-              color: col_purple,
+              color: col_aqua,
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
@@ -38,7 +38,7 @@ Widget _tallRecordOptions() {
               onPressed: () {},
               label: Text('Card'),
               icon: Icon(Icons.payment),
-              color: col_purple,
+              color: col_aqua,
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
@@ -49,7 +49,7 @@ Widget _tallRecordOptions() {
               onPressed: () {},
               label: Text('Options'),
               icon: Icon(Icons.menu),
-              color: col_purple,
+              color: col_aqua,
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),

@@ -16,7 +16,9 @@ class _FrontTripState extends State<FrontTrip> {
       padding: EdgeInsets.fromLTRB(12, 6, 12, 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
+        // border: Border.all(color: Colors.black87),
+        boxShadow: kElevationToShadow[1],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,19 +28,19 @@ class _FrontTripState extends State<FrontTrip> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Text('Trip'),
+                  // Text('Trip'),
+                  // SizedBox(width: 10),
+                  Text(
+                    'Queensland',
+                    textScaleFactor: 2,
+                  ),
                 ],
               ),
               TripOptionsPopup(),
             ],
           ),
-          SizedBox(height: 6),
-          Text(
-            'Queensland',
-            textScaleFactor: 2,
-          ),
           SizedBox(
-            height: 24,
+            height: 18,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,3 +73,17 @@ class _FrontTripState extends State<FrontTrip> {
     );
   }
 }
+
+const Color col1 = Color(0xFF56ab2f);
+const Color col2 = Color(0xFFa8e063);
+
+final BoxDecoration _boxDecor = BoxDecoration(
+  // gradient: LinearGradient(
+  //   begin: Alignment.topLeft,
+  //   end: Alignment.bottomRight,
+  //   stops: [0, 1],
+  //   colors: [col1.withOpacity(0.8), col2],
+  // ),
+  borderRadius: BorderRadius.circular(16),
+  // boxShadow: kElevationToShadow[1],
+);

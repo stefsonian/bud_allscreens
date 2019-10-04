@@ -20,28 +20,42 @@ class _RecordAmountState extends State<RecordAmount> {
     RecordState recordState = Provider.of<RecordState>(context);
     return Container(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Numpad(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              SizedBox(
-                width: 250,
-                child: FloatingActionButton.extended(
-                  label: Text(
-                    'Next',
-                    textScaleFactor: 1.4,
-                  ),
-                  icon: Icon(Icons.keyboard_arrow_right),
-                  backgroundColor: Colors.yellow,
-                  foregroundColor: col_purple,
-                  onPressed: () => recordState.isAmountRecorded = true,
-                ),
-              ),
+              RoundButton(icon: Icons.arrow_right),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class RoundButton extends StatelessWidget {
+  const RoundButton({Key key, this.icon}) : super(key: key);
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    RecordState recordState = Provider.of<RecordState>(context);
+    return SizedBox(
+      width: 80,
+      child: FittedBox(
+        child: FloatingActionButton(
+          child: SizedBox(
+            height: 50,
+            child: FittedBox(
+              child: Icon(Icons.arrow_right),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          foregroundColor: col_aqua,
+          onPressed: () => recordState.isAmountRecorded = true,
+        ),
       ),
     );
   }

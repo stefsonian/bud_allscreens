@@ -1,4 +1,5 @@
 import 'package:allscreens/src/navigation/bottom_nav.dart';
+import 'package:allscreens/src/services/expense_list_state.dart';
 import 'package:allscreens/src/services/home_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +29,12 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<HomeState>.value(
           value: HomeState(),
         ),
+        ChangeNotifierProvider<ExpenseListState>.value(
+          value: ExpenseListState(),
+        ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
