@@ -12,25 +12,158 @@ class FrontScreen extends StatefulWidget {
 class _FrontScreenState extends State<FrontScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.fromLTRB(8, 14, 8, 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            FrontTrip(),
-            SizedBox(height: 14),
-            Expanded(child: FrontStats()),
-            SizedBox(height: 14),
-            FrontAverages(),
-            // SizedBox(height: 50),
-            // _addExpenseButton(),
-            SizedBox(height: 30),
-          ],
-        ),
+    return Container(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.person),
+                tooltip: 'To top',
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(Icons.settings),
+                tooltip: 'Sort',
+                onPressed: () {},
+              ),
+            ],
+            floating: true,
+            snap: true,
+            backgroundColor: col_aqua,
+            expandedHeight: 100.0,
+            flexibleSpace: FlexibleSpaceBar(
+              background: _tripInfo(),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate.fixed(
+              <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FrontStats(),
+                ),
+                // SizedBox(height: 14),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FrontAverages(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FrontAverages(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FrontAverages(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FrontAverages(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FrontAverages(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FrontAverages(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FrontAverages(),
+                ),
+              ],
+            ),
+
+            // SliverChildBuilderDelegate(
+            //   (BuildContext context, int index) {
+            //     final Color color =
+            //         index.isEven ? Colors.pink : Colors.yellowAccent;
+            //     return Container(
+            //       height: 100,
+            //       color: color,
+            //     );
+            //   },
+            //   childCount: 30,
+            // ),
+          ),
+        ],
       ),
     );
   }
+
+  Widget _tripInfo() {
+    var tripText = 'Queensland';
+    return Container(
+      padding: EdgeInsets.only(left: 8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 4,
+                child: Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: Text(
+                        tripText,
+                        style: TextStyle(
+                          fontSize: tripText.length < 19 ? 22 : 18,
+                          letterSpacing: 1.1,
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      color: Colors.white,
+                      tooltip: 'Edit trip',
+                      // padding: EdgeInsets.fromLTRB(8, 16, 8, 0),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
+              Spacer(flex: 1),
+            ],
+          ),
+          // SizedBox(height: 2),
+          Text(
+            '3 Aug - 25 Sep  •  day 16',
+            style: TextStyle(
+              fontSize: 12,
+              letterSpacing: 1.1,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget build(BuildContext context) {
+  //   return SafeArea(
+  //     child: Container(
+  //       padding: EdgeInsets.fromLTRB(8, 14, 8, 10),
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //         children: <Widget>[
+  //           FrontTrip(),
+  //           SizedBox(height: 14),
+  //           Expanded(child: FrontStats()),
+  //           SizedBox(height: 14),
+  //           FrontAverages(),
+  //           // SizedBox(height: 50),
+  //           // _addExpenseButton(),
+  //           SizedBox(height: 30),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Widget _addExpenseButton() {
   //   return SizedBox(

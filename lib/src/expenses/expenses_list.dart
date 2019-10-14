@@ -3,20 +3,6 @@ import 'package:allscreens/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-const colList = [
-  Colors.blueGrey,
-  Colors.cyanAccent,
-  Colors.deepPurpleAccent,
-  Colors.greenAccent,
-  Colors.lightBlueAccent,
-  Colors.orangeAccent,
-  Colors.black,
-  Colors.pink,
-  Colors.teal
-];
-
-// MAKE AS INDEXED STACK ALONG WITH DAY VIEW
-
 class ExpensesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

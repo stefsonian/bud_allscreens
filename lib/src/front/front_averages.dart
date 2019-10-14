@@ -35,7 +35,7 @@ class FrontAverages extends StatelessWidget {
               FactoidCircle(
                 fact: '588',
                 label: 'week',
-                backColor: col_orange,
+                backColor: col_aqua_light,
               ),
               FactoidCircle(
                 fact: '1773',

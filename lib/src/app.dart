@@ -40,6 +40,7 @@ class App extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(
+          extendBody: true,
           body: Container(
             // color: Colors.white70,
             child: Background(child: BottomNav()),

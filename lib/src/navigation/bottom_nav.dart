@@ -1,9 +1,11 @@
+import 'package:allscreens/src/day/day_screen.dart';
 import 'package:allscreens/src/expenses/expenses_screen.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/navigation/start_nav.dart';
 import 'package:allscreens/src/record/record_screen.dart';
 import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/start/start_screen.dart';
+import 'package:allscreens/src/stats/stats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +29,7 @@ class _BottomNavState extends State<BottomNav>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: appState.activeTabIndex == 2
@@ -37,23 +40,21 @@ class _BottomNavState extends State<BottomNav>
               child: Icon(Icons.add),
               onPressed: () => appState.activeTabIndex = 2,
             ),
-      body: SafeArea(
-        top: false,
-        child: IndexedStack(
-          index: appState.activeTabIndex,
-          // children: allDestinations.map<Widget>((Destination destination) {
-          //   return DestinationView(destination: destination);
-          // }).toList(),
-          children: [
-            StartNav(),
-            ExpensesScreen(),
-            RecordScreen(),
-            Start(),
-            Start()
-          ],
-        ),
+      body: IndexedStack(
+        index: appState.activeTabIndex,
+        // children: allDestinations.map<Widget>((Destination destination) {
+        //   return DestinationView(destination: destination);
+        // }).toList(),
+        children: [
+          StartNav(),
+          ExpensesScreen(),
+          RecordScreen(),
+          DayScreen(),
+          StatsScreen(),
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
+        // notchMargin: 20,
         color: col_aqua,
         elevation: 0,
         shape: CircularNotchedRectangle(),
@@ -86,7 +87,7 @@ class _BottomNavState extends State<BottomNav>
                 color: appState.activeTabIndex == 3
                     ? Colors.white
                     : Colors.white70,
-                icon: Icon(Icons.show_chart),
+                icon: Icon(Icons.today),
                 iconSize: 30,
                 onPressed: () => appState.activeTabIndex = 3,
               ),
@@ -95,7 +96,7 @@ class _BottomNavState extends State<BottomNav>
                 color: appState.activeTabIndex == 4
                     ? Colors.white
                     : Colors.white70,
-                icon: Icon(Icons.settings),
+                icon: Icon(Icons.show_chart),
                 iconSize: 30,
                 onPressed: () => appState.activeTabIndex = 4,
               ),

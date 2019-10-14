@@ -20,6 +20,8 @@ class _FrontTripState extends State<FrontTrip> {
         // border: Border.all(color: Colors.black87),
         boxShadow: kElevationToShadow[1],
       ),
+      // color: Colors.white,
+      // height: 300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

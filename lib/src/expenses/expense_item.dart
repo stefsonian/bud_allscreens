@@ -1,6 +1,5 @@
 import 'package:allscreens/src/components/Ikon_button.dart';
 import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/components/info_bubble.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -42,11 +41,11 @@ class ExpenseItem extends StatelessWidget {
                     letterSpacing: 1.1,
                   ),
                 ),
-                LayoutBuilder(builder: (context, constraints) {
-                  print('h2: ${constraints.maxHeight}');
-                  print('w2: ${constraints.maxWidth}');
-                  return Container();
-                }),
+                // LayoutBuilder(builder: (context, constraints) {
+                //   print('h2: ${constraints.maxHeight}');
+                //   print('w2: ${constraints.maxWidth}');
+                //   return Container();
+                // }),
                 note == null
                     ? Container()
                     : Text(

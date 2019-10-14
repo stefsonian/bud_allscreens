@@ -40,6 +40,7 @@ class _FrontStatsState extends State<FrontStats> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 420,
       padding: EdgeInsets.all(14),
       // height: 300,
       decoration: BoxDecoration(
