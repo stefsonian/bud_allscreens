@@ -6,6 +6,7 @@ import 'package:allscreens/src/record/record_categories.dart';
 import 'package:allscreens/src/record/record_options.dart';
 import 'package:allscreens/src/record/record_other.dart';
 import 'package:allscreens/src/record/record_submit.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:allscreens/src/helpers/colors.dart';
@@ -20,6 +21,7 @@ class RecordScreen extends StatefulWidget {
 }
 
 class _RecordScreenState extends State<RecordScreen> {
+  AppState appState;
   RecordState recordState;
 
   final inputWidgets = [
@@ -35,6 +37,8 @@ class _RecordScreenState extends State<RecordScreen> {
   didChangeDependencies() {
     super.didChangeDependencies();
     recordState = Provider.of<RecordState>(context);
+    appState = Provider.of<AppState>(context);
+    // Future.microtask(() => appState.showQuickAddButton = false);
   }
 
   tapNextButton() => recordState.isAmountRecorded = true;

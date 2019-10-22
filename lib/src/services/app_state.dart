@@ -9,4 +9,11 @@ class AppState with ChangeNotifier {
     _activeTabIndex = activeTabIndex;
     notifyListeners();
   }
+
+  bool _showQuickAddButton = true;
+  bool get showQuickAddButton => _showQuickAddButton;
+  set showQuickAddButton(bool showQuickAddButton) {
+    _showQuickAddButton = showQuickAddButton;
+    notifyListeners();
+  }
 }

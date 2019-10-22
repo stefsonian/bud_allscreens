@@ -18,7 +18,6 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav>
     with TickerProviderStateMixin<BottomNav> {
-  // int _currentIndex = 0; note: We use appState.activeTabIndex instead.
   AppState appState;
 
   didChangeDependencies() {
@@ -26,20 +25,31 @@ class _BottomNavState extends State<BottomNav>
     appState = Provider.of<AppState>(context);
   }
 
+  _handleAppBarTap(int index) {
+    if (index == 2) {
+      appState.showQuickAddButton = false;
+    } else {
+      appState.showQuickAddButton = true;
+    }
+
+    appState.activeTabIndex = index;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       extendBody: true,
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: appState.activeTabIndex == 2
-          ? null
-          : FloatingActionButton(
-              backgroundColor:
-                  appState.activeTabIndex == 2 ? col_aqua : col_orange,
+      floatingActionButton: appState.showQuickAddButton
+          ? FloatingActionButton(
+              backgroundColor: col_orange,
               child: Icon(Icons.add),
-              onPressed: () => appState.activeTabIndex = 2,
-            ),
+              onPressed: () => _handleAppBarTap(2),
+            )
+          : null,
       body: IndexedStack(
         index: appState.activeTabIndex,
         // children: allDestinations.map<Widget>((Destination destination) {
@@ -71,7 +81,7 @@ class _BottomNavState extends State<BottomNav>
                     : Colors.white70,
                 icon: Icon(Icons.home),
                 iconSize: 30,
-                onPressed: () => appState.activeTabIndex = 0,
+                onPressed: () => _handleAppBarTap(0),
               ),
               IconButton(
                 padding: EdgeInsets.only(right: 28.0),
@@ -80,7 +90,7 @@ class _BottomNavState extends State<BottomNav>
                     : Colors.white70,
                 icon: Icon(Icons.list),
                 iconSize: 30,
-                onPressed: () => appState.activeTabIndex = 1,
+                onPressed: () => _handleAppBarTap(1),
               ),
               IconButton(
                 padding: EdgeInsets.only(left: 28.0),
@@ -89,7 +99,7 @@ class _BottomNavState extends State<BottomNav>
                     : Colors.white70,
                 icon: Icon(Icons.today),
                 iconSize: 30,
-                onPressed: () => appState.activeTabIndex = 3,
+                onPressed: () => _handleAppBarTap(3),
               ),
               IconButton(
                 padding: EdgeInsets.only(right: 28.0),
@@ -98,7 +108,7 @@ class _BottomNavState extends State<BottomNav>
                     : Colors.white70,
                 icon: Icon(Icons.show_chart),
                 iconSize: 30,
-                onPressed: () => appState.activeTabIndex = 4,
+                onPressed: () => _handleAppBarTap(4),
               ),
             ],
           ),

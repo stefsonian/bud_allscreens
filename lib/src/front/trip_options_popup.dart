@@ -1,13 +1,18 @@
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum TripOption { edit, change, add, invite }
 
 class TripOptionsPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return PopupMenuButton<TripOption>(
+      icon: Icon(Icons.edit, color: Colors.white),
       onSelected: (TripOption result) {
+        appState.showQuickAddButton = false;
         switch (result) {
           case TripOption.edit:
             Navigator.pushNamed(context, 'edit trip');

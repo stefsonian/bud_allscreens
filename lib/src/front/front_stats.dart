@@ -40,7 +40,7 @@ class _FrontStatsState extends State<FrontStats> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 420,
+      height: 350,
       padding: EdgeInsets.all(14),
       // height: 300,
       decoration: BoxDecoration(
@@ -55,7 +55,7 @@ class _FrontStatsState extends State<FrontStats> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Text('Daily'),
+                  Text('Daily', style: TextStyle(fontSize: 16)),
                   Icon(Icons.expand_more),
                 ],
               ),
@@ -67,7 +67,7 @@ class _FrontStatsState extends State<FrontStats> {
               ),
               Row(
                 children: <Widget>[
-                  Text('AUD'),
+                  Text('AUD', style: TextStyle(fontSize: 16)),
                   Icon(Icons.expand_more),
                 ],
               ),
@@ -85,16 +85,16 @@ class _FrontStatsState extends State<FrontStats> {
   }
 }
 
-const Color col1 = Color(0xFF56ab2f);
-const Color col2 = Color(0xFFa8e063);
+// const Color col1 = Color(0xFF56ab2f);
+// const Color col2 = Color(0xFFa8e063);
 
-final BoxDecoration _boxDecor = BoxDecoration(
-  gradient: LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    stops: [0, 1],
-    colors: [col1.withOpacity(0.8), col2],
-  ),
-  borderRadius: BorderRadius.circular(16),
-  // boxShadow: kElevationToShadow[1],
-);
+// final BoxDecoration _boxDecor = BoxDecoration(
+//   gradient: LinearGradient(
+//     begin: Alignment.topLeft,
+//     end: Alignment.bottomRight,
+//     stops: [0, 1],
+//     colors: [col1.withOpacity(0.8), col2],
+//   ),
+//   borderRadius: BorderRadius.circular(16),
+//   // boxShadow: kElevationToShadow[1],
+// );

@@ -1,6 +1,13 @@
+import 'package:allscreens/src/components/btm_sheet.dart';
 import 'package:allscreens/src/front/front_averages.dart';
+import 'package:allscreens/src/front/front_by_category.dart';
+import 'package:allscreens/src/front/front_by_hashtag.dart';
+import 'package:allscreens/src/front/front_by_person.dart';
+import 'package:allscreens/src/front/front_recent.dart';
 import 'package:allscreens/src/front/front_stats.dart';
 import 'package:allscreens/src/front/front_trip.dart';
+import 'package:allscreens/src/front/trip_options_dialog.dart';
+import 'package:allscreens/src/front/trip_options_popup.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +40,7 @@ class _FrontScreenState extends State<FrontScreen> {
             backgroundColor: col_aqua,
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(
-              background: _tripInfo(),
+              background: _tripInfo(context),
             ),
           ),
           SliverList(
@@ -41,37 +48,29 @@ class _FrontScreenState extends State<FrontScreen> {
               <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
+                  child: FrontRecent(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: FrontStats(),
                 ),
-                // SizedBox(height: 14),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FrontAverages(),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FrontAverages(),
+                  child: FrontByCategory(),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FrontAverages(),
+                  child: FrontByHashtag(),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FrontAverages(),
+                  child: FrontByPerson(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FrontAverages(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FrontAverages(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FrontAverages(),
-                ),
+                SizedBox(height: 100),
               ],
             ),
 
@@ -92,7 +91,7 @@ class _FrontScreenState extends State<FrontScreen> {
     );
   }
 
-  Widget _tripInfo() {
+  Widget _tripInfo(BuildContext context) {
     var tripText = 'Queensland';
     return Container(
       padding: EdgeInsets.only(left: 8),
@@ -117,13 +116,31 @@ class _FrontScreenState extends State<FrontScreen> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      color: Colors.white,
-                      tooltip: 'Edit trip',
-                      // padding: EdgeInsets.fromLTRB(8, 16, 8, 0),
-                      onPressed: () {},
-                    ),
+                    // IconButton(
+                    //   icon: Icon(Icons.edit),
+                    //   color: Colors.white,
+                    //   tooltip: 'Edit trip',
+                    //   // padding: EdgeInsets.fromLTRB(8, 16, 8, 0),
+                    //   // onPressed: () =>
+                    //   //     Navigator.pushNamed(context, 'edit trip'),
+                    //   onPressed: () {
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) => SimpleDialog(
+                    //         backgroundColor: Colors.transparent,
+                    //         elevation: 0,
+
+                    //         // shape: RoundedRectangleBorder(
+                    //         //     borderRadius: BorderRadius.circular(14)),
+                    //         children: <Widget>[
+                    //           TripOptionsDialog(),
+                    //         ],
+                    //       ),
+                    //     );
+
+                    //   },
+                    // ),
+                    TripOptionsPopup(),
                   ],
                 ),
               ),
