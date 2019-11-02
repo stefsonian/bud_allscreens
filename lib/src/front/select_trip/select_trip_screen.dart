@@ -1,11 +1,10 @@
 import 'package:allscreens/src/background/background.dart';
 import 'package:allscreens/src/components/back_button_show_quick_add.dart';
-import 'package:allscreens/src/front/manage_trip/manage_trip_form.dart';
+import 'package:allscreens/src/front/select_trip/select_trip_list.dart';
 import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/services/app_state.dart';
 import 'package:flutter/material.dart';
 
-class ManageTripScreen extends StatelessWidget {
+class SelectTripScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,13 +13,14 @@ class ManageTripScreen extends StatelessWidget {
       appBar: AppBar(
         leading: BackButtonShowQuickAdd(),
         backgroundColor: col_aqua,
-        title: Text('Edit current trip'),
+        title: Text('Select trip'),
         automaticallyImplyLeading: true,
       ),
       body: Background(
         child: Container(
+          color: Colors.white,
           padding: EdgeInsets.all(12),
-          child: ManageTripForm(),
+          child: SelectTripList(),
         ),
       ),
     );

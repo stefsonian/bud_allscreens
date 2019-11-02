@@ -18,7 +18,7 @@ class TripOptionsPopup extends StatelessWidget {
             Navigator.pushNamed(context, 'edit trip');
             break;
           case TripOption.change:
-            Navigator.pushNamed(context, 'edit trip');
+            Navigator.pushNamed(context, 'select trip');
             break;
           case TripOption.add:
             Navigator.pushNamed(context, 'edit trip');
@@ -57,7 +57,7 @@ class TripOptionsPopup extends StatelessWidget {
         const PopupMenuItem<TripOption>(
           value: TripOption.invite,
           child: _PopupItem(
-            label: 'Invite traveller',
+            label: 'Trip companions',
             icon: Icons.person_add,
             color: col_aqua_dark2,
           ),

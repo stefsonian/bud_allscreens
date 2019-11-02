@@ -33,7 +33,8 @@ class TripOptionsDialog extends StatelessWidget {
           SizedBox(height: 20),
           _button('New trip', Icon(Icons.add), () {}, col_aqua),
           SizedBox(height: 20),
-          _button('Invite traveller', Icon(Icons.person_add), () {}, col_aqua),
+          _button('Manage travel companions', Icon(Icons.person_add), () {},
+              col_aqua),
           SizedBox(height: 60),
           _button('Cancel', Icon(Icons.cancel), () {}, col_orange_dark)
         ],
