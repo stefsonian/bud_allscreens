@@ -26,12 +26,6 @@ class _BottomNavState extends State<BottomNav>
   }
 
   _handleAppBarTap(int index) {
-    if (index == 2) {
-      appState.showQuickAddButton = false;
-    } else {
-      appState.showQuickAddButton = true;
-    }
-
     appState.activeTabIndex = index;
   }
 
@@ -43,6 +37,7 @@ class _BottomNavState extends State<BottomNav>
       extendBody: true,
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonAnimator: null,
       floatingActionButton: appState.showQuickAddButton
           ? FloatingActionButton(
               backgroundColor: col_orange,
@@ -69,7 +64,7 @@ class _BottomNavState extends State<BottomNav>
         elevation: 0,
         shape: CircularNotchedRectangle(),
         child: Container(
-          height: 60,
+          height: appState.showToolBar ? 60 : 0,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

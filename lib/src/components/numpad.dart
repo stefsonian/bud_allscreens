@@ -62,9 +62,10 @@ class _NumpadButton extends StatelessWidget {
       width: screenHeight > 850 ? 66 : 60,
       child: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: Colors.white,
-        foregroundColor: col_aqua,
-        child: Text(label, textScaleFactor: 2),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.white,
+        child: Text(label, textScaleFactor: 3),
       ),
     );
   }

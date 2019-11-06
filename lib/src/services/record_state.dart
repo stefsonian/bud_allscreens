@@ -26,12 +26,19 @@ class RecordState with ChangeNotifier {
 
   bool get isCategoriesRecorded => _isMainCatRecorded && _isSubCatRecorded;
 
-  int get recordStage {
-    if (!_isAmountRecorded) return 0;
-    if (!_isMainCatRecorded) return 1;
-    if (!_isSubCatRecorded) return 2;
-    return 3;
+  int _recordStage = 0;
+  int get recordStage => _recordStage;
+  set recordStage(int recordStage) {
+    _recordStage = recordStage;
+    notifyListeners();
   }
+
+  // int get recordStage {
+  //   if (!_isAmountRecorded) return 0;
+  //   if (!_isMainCatRecorded) return 1;
+  //   if (!_isSubCatRecorded) return 2;
+  //   return 3;
+  // }
 
   reset() {
     _isSubCatRecorded = false;
