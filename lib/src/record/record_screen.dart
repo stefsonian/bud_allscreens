@@ -2,8 +2,9 @@ import 'package:allscreens/src/background/background.dart';
 import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/components/gradient_box_simple.dart';
 import 'package:allscreens/src/components/numpad.dart';
+import 'package:allscreens/src/components/splitter.dart';
 import 'package:allscreens/src/record/record_amount.dart';
-import 'package:allscreens/src/record/record_categories.dart';
+import 'package:allscreens/src/record/record_category.dart';
 import 'package:allscreens/src/record/record_options.dart';
 import 'package:allscreens/src/record/record_other.dart';
 import 'package:allscreens/src/record/record_stepper.dart';
@@ -29,20 +30,28 @@ class _RecordScreenState extends State<RecordScreen> {
   RecordState recordState;
 
   final inputWidgets = [
+    // RecordOptions(),
     RecordAmount(),
-    RecordMainCategory(),
-    RecordSubCategory(),
+    Container(),
+    Container(),
     // RecordOther(),
     RecordSubmit(),
     // Container(),
     Container()
   ];
 
+  final stages = [Stage0(), Stage1()];
+
   didChangeDependencies() {
     super.didChangeDependencies();
     recordState = Provider.of<RecordState>(context);
     appState = Provider.of<AppState>(context);
     // Future.microtask(() => appState.showQuickAddButton = false);
+  }
+
+  tapNextButton() {
+    recordState.recordStage = recordState.recordStage + 1;
+    if (recordState.recordStage == 2) recordState.recordStage = 0;
   }
 
   // tapNextButton() => recordState.isAmountRecorded = true;
@@ -71,21 +80,24 @@ class _RecordScreenState extends State<RecordScreen> {
               boxShadow: kElevationToShadow[2],
               child: Background(),
             ),
+            // Content
             Positioned(
-              top: 20,
-              bottom: 420,
+              top: 0,
+              bottom: 94,
               left: 0,
               right: 0,
-              child: RecordOptions(),
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 200),
+                key: Key('K'),
+                // transitionBuilder: (Widget child, Animation<double> animation) {
+                // return ScaleTransition(child: child, scale: animation);
+                // },
+                child: stages[recordState.recordStage],
+              ),
             ),
+            // Buttons
             Positioned(
-              bottom: 130,
-              left: 0,
-              right: 0,
-              child: RecordAmount(),
-            ),
-            Positioned(
-              bottom: 35,
+              bottom: 23,
               left: 18.5,
               child: SizedBox(
                 height: 40,
@@ -99,7 +111,7 @@ class _RecordScreenState extends State<RecordScreen> {
               ),
             ),
             Positioned(
-              bottom: 35,
+              bottom: 23,
               left: 92.5,
               child: SizedBox(
                 height: 40,
@@ -113,7 +125,7 @@ class _RecordScreenState extends State<RecordScreen> {
               ),
             ),
             Positioned(
-              bottom: 20,
+              bottom: 8,
               left: width * 0.5 - 35,
               child: SizedBox(
                 height: 70,
@@ -123,13 +135,54 @@ class _RecordScreenState extends State<RecordScreen> {
                   elevation: 2,
                   child:
                       Icon(Icons.arrow_forward, color: Colors.white, size: 44),
-                  onPressed: () => appState.activeTabIndex = 0,
+                  onPressed: tapNextButton,
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class Stage0 extends StatelessWidget {
+  const Stage0({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Expanded(child: RecordCategory()),
+        // SizedBox(height: 15),
+        Splitter(
+          padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+          icon: Icons.attach_money,
+          label: 'Expense amount',
+          // showLine: false,
+        ),
+        RecordAmount(),
+      ],
+    );
+  }
+}
+
+class Stage1 extends StatelessWidget {
+  const Stage1({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        RecordOptions(),
+        RecordOptions(),
+      ],
     );
   }
 }
@@ -142,7 +195,7 @@ class RecordScreenClipper extends CustomClipper<Path> {
 
     var left = w * 0.0;
     var right = w;
-    var bottom = h - 55;
+    var bottom = h - 42;
     var top = 0.0;
 
     final path = Path();
@@ -162,30 +215,5 @@ class RecordScreenClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(RecordScreenClipper oldClipper) => false;
-}
-
-class RecordScreenBackground extends StatelessWidget {
-  const RecordScreenBackground({this.child});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          stops: [0, 1],
-          colors: [col_aqua, col_aqua_lighter],
-          // colors: [col_aqua_lighter, col_aqua],
-        ),
-        boxShadow: kElevationToShadow[4],
-      ),
-      // color: Colors.white,
-      height: double.infinity,
-      width: double.infinity,
-      child: child,
-    );
-  }
+  bool shouldReclip(RecordScreenClipper oldClipper) => true;
 }

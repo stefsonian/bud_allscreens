@@ -34,10 +34,10 @@ class RecordState with ChangeNotifier {
   }
 
   // int get recordStage {
-  //   if (!_isAmountRecorded) return 0;
-  //   if (!_isMainCatRecorded) return 1;
-  //   if (!_isSubCatRecorded) return 2;
-  //   return 3;
+  //   if (!_isAmountRecorded) return 1;
+  //   if (!_isMainCatRecorded) return 2;
+  //   if (!_isSubCatRecorded) return 3;
+  //   return 1;
   // }
 
   reset() {

@@ -1,12 +1,6 @@
-import 'package:allscreens/src/components/Ikon_button.dart';
-import 'package:allscreens/src/components/gradient_box.dart';
-import 'package:allscreens/src/components/numpad.dart';
-import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'display_amount.dart';
 
 class RecordAmount extends StatefulWidget {
   const RecordAmount({this.showNumpad});
@@ -19,11 +13,16 @@ class _RecordAmountState extends State<RecordAmount> {
   Widget build(BuildContext context) {
     RecordState recordState = Provider.of<RecordState>(context);
     return Container(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           AmountDisplay(),
-          SizedBox(height: 26),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            color: Colors.white.withOpacity(0.2),
+            height: 1,
+          ),
           NumGrid(),
         ],
       ),
@@ -35,29 +34,34 @@ class AmountDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 280,
-      height: 65,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(360),
-        border: Border.all(width: 1, color: Colors.white),
-      ),
+      padding: EdgeInsets.only(right: 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 8, 2, 0),
-            child: Text(
-              '\$',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold),
+          Spacer(flex: 2),
+          Expanded(
+            flex: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 8, 2, 0),
+                  child: Text(
+                    'AUD  \$',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                Text(
+                  '77.00',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-          ),
-          Text(
-            '77.00',
-            style: TextStyle(
-                color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -69,32 +73,77 @@ class NumGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          // border: Border.all(width: 1, color: Colors.white),
-          ),
+      padding: EdgeInsets.only(right: 20),
       height: 220,
-      width: 280,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[number('1'), number('2'), number('3')],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[number('4'), number('5'), number('6')],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[number('7'), number('8'), number('9')],
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                  flex: 2,
+                  child: selectButton('Currency', Icons.monetization_on)),
+              Expanded(
+                flex: 3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    number('1'),
+                    number('2'),
+                    number('3'),
+                  ],
+                ),
+              ),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              number('.'),
-              number('0'),
-              numIcon(Icons.arrow_back),
+              Expanded(
+                  flex: 2, child: selectButton('Credit', Icons.credit_card)),
+              Expanded(
+                flex: 3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[number('4'), number('5'), number('6')],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(flex: 2, child: selectButton('Split', Icons.call_split)),
+              Expanded(
+                flex: 3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[number('7'), number('8'), number('9')],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(flex: 2, child: selectButton('Repeat', Icons.repeat)),
+              Expanded(
+                flex: 3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        number('·'),
+                        number('B'),
+                      ],
+                    ),
+                    number('0'),
+                    numIcon(Icons.arrow_back),
+                  ],
+                ),
+              ),
             ],
           ),
         ],
@@ -102,39 +151,14 @@ class NumGrid extends StatelessWidget {
     );
   }
 
-  Widget number_alt(String n) {
-    return Container(
-      height: 65,
-      width: 65,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(360),
-        border: Border.all(width: 1, color: Colors.white),
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(
-          n,
-          style: TextStyle(color: Colors.white, fontSize: 34),
-        ),
-      ),
-    );
-  }
-
-  final sz = 55.0;
   Widget number(String n) {
+    Color color = n == 'B' ? Colors.transparent : Colors.white;
     return Container(
-      height: sz,
-      width: sz,
-      // decoration: BoxDecoration(
-      //   borderRadius: BorderRadius.circular(360),
-      //   border: Border.all(width: 1, color: Colors.white),
-      // ),
       child: Align(
         alignment: Alignment.center,
         child: Text(
           n,
-          style: TextStyle(
-              color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
+          style: TextStyle(color: color, fontSize: 34),
         ),
       ),
     );
@@ -142,19 +166,27 @@ class NumGrid extends StatelessWidget {
 
   Widget numIcon(IconData icon) {
     return Container(
-      height: sz,
-      width: sz,
-      // decoration: BoxDecoration(
-      //   borderRadius: BorderRadius.circular(360),
-      //   border: Border.all(width: 1, color: Colors.white),
-      // ),
       child: Align(
-        alignment: Alignment.center,
+        alignment: Alignment.centerRight,
         child: Icon(
           icon,
           color: Colors.white,
           size: 34,
         ),
+      ),
+    );
+  }
+
+  Widget selectButton(String label, IconData icon) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Icon(icon, color: Colors.white),
+          SizedBox(width: 4),
+          Text(label,
+              style: TextStyle(color: Colors.white),
+              overflow: TextOverflow.visible),
+        ],
       ),
     );
   }
@@ -185,3 +217,21 @@ class NumGrid extends StatelessWidget {
 //     );
 //   }
 // }
+
+// Widget number_alt(String n) {
+//     return Container(
+//       height: 65,
+//       width: 65,
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(360),
+//         border: Border.all(width: 1, color: Colors.white),
+//       ),
+//       child: Align(
+//         alignment: Alignment.center,
+//         child: Text(
+//           n,
+//           style: TextStyle(color: Colors.white, fontSize: 34),
+//         ),
+//       ),
+//     );
+//   }

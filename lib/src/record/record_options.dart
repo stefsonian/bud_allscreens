@@ -17,7 +17,7 @@ class _RecordOptionsState extends State<RecordOptions> {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          _person(),
+          _complexity(),
           RecordItemSplitter(),
           _date(),
           RecordItemSplitter(),
@@ -37,6 +37,18 @@ class _RecordOptionsState extends State<RecordOptions> {
         _optionBox('Plato', true),
         _optionBox('Aristotle', false),
         _optionBox('Pick', false),
+      ],
+    );
+  }
+
+  Widget _complexity() {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        _optionBox('Simple', true),
+        // _optionBox('Aristotle', false),
+        Spacer(flex: 1),
+        _optionBox('Complex', false),
       ],
     );
   }
