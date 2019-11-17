@@ -24,9 +24,9 @@ class Splitter extends StatelessWidget {
         children: <Widget>[
           showLine
               ? Container(
-                  padding: EdgeInsets.only(bottom: 1),
+                  margin: EdgeInsets.only(bottom: 5),
                   color: color.withOpacity(0.6),
-                  height: 2,
+                  height: 1,
                 )
               : Container(),
           Row(

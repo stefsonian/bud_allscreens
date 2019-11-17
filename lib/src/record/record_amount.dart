@@ -1,3 +1,4 @@
+import 'package:allscreens/src/components/splitter.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class _RecordAmountState extends State<RecordAmount> {
           AmountDisplay(),
           Container(
             margin: EdgeInsets.symmetric(vertical: 10),
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withOpacity(0.4),
             height: 1,
           ),
           NumGrid(),

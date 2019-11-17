@@ -12,49 +12,83 @@ class RecordCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-      child: Stack(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Positioned(
-            top: 2,
-            left: 0,
-            right: 0,
-            child: Splitter(
-              label: 'Expense category',
-              icon: Icons.select_all,
-              padding: EdgeInsets.all(0),
-              showLine: false,
+          // Splitter(
+          //   label: 'Category',
+          //   icon: Icons.select_all,
+          //   padding: EdgeInsets.only(bottom: 20),
+          //   showLine: true,
+          // ),
+          // Categories
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              CatButton(icon: Icons.flash_on, label: 'Quick', isMainCat: true),
+              CatButton(
+                icon: Icons.restaurant,
+                label: 'Eat',
+                showLabel: false,
+                isMainCat: true,
+                isDimmed: true,
+              ),
+              CatButton(
+                icon: Icons.hotel,
+                label: 'Sleep',
+                showLabel: false,
+                isMainCat: true,
+                isDimmed: true,
+              ),
+              CatButton(
+                icon: Icons.train,
+                label: 'Travel',
+                showLabel: false,
+                isMainCat: true,
+                isDimmed: true,
+              ),
+              CatButton(
+                icon: Icons.camera_alt,
+                label: 'See',
+                showLabel: false,
+                isMainCat: true,
+                isDimmed: true,
+              ),
+              CatButton(
+                icon: Icons.scatter_plot,
+                label: 'Other',
+                showLabel: false,
+                isMainCat: true,
+                isDimmed: true,
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            color: Colors.white.withOpacity(0.4),
+            height: 1,
+          ),
+          SizedBox(height: 20),
+          // Smart suggestions
+          SizedBox(
+            height: 55,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                CatButton(icon: Icons.restaurant, label: 'Breakfast'),
+                CatButton(icon: Icons.train, label: 'Train'),
+                CatButton(icon: Icons.shopping_cart, label: 'Groceries'),
+                CatButton(icon: Icons.hotel, label: 'Hotel'),
+                CatButton(icon: Icons.map, label: 'Hike'),
+                CatButton(icon: Icons.local_drink, label: 'Drink'),
+              ],
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              // Categories
-              Expanded(child: CategorySelector()),
-              // Smart suggestions
-              Column(
-                children: <Widget>[
-                  Splitter(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    icon: Icons.lightbulb_outline,
-                    label: 'Smart suggestions',
-                    // showLine: false,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      _IconButton(icon: Icons.restaurant, label: 'Breakfast'),
-                      _IconButton(icon: Icons.train, label: 'Train'),
-                      _IconButton(
-                        icon: Icons.shopping_cart,
-                        label: 'Groceries',
-                        isSelected: true,
-                      ),
-                      _IconButton(icon: Icons.hotel, label: 'Hotel'),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            color: Colors.white.withOpacity(0.4),
+            height: 1,
           ),
         ],
       ),
@@ -62,102 +96,53 @@ class RecordCategory extends StatelessWidget {
   }
 }
 
-class CategorySelector extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _category(Icons.restaurant),
-                  _category(Icons.hotel),
-                  _category(Icons.train),
-                ],
-              ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  _category(Icons.camera_alt),
-                  _category(Icons.scatter_plot),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _category(IconData icon) {
-    return Container(
-      height: 60,
-      width: 60,
-      padding: EdgeInsets.all(9),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(360),
-        border: Border.all(color: Colors.white, width: 1),
-      ),
-      child: FittedBox(
-        child: Icon(
-          icon,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-}
-
-class _IconButton extends StatelessWidget {
-  const _IconButton({Key key, this.icon, this.isSelected = false, this.label})
+class CatButton extends StatefulWidget {
+  const CatButton(
+      {Key key,
+      this.icon,
+      this.label,
+      this.isMainCat = false,
+      this.isDimmed = false,
+      this.showLabel = true})
       : super(key: key);
   final IconData icon;
   final String label;
-  final bool isSelected;
+  final bool isMainCat;
+  final isDimmed;
+  final showLabel;
 
   @override
+  _CatButtonState createState() => _CatButtonState();
+}
+
+class _CatButtonState extends State<CatButton> {
+  @override
   Widget build(BuildContext context) {
+    var iconOpacity = widget.isDimmed ? 0.7 : 1.0;
+    var labelOpacity = widget.isDimmed ? 0.7 : 1.0;
+    if (widget.isMainCat && !widget.showLabel) labelOpacity = 0.0;
     return Container(
-      child: isSelected ? buildSelected() : buildNormal(),
-    );
-  }
-
-  Widget buildNormal() {
-    return Column(
-      children: <Widget>[
-        Icon(
-          icon,
-          size: 26,
-          color: Colors.white.withOpacity(0.6),
-        ),
-        SizedBox(height: 1),
-        Text(label,
-            style:
-                TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 11)),
-      ],
-    );
-  }
-
-  Widget buildSelected() {
-    return Column(
-      children: <Widget>[
-        Icon(
-          icon,
-          size: 26,
-          color: Colors.white,
-        ),
-        SizedBox(height: 1),
-        Text(label,
+      width: widget.isMainCat ? null : 85,
+      child: Column(
+        verticalDirection:
+            widget.isMainCat ? VerticalDirection.up : VerticalDirection.down,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Icon(
+            widget.icon,
+            size: 30,
+            color: Colors.white.withOpacity(iconOpacity),
+          ),
+          SizedBox(height: 5),
+          Text(
+            widget.label,
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 11,
-                fontWeight: FontWeight.bold)),
-      ],
+                color: Colors.white.withOpacity(labelOpacity), fontSize: 12),
+            maxLines: 1,
+            overflow: TextOverflow.clip,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,33 +1,25 @@
 import 'package:allscreens/src/background/background.dart';
-import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/components/gradient_box_simple.dart';
-import 'package:allscreens/src/components/numpad.dart';
-import 'package:allscreens/src/components/splitter.dart';
 import 'package:allscreens/src/record/record_amount.dart';
 import 'package:allscreens/src/record/record_category.dart';
+import 'package:allscreens/src/record/record_details.dart';
 import 'package:allscreens/src/record/record_options.dart';
-import 'package:allscreens/src/record/record_other.dart';
-import 'package:allscreens/src/record/record_stepper.dart';
-import 'package:allscreens/src/record/record_submit.dart';
 import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:clip_shadow/clip_shadow.dart';
-
-import 'display_amount.dart';
-import 'display_categories.dart';
 
 class RecordScreen extends StatefulWidget {
   @override
   _RecordScreenState createState() => _RecordScreenState();
 }
 
-class _RecordScreenState extends State<RecordScreen> {
+class _RecordScreenState extends State<RecordScreen>
+    with SingleTickerProviderStateMixin {
   AppState appState;
   RecordState recordState;
+  AnimationController _controller;
 
   final inputWidgets = [
     // RecordOptions(),
@@ -35,7 +27,6 @@ class _RecordScreenState extends State<RecordScreen> {
     Container(),
     Container(),
     // RecordOther(),
-    RecordSubmit(),
     // Container(),
     Container()
   ];
@@ -50,8 +41,12 @@ class _RecordScreenState extends State<RecordScreen> {
   }
 
   tapNextButton() {
+    if (recordState.recordStage == 1) recordState.recordStage = -1;
     recordState.recordStage = recordState.recordStage + 1;
-    if (recordState.recordStage == 2) recordState.recordStage = 0;
+  }
+
+  tapPreviousButton() {
+    if (recordState.recordStage != 0) recordState.recordStage -= 1;
   }
 
   // tapNextButton() => recordState.isAmountRecorded = true;
@@ -66,6 +61,7 @@ class _RecordScreenState extends State<RecordScreen> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     // print('sHeight: $height');
     return SafeArea(
       // top: false,
@@ -87,11 +83,18 @@ class _RecordScreenState extends State<RecordScreen> {
               left: 0,
               right: 0,
               child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 200),
+                duration: Duration(milliseconds: 150),
                 key: Key('K'),
-                // transitionBuilder: (Widget child, Animation<double> animation) {
-                // return ScaleTransition(child: child, scale: animation);
-                // },
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(1.0, 0.0),
+                      end: const Offset(0.0, 0.0),
+                    ).animate(CurvedAnimation(
+                        parent: animation, curve: Curves.linear)),
+                    child: child,
+                  );
+                },
                 child: stages[recordState.recordStage],
               ),
             ),
@@ -120,7 +123,7 @@ class _RecordScreenState extends State<RecordScreen> {
                   backgroundColor: col_orange_dark,
                   elevation: 2,
                   child: Icon(Icons.arrow_back, color: Colors.white, size: 33),
-                  onPressed: () => appState.activeTabIndex = 0,
+                  onPressed: tapPreviousButton,
                 ),
               ),
             ),
@@ -133,8 +136,9 @@ class _RecordScreenState extends State<RecordScreen> {
                 child: FloatingActionButton(
                   backgroundColor: col_orange,
                   elevation: 2,
-                  child:
-                      Icon(Icons.arrow_forward, color: Colors.white, size: 44),
+                  child: recordState.recordStage < 1
+                      ? Icon(Icons.arrow_forward, color: Colors.white, size: 44)
+                      : Icon(Icons.check, color: Colors.white, size: 44),
                   onPressed: tapNextButton,
                 ),
               ),
@@ -154,17 +158,19 @@ class Stage0 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Expanded(child: RecordCategory()),
-        // SizedBox(height: 15),
-        Splitter(
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-          icon: Icons.attach_money,
-          label: 'Expense amount',
-          // showLine: false,
+        Spacer(flex: 1),
+        Expanded(
+          flex: 8,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              RecordCategory(),
+              RecordAmount(),
+            ],
+          ),
         ),
-        RecordAmount(),
       ],
     );
   }
@@ -177,13 +183,7 @@ class Stage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        RecordOptions(),
-        RecordOptions(),
-      ],
-    );
+    return RecordDetails();
   }
 }
 
@@ -215,5 +215,5 @@ class RecordScreenClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(RecordScreenClipper oldClipper) => true;
+  bool shouldReclip(RecordScreenClipper oldClipper) => false;
 }
