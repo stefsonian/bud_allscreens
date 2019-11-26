@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:allscreens/src/components/Ikon_button.dart';
 import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/day/day_box.dart';
@@ -65,6 +67,8 @@ class DayItem extends StatelessWidget {
 
   Widget _expenseEntry(Color color, Color btnColor, IconData icon, String label,
       String amount, String note) {
+    String rdm = Random().nextDouble().toString();
+    var heroString = 'add item ($rdm)';
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: Row(
@@ -110,6 +114,7 @@ class DayItem extends StatelessWidget {
                   alignment: Alignment.center,
                   constraints: BoxConstraints.tightFor(width: 42, height: 42),
                   child: FloatingActionButton(
+                    heroTag: heroString,
                     child: Icon(Icons.add),
                     backgroundColor: color,
                     foregroundColor: btnColor,

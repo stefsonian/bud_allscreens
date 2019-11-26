@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class IkonButton extends StatelessWidget {
@@ -18,6 +20,8 @@ class IkonButton extends StatelessWidget {
   final double elevation;
 
   Widget build(BuildContext context) {
+    String rdm = Random().nextDouble().toString();
+    var heroString = 'add item ($rdm)';
     return Column(
       children: <Widget>[
         Container(
@@ -26,6 +30,7 @@ class IkonButton extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.fill,
             child: FloatingActionButton(
+              heroTag: heroString,
               elevation: elevation,
               child: FractionallySizedBox(
                 heightFactor: 0.6,

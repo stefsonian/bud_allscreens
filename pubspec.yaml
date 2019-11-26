@@ -29,6 +29,7 @@ dependencies:
   animator: ^1.0.0+1
   flutter_swiper: ^1.1.6
   clip_shadow: any
+  jiffy: ^2.1.2
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +54,11 @@ flutter:
 
   assets:
    - assets/currencies.json
+
+  fonts:
+    - family:  MyFlutterApp
+      fonts:
+       - asset: assets/fonts/MyFlutterApp.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

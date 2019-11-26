@@ -8,6 +8,8 @@ const Color col_content = col_aqua;
 const Color col_back = Colors.white;
 
 class RecordCategory extends StatelessWidget {
+  static const IconData tags =
+      const IconData(0xe801, fontFamily: 'MyFlutterApp');
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +29,7 @@ class RecordCategory extends StatelessWidget {
             children: <Widget>[
               CatButton(icon: Icons.flash_on, label: 'Quick', isMainCat: true),
               CatButton(
-                icon: Icons.restaurant,
+                icon: tags,
                 label: 'Eat',
                 showLabel: false,
                 isMainCat: true,

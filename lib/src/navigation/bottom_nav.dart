@@ -4,12 +4,9 @@ import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/navigation/start_nav.dart';
 import 'package:allscreens/src/record/record_screen.dart';
 import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/start/start_screen.dart';
 import 'package:allscreens/src/stats/stats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'destination.dart';
 
 class BottomNav extends StatefulWidget {
   @override
@@ -42,6 +39,7 @@ class _BottomNavState extends State<BottomNav>
           ? FloatingActionButton(
               backgroundColor: col_orange,
               child: Icon(Icons.add),
+              heroTag: 'Add expense',
               onPressed: () => _handleAppBarTap(2),
             )
           : null,

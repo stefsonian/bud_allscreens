@@ -1,11 +1,12 @@
 import 'package:allscreens/src/components/Ikon_button.dart';
 import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/models/Expense.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseItem extends StatelessWidget {
-  const ExpenseItem({Key key, this.note}) : super(key: key);
-  final String note;
+  const ExpenseItem({Key key, this.expense}) : super(key: key);
+  final Expense expense;
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +18,14 @@ class ExpenseItem extends StatelessWidget {
             backColor: Colors.white,
             color: col_aqua,
             elevation: 0.0,
-            icon: Icons.camera,
+            icon: expense.subCategory.icon,
           ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Entertainment',
+                  expense.subCategory.name,
                   style: TextStyle(
                     fontSize: 16,
                     color: col_aqua,
@@ -46,7 +47,7 @@ class ExpenseItem extends StatelessWidget {
                 //   print('w2: ${constraints.maxWidth}');
                 //   return Container();
                 // }),
-                note == null
+                expense.note == null
                     ? Container()
                     : Text(
                         "I'm just a little note but I'm very important. It's good I'm here",
@@ -65,7 +66,7 @@ class ExpenseItem extends StatelessWidget {
             width: 90,
             alignment: Alignment.centerRight,
             child: Text(
-              '\$46.88',
+              '\$${expense.amount.value.toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 18,
                 color: col_aqua,

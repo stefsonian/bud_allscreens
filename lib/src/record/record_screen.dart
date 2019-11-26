@@ -106,6 +106,7 @@ class _RecordScreenState extends State<RecordScreen>
                 height: 40,
                 width: 40,
                 child: FloatingActionButton(
+                  heroTag: 'exit create expense',
                   backgroundColor: col_orange_dark,
                   elevation: 2,
                   child: Icon(Icons.remove, color: Colors.white, size: 33),
@@ -120,6 +121,7 @@ class _RecordScreenState extends State<RecordScreen>
                 height: 40,
                 width: 40,
                 child: FloatingActionButton(
+                  heroTag: 'go back (expense)',
                   backgroundColor: col_orange_dark,
                   elevation: 2,
                   child: Icon(Icons.arrow_back, color: Colors.white, size: 33),
@@ -134,6 +136,7 @@ class _RecordScreenState extends State<RecordScreen>
                 height: 70,
                 width: 70,
                 child: FloatingActionButton(
+                  heroTag: 'go on (expense)',
                   backgroundColor: col_orange,
                   elevation: 2,
                   child: recordState.recordStage < 1

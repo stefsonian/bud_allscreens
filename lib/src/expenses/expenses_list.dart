@@ -1,11 +1,16 @@
 import 'package:allscreens/src/expenses/expense_item.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/models/Expense.dart';
+import 'package:allscreens/src/services/records.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:provider/provider.dart';
 
 class ExpensesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Records records = Provider.of<Records>(context);
     return Container(
       child: CustomScrollView(
         slivers: <Widget>[
@@ -51,10 +56,10 @@ class ExpensesList extends StatelessWidget {
                     Scaffold.of(context).showSnackBar(
                         SnackBar(content: Text("item dismissed")));
                   },
-                  child: expenseSliver(),
+                  child: expenseSliver(records.full[index]),
                 );
               },
-              childCount: 30,
+              childCount: records.full.length,
             ),
           ),
         ],
@@ -63,12 +68,12 @@ class ExpensesList extends StatelessWidget {
   }
 }
 
-Widget expenseSliver() {
+Widget expenseSliver(Expense expense) {
   final double rand = Random().nextDouble();
-  final note = rand > 0.5 ? 'note' : null;
+  expense.note = rand > 0.5 ? expense.note : null;
   return Padding(
     padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
-    child: ExpenseItem(note: note),
+    child: ExpenseItem(expense: expense),
   );
 }
 

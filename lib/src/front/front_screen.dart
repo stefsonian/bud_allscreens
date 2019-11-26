@@ -1,12 +1,9 @@
-import 'package:allscreens/src/components/btm_sheet.dart';
 import 'package:allscreens/src/front/front_averages.dart';
 import 'package:allscreens/src/front/front_by_category.dart';
 import 'package:allscreens/src/front/front_by_hashtag.dart';
 import 'package:allscreens/src/front/front_by_person.dart';
 import 'package:allscreens/src/front/front_recent.dart';
 import 'package:allscreens/src/front/front_stats.dart';
-import 'package:allscreens/src/front/front_trip.dart';
-import 'package:allscreens/src/front/trip_options_dialog.dart';
 import 'package:allscreens/src/front/trip_options_popup.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
@@ -26,12 +23,12 @@ class _FrontScreenState extends State<FrontScreen> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.person),
-                tooltip: 'To top',
+                tooltip: 'User settings',
                 onPressed: () {},
               ),
               IconButton(
                 icon: Icon(Icons.settings),
-                tooltip: 'Sort',
+                tooltip: 'App settings',
                 onPressed: () {},
               ),
             ],

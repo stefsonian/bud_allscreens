@@ -1,5 +1,15 @@
 class FrozenAmount {
   var currency, homeCurrency = '';
   var frozenDT = DateTime.now();
-  var amount, amountInUSD, amountInEUR, amountInAUD, amountInHome = 0.0;
+  double value, amountInUSD, amountInEUR, amountInAUD, amountInHome = 0.0;
+
+  FrozenAmount.withTestData(double amount) {
+    currency = 'AUD';
+    homeCurrency = 'AUD';
+    value = amount;
+    amountInAUD = amount;
+    amountInUSD = amount * 0.7;
+    amountInEUR = amount * 0.6;
+    amountInHome = amount;
+  }
 }
