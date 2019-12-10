@@ -1,4 +1,5 @@
 import 'package:allscreens/src/background/background.dart';
+import 'package:allscreens/src/components/chart_bar_vertical.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/navigation/bottom_nav.dart';
 import 'package:allscreens/src/services/session_data.dart';
@@ -21,7 +22,7 @@ class LoginScreen extends StatelessWidget {
       height: double.infinity,
       width: double.infinity,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           FloatingActionButton.extended(
             label: Text(
@@ -32,6 +33,37 @@ class LoginScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             heroTag: 'Log in',
             onPressed: () => _onPressedHandler(sessionData, context),
+          ),
+          Container(
+            height: 400,
+            width: 400,
+            color: Colors.white70,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                ChartBarVertical(
+                  value: 70.0,
+                  threshold1: 100.0,
+                  threshold2: 120,
+                ),
+                ChartBarVertical(
+                  value: 10.0,
+                  threshold1: 100.0,
+                  threshold2: 120,
+                  showAmountAbove: true,
+                ),
+                ChartBarVertical(
+                  value: 110.0,
+                  threshold1: 100.0,
+                  threshold2: 120,
+                ),
+                ChartBarVertical(
+                  value: 150.0,
+                  threshold1: 100.0,
+                  threshold2: 120,
+                ),
+              ],
+            ),
           ),
         ],
       ),

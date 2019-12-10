@@ -6,7 +6,10 @@ import 'package:allscreens/src/front/front_recent.dart';
 import 'package:allscreens/src/front/front_stats.dart';
 import 'package:allscreens/src/front/trip_options_popup.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/models/Trip.dart';
+import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FrontScreen extends StatefulWidget {
   @override
@@ -14,6 +17,14 @@ class FrontScreen extends StatefulWidget {
 }
 
 class _FrontScreenState extends State<FrontScreen> {
+  SessionData session;
+
+  @override
+  void didChangeDependencies() {
+    session = Provider.of<SessionData>(context);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -89,7 +100,7 @@ class _FrontScreenState extends State<FrontScreen> {
   }
 
   Widget _tripInfo(BuildContext context) {
-    var tripText = 'Queensland';
+    var tripText = session.trip.name;
     return Container(
       padding: EdgeInsets.only(left: 8),
       child: Column(
@@ -146,7 +157,7 @@ class _FrontScreenState extends State<FrontScreen> {
           ),
           // SizedBox(height: 2),
           Text(
-            '3 Aug - 25 Sep  •  day 16',
+            '${session.trip.startDayMonth} - ${session.trip.endDayMonth}  •  day ${session.trip.travelDay}',
             style: TextStyle(
               fontSize: 12,
               letterSpacing: 1.1,

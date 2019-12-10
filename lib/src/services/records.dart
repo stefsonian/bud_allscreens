@@ -4,24 +4,20 @@ import 'package:allscreens/src/models/Frozen_amount.dart';
 import 'package:allscreens/src/models/Location.dart';
 import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 
 class Records with ChangeNotifier {
-  Records();
   List<Expense> _full = [];
   List<Expense> get full => _full;
 
-  void addRecord(Expense expense) {
-    _full.add(expense);
-    notifyListeners();
-  }
+  Records();
 
-  double get totalAmount =>
-      _full.fold(0.0, (curr, next) => curr + next.amount.value);
-
-  void createTestData(int n) {
+  void createTestData(int n, int start, int end) {
     final sData = SessionData.withCatsOnly();
     for (var i = 0; i < n; i++) {
       var e = Expense();
+      var y = Random().nextInt(start + end) - start;
+      e.expenseDT = DateTime.now().add(Duration(days: y));
       var x = Random().nextInt(sData.subcats.length);
       var subCat = sData.subcats[x];
       var mainCat =
@@ -41,5 +37,23 @@ class Records with ChangeNotifier {
       _full.add(e);
     }
     notifyListeners();
+  }
+
+  void addRecord(Expense expense) {
+    _full.add(expense);
+    notifyListeners();
+  }
+
+  double get totalAmount =>
+      _full.fold(0.0, (curr, next) => curr + next.amount.value);
+
+  List<Expense> expensesOnDate(DateTime date) {
+    DateTime dStart = Jiffy(date).startOf('day');
+    DateTime dEnd = Jiffy(date).endOf('day');
+    return _full
+        .where((e) =>
+            e.expenseDT.compareTo(dStart) >= 0 &&
+            e.expenseDT.compareTo(dEnd) <= 0)
+        .toList();
   }
 }

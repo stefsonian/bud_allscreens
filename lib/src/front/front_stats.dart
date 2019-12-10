@@ -1,9 +1,17 @@
+import 'package:allscreens/src/components/chart_bar_vertical.dart';
+import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/components/info_bubble.dart';
 import 'package:allscreens/src/front/budget_bar.dart';
 import 'package:allscreens/src/front/budget_bar_box.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/models/Expense.dart';
+import 'package:allscreens/src/services/records.dart';
+import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'dart:math';
+
+import 'package:provider/provider.dart';
 
 class FrontStats extends StatefulWidget {
   @override
@@ -12,74 +20,94 @@ class FrontStats extends StatefulWidget {
 
 class _FrontStatsState extends State<FrontStats> {
   var budget = 100.0;
-  List<BudgetBar> budgetBars = [];
+  List<ChartBarVertical> budgetBars = [];
+  Records records;
+  SessionData session;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    records = Provider.of<Records>(context);
+    session = Provider.of<SessionData>(context);
     createTestData();
   }
 
   createTestData() {
-    List<BudgetBar> bb = [];
-    List<double> spends = [];
-    for (var i = 0; i < 100; i++) {
-      double spend = budget * 1.3 * Random().nextDouble();
-      spends.add(spend);
+    List<ChartBarVertical> bb = [];
+    List<Expense> rs = List.from(records.full);
+    rs.sort((curr, next) => curr.expenseDT.compareTo(next.expenseDT));
+    double threshold1 = 100.0;
+    double threshold2 = 120.0;
+    for (var i = session.trip.travelDay - 1; i >= 0; i--) {
+      var date = session.trip.startDT.add(Duration(days: i));
+      var dateExpenses = records.expensesOnDate(date);
+      double amount = dateExpenses.fold(
+          0.0, (curr, next) => curr + next.amount.amountInHome);
+      double budgetFactor = amount / session.trip.budgetAmount;
+      var height = min(1.0, budgetFactor) * 100;
+      var overRatio = min(1.2, budgetFactor);
+      var label = Jiffy(date).format('d/M');
+      bb.add(ChartBarVertical(
+        complyColor: Colors.white,
+        exceedColor: col_orange,
+        labelLine1: label,
+        labelColor: Colors.white,
+        valueColor: col_aqua,
+        threshold1: threshold1,
+        threshold2: threshold2,
+        showAmountAbove: amount < 0.15 * threshold1 ? true : false,
+        value: amount,
+      ));
     }
 
-    spends.forEach((spend) {
-      double height = spend / spends.reduce(max) * 100;
-      double overRatio = spend <= budget ? 0.0 : budget / spend;
-      bb.add(BudgetBar(heightPct: height.toInt(), ratioOver: overRatio));
-    });
-
-    setState(() => budgetBars.addAll(bb));
+    setState(() => budgetBars = bb);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 350,
-      padding: EdgeInsets.all(14),
-      // height: 300,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: kElevationToShadow[1],
-      ),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text('Daily', style: TextStyle(fontSize: 16)),
-                  Icon(Icons.expand_more),
-                ],
-              ),
-              InfoBubble(
-                backcolor: col_aqua,
-                textcolor: Colors.white,
-                text1: 'Budget  ',
-                text2: '\$100',
-              ),
-              Row(
-                children: <Widget>[
-                  Text('AUD', style: TextStyle(fontSize: 16)),
-                  Icon(Icons.expand_more),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 2),
-          Expanded(
-            child: BudgetBarBox(
-              budgetBars: budgetBars,
+    return ContentBox(
+      child: Container(
+        height: 350,
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Daily spend  ·  AUD \$100 budget',
+                      style: TextStyle(
+                          fontSize: 16,
+                          letterSpacing: 1.1,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      '',
+                      // 'Budget: \$100',
+                      style: TextStyle(
+                          fontSize: 16,
+                          letterSpacing: 1.1,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
-        ],
+            SizedBox(height: 2),
+            Expanded(
+              child: BudgetBarBox(
+                budgetBars: budgetBars,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

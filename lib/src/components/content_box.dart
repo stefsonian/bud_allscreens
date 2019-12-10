@@ -4,7 +4,7 @@ class ContentBox extends StatelessWidget {
   const ContentBox(
       {Key key,
       this.child,
-      this.color = Colors.white,
+      this.color = Colors.transparent,
       this.padding = const EdgeInsets.all(14)})
       : super(key: key);
   final Widget child;
@@ -18,7 +18,11 @@ class ContentBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: kElevationToShadow[1],
+        // boxShadow: kElevationToShadow[1],
+        border: Border.all(
+          width: 1,
+          color: Colors.white,
+        ),
       ),
       child: child,
     );

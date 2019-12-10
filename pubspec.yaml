@@ -30,6 +30,7 @@ dependencies:
   flutter_swiper: ^1.1.6
   clip_shadow: any
   jiffy: ^2.1.2
+  matrix4_transform: ^1.1.3
 
 dev_dependencies:
   flutter_test:

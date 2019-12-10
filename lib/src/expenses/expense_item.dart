@@ -35,7 +35,7 @@ class ExpenseItem extends StatelessWidget {
                   overflow: TextOverflow.fade,
                 ),
                 Text(
-                  '27 Sep 19',
+                  expense.dayMonthYear,
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.black54,

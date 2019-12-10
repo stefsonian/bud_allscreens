@@ -12,7 +12,15 @@ class FrontRecent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Recent activity', style: TextStyle(fontSize: 16)),
+            Text(
+              'Recent activity',
+              style: TextStyle(
+                fontSize: 16,
+                letterSpacing: 1.1,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SizedBox(height: 8),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -32,13 +40,21 @@ class FrontRecent extends StatelessWidget {
   Row _activityRow(IconData icon, String label, String price) {
     return Row(
       children: <Widget>[
-        Icon(icon),
+        Icon(icon, color: Colors.white),
         SizedBox(width: 16),
-        Text(label, style: TextStyle(fontSize: 16, letterSpacing: 1.1)),
+        Text(
+          label,
+          style:
+              TextStyle(fontSize: 16, color: Colors.white, letterSpacing: 1.1),
+        ),
         Expanded(
           child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(price, style: TextStyle(fontSize: 16))),
+            alignment: Alignment.centerRight,
+            child: Text(
+              price,
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+          ),
         ),
         // SizedBox(width: 20),
         Padding(

@@ -27,7 +27,7 @@ class _BudgetBarState extends State<BudgetBar> {
         Container(
           margin: EdgeInsets.only(bottom: 6),
           child: Text(
-            '\$${widget.heightPct}',
+            '\$${widget.value}',
             style: TextStyle(
               fontSize: 11,
             ),
@@ -51,7 +51,7 @@ class _BudgetBarState extends State<BudgetBar> {
         Container(
           margin: EdgeInsets.only(top: 6),
           child: Text(
-            'Wed',
+            widget.label,
             style: TextStyle(
               fontSize: 11,
             ),

@@ -44,8 +44,8 @@ class SessionData with ChangeNotifier {
       user = User.withDemoData('demouser A', 'Plato');
       onDeviceUsers.add(User.withDemoData('onDeviceUser1', 'Aristotle'));
       onDeviceUsers.add(User.withDemoData('onDeviceUser2', 'Anaximander'));
+      _updateTrips();
     });
-    _updateTrips();
     notifyListeners();
   }
 
@@ -56,12 +56,14 @@ class SessionData with ChangeNotifier {
   void _updateTrips() {
     user.trips.forEach((id) {
       var name = '$id name';
-      var allUsers = List.from(onDeviceUsers);
+      List<User> allUsers = List.from(onDeviceUsers);
       allUsers.add(user);
       var t = Trip.withDemoData(id, name, allUsers);
       trips.add(t);
     });
   }
+
+  Trip get trip => trips.firstWhere((t) => t.id == user.currentTrip);
 
   void _initialiseMainCats() {
     maincats = [];
