@@ -34,37 +34,6 @@ class LoginScreen extends StatelessWidget {
             heroTag: 'Log in',
             onPressed: () => _onPressedHandler(sessionData, context),
           ),
-          Container(
-            height: 400,
-            width: 400,
-            color: Colors.white70,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                ChartBarVertical(
-                  value: 70.0,
-                  threshold1: 100.0,
-                  threshold2: 120,
-                ),
-                ChartBarVertical(
-                  value: 10.0,
-                  threshold1: 100.0,
-                  threshold2: 120,
-                  showAmountAbove: true,
-                ),
-                ChartBarVertical(
-                  value: 110.0,
-                  threshold1: 100.0,
-                  threshold2: 120,
-                ),
-                ChartBarVertical(
-                  value: 150.0,
-                  threshold1: 100.0,
-                  threshold2: 120,
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

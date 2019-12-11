@@ -19,6 +19,17 @@ class _RecordScreenState extends State<RecordScreen>
     with SingleTickerProviderStateMixin {
   AppState appState;
   RecordState recordState;
+  AnimationController _controller;
+
+  final inputWidgets = [
+    // RecordOptions(),
+    RecordAmount(),
+    Container(),
+    Container(),
+    // RecordOther(),
+    // Container(),
+    Container()
+  ];
 
   final stages = [Stage0(), Stage1()];
 
@@ -38,10 +49,20 @@ class _RecordScreenState extends State<RecordScreen>
     if (recordState.recordStage != 0) recordState.recordStage -= 1;
   }
 
+  // tapNextButton() => recordState.isAmountRecorded = true;
+  // tapAmountBox() => recordState.isAmountRecorded = false;
+  // tapMainCat() => recordState.isMainCatRecorded = true;
+  // tapSubCat() => recordState.isSubCatRecorded = true;
+  // tapCategoriesBox() {
+  //   recordState.isMainCatRecorded = false;
+  //   recordState.isSubCatRecorded = false;
+  // }
+
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
 
+    // print('sHeight: $height');
     return SafeArea(
       // top: false,
       left: false,

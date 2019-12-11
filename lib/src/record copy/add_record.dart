@@ -25,7 +25,7 @@ class _AddRecordState extends State<AddRecord> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            RecordOptions(),
+            // RecordOptions(),
             SizedBox(height: 16),
             GestureDetector(
               onTap: tapAmount,
