@@ -32,8 +32,8 @@ class _RecordAmountState extends State<RecordAmount> {
             height: 220,
             child: Row(
               children: <Widget>[
-                Flexible(child: RecordOptions()),
-                Expanded(child: Numpad()),
+                Flexible(flex: 1, child: RecordOptions()),
+                Expanded(flex: 2, child: Numpad()),
               ],
             ),
           ),

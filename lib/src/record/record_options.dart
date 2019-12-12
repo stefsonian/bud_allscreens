@@ -11,13 +11,13 @@ class RecordOptions extends StatelessWidget {
             child: selectButton('Currency', Icons.monetization_on),
           ),
           Expanded(
-            child: selectButton('Currency', Icons.monetization_on),
+            child: selectButton('Credit', Icons.credit_card),
           ),
           Expanded(
-            child: selectButton('Currency', Icons.monetization_on),
+            child: selectButton('Split', Icons.call_split),
           ),
           Expanded(
-            child: selectButton('Currency', Icons.monetization_on),
+            child: selectButton('Repeat', Icons.repeat),
           ),
         ],
       ),
