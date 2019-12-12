@@ -58,7 +58,7 @@ class _RecordScreenState extends State<RecordScreen>
             // Content
             Positioned(
               top: 0,
-              bottom: 94,
+              bottom: 80,
               left: 0,
               right: 0,
               child: AnimatedSwitcher(
@@ -78,30 +78,16 @@ class _RecordScreenState extends State<RecordScreen>
               ),
             ),
             // Buttons
+
             Positioned(
               bottom: 23,
-              left: 18.5,
-              child: SizedBox(
-                height: 40,
-                width: 40,
-                child: FloatingActionButton(
-                  heroTag: 'exit create expense',
-                  backgroundColor: col_orange_dark,
-                  elevation: 2,
-                  child: Icon(Icons.remove, color: Colors.white, size: 33),
-                  onPressed: () => appState.activeTabIndex = 0,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 23,
-              left: 92.5,
+              left: 45,
               child: SizedBox(
                 height: 40,
                 width: 40,
                 child: FloatingActionButton(
                   heroTag: 'go back (expense)',
-                  backgroundColor: col_orange_dark,
+                  backgroundColor: col_orange,
                   elevation: 2,
                   child: Icon(Icons.arrow_back, color: Colors.white, size: 33),
                   onPressed: tapPreviousButton,
@@ -140,18 +126,15 @@ class Stage0 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        Spacer(flex: 1),
-        Expanded(
-          flex: 8,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              RecordCategory(),
-              RecordAmount(),
-            ],
-          ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            RecordCategory(),
+            SizedBox(height: 20),
+            RecordAmount(),
+          ],
         ),
       ],
     );
@@ -177,18 +160,16 @@ class RecordScreenClipper extends CustomClipper<Path> {
 
     var left = w * 0.0;
     var right = w;
-    var bottom = h - 42;
     var top = 0.0;
+    var bottom = h - 42;
 
     final path = Path();
     path.moveTo(left, top);
     path.lineTo(left, bottom);
-    path.lineTo(15, bottom);
-    path.arcToPoint(Offset(62, bottom), radius: Radius.circular(w * 0.05));
-    path.lineTo(89, bottom);
-    path.arcToPoint(Offset(136, bottom), radius: Radius.circular(w * 0.05));
-    path.lineTo(w * 0.4, bottom);
-    path.arcToPoint(Offset(w * 0.6, bottom), radius: Radius.circular(w * 0.1));
+    path.lineTo(40, bottom);
+    path.arcToPoint(Offset(90, bottom), radius: Radius.circular(1));
+    path.lineTo(w * 0.5 - 41, bottom);
+    path.arcToPoint(Offset(w * 0.5 + 41, bottom), radius: Radius.circular(1));
     path.lineTo(right, bottom);
     path.lineTo(right, top);
     path.close();
@@ -197,5 +178,5 @@ class RecordScreenClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(RecordScreenClipper oldClipper) => false;
+  bool shouldReclip(RecordScreenClipper oldClipper) => true;
 }

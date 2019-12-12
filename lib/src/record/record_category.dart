@@ -29,7 +29,7 @@ class RecordCategory extends StatelessWidget {
             children: <Widget>[
               CatButton(icon: Icons.flash_on, label: 'Quick', isMainCat: true),
               CatButton(
-                icon: tags,
+                icon: Icons.restaurant,
                 label: 'Eat',
                 showLabel: false,
                 isMainCat: true,

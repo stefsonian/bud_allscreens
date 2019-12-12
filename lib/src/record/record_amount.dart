@@ -27,13 +27,14 @@ class _RecordAmountState extends State<RecordAmount> {
             color: Colors.white.withOpacity(0.4),
             height: 1,
           ),
+          SizedBox(height: 4),
           Container(
             // padding: EdgeInsets.symmetric(horizontal: 30),
             height: 220,
             child: Row(
               children: <Widget>[
                 Flexible(flex: 1, child: RecordOptions()),
-                Expanded(flex: 2, child: Numpad()),
+                Expanded(flex: 2, child: Center(child: Numpad())),
               ],
             ),
           ),
