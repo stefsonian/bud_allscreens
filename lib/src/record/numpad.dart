@@ -1,3 +1,4 @@
+import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:splitsi/src/services/appState.dart';
@@ -117,8 +118,7 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // AppState appState = Provider.of<AppState>(context);
-    var appState = AppState();
+    RecordState recordState = Provider.of<RecordState>(context);
     Widget w = number == null
         ? Icon(icon, size: 30, color: Colors.white)
         : Text(number.toString(), style: _textStyle);
@@ -126,7 +126,7 @@ class _Item extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         // radius: 60,
-        onTap: () => appState.onNumpadTap(value, context),
+        onTap: () => recordState.updateNumpadValue(value),
         child: Container(
           child: FittedBox(
             fit: BoxFit.scaleDown,

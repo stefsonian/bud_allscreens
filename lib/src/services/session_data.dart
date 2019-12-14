@@ -31,6 +31,7 @@ class SessionData with ChangeNotifier {
   }
 
   void _initialiseCurrencies() async {
+    WidgetsFlutterBinding.ensureInitialized();
     currencies = [];
     String data = await rootBundle.loadString('assets/currencies.json');
 

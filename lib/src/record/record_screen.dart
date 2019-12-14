@@ -58,7 +58,7 @@ class _RecordScreenState extends State<RecordScreen>
             // Content
             Positioned(
               top: 0,
-              bottom: 80,
+              bottom: 100,
               left: 0,
               right: 0,
               child: AnimatedSwitcher(

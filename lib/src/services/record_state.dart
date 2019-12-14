@@ -1,3 +1,4 @@
+import 'package:allscreens/src/models/Numpad_input.dart';
 import 'package:flutter/material.dart';
 
 class RecordState with ChangeNotifier {
@@ -30,6 +31,15 @@ class RecordState with ChangeNotifier {
   int get recordStage => _recordStage;
   set recordStage(int recordStage) {
     _recordStage = recordStage;
+    notifyListeners();
+  }
+
+  NumpadInput _numpad = NumpadInput();
+  NumpadInput get numpad => _numpad;
+  String get numpadValue => numpad.displayValue();
+  updateNumpadValue(String value) {
+    numpad.updateValue(value);
+    print('New numpad value: ${numpad.displayValue()}');
     notifyListeners();
   }
 

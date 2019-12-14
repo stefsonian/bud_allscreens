@@ -1,40 +1,42 @@
 class NumpadInput {
-  String value = '0.00';
-  bool hasInput = false;
-  bool hasPoint = false;
+  String value = '';
 
   int get len => value.length;
   double get valueDouble => double.tryParse(value) ?? 0.0;
 
-  // updateValue(String newVal) {
-  //   var len = numpadValue.length;
-  //   var curVal = numpadValue;
-  //   var dotIndex = curVal.indexOf('.');
+  String displayValue() {
+    var dotIndex = value.indexOf('.');
+    if (value == '') return '0.00';
+    if (dotIndex == -1) return '$value.00';
+    if (dotIndex == len - 1) return '${value}00';
+    if (dotIndex == len - 2) return '${value}0';
+    return value;
+  }
 
-  //   switch (value) {
-  //     case 'del':
-  //       // remove the last character if exists
-  //       if (len > 0) numpadValue = curVal.substring(0, len - 1);
-  //       break;
-  //     case '.':
-  //       // only add a dot if there isn't already a dot
-  //       if (dotIndex == -1) numpadValue = '$curVal.';
-  //       break;
-  //     case 'done':
-  //       nextStage();
-  //       if (stage == 'split amount') Navigator.pushNamed(context, '/sliders');
-  //       break;
-  //     default:
-  //       // if there are already two decimals, then replace the last decimal,
-  //       // otherwise just add the new value onto the _numpadValue
-  //       // (except if the first number is 0. if it is, then replace it)
-  //       if (dotIndex != -1 && dotIndex == len - 3) {
-  //         numpadValue = '${curVal.substring(0, len - 1)}$value';
-  //       } else if (dotIndex == -1 && curVal == '0') {
-  //         numpadValue = value;
-  //       } else {
-  //         numpadValue = '$curVal$value';
-  //       }
-  //   }
-  // }
+  updateValue(String newVal) {
+    var dotIndex = value.indexOf('.');
+
+    switch (newVal) {
+      case 'del':
+        // remove the last character if exists
+        if (len > 0) value = value.substring(0, len - 1);
+        if (value.endsWith('.')) value = value.substring(0, len - 1);
+        break;
+      case '.':
+        // only add a dot if there isn't already a dot
+        if (dotIndex == -1) value = '$value.';
+        break;
+      default:
+        // if there are already two decimals, then replace the last decimal,
+        // otherwise just add the new value onto the current value
+        // (except if the first number is 0. If it is, then replace it)
+        if (dotIndex != -1 && dotIndex == len - 3) {
+          value = '${value.substring(0, len - 1)}$newVal';
+        } else if (dotIndex == -1 && value == '0') {
+          value = newVal;
+        } else {
+          value = '$value$newVal';
+        }
+    }
+  }
 }

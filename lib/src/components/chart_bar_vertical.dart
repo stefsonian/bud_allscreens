@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:align_positioned/align_positioned.dart';
 import 'package:allscreens/src/components/animated_spacer.dart';
 import 'package:clip_shadow/clip_shadow.dart';
 import 'package:flutter/material.dart';
@@ -35,48 +36,99 @@ class ChartBarVertical extends StatelessWidget {
   final Color labelColor;
   final Color valueColor;
   final bool showAmountAbove;
+  final double labelBoxHeight = 36;
 
   @override
   Widget build(BuildContext context) {
-    int pct1 = ((value / threshold1) * 100).toInt();
-    int pct2 = ((value / threshold2) * 100).toInt();
-    Color color = pct1 > 100 ? exceedColor : complyColor;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        AnimatedSpacer(begin: 1000, end: 101 - min(100, pct2)),
-        Expanded(
-          flex: min(100, pct2),
-          child: pct2 > 100
-              ? _excessBar(color, valueColor)
-              : _compliantBar(color: color, amountAbove: showAmountAbove),
-        ),
-        Container(
-          alignment: Alignment.center,
-          height: 36,
-          width: width,
-          decoration: BoxDecoration(
-            color: labelBackColor,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
+    double ratio1 = value / threshold1;
+    double ratio2 = value / threshold2;
+    double heightRatio = min(1.0, ratio2);
+    Color color = ratio1 > 1 ? exceedColor : complyColor;
+    Widget bar =
+        ratio2 > 1.0 ? _excessBar(color: color) : _compliantBar(color: color);
+    return Container(
+      width: width,
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: 0,
+            bottom: labelBoxHeight,
+            left: 0,
+            right: 0,
+            child: AlignPositioned(
+              alignment: Alignment.bottomCenter,
+              childHeightRatio: heightRatio,
+              childWidthRatio: 1.0,
+              child: bar,
             ),
           ),
-          child: Text(
-            labelLine1,
-            style: TextStyle(
-              color: labelColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+          Positioned(
+            top: 0,
+            bottom: labelBoxHeight,
+            left: 0,
+            right: 0,
+            child: _displayValue(
+              color: color,
+              amountAbove: showAmountAbove,
+              heightRatio: heightRatio,
             ),
           ),
-        ),
-      ],
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: _displayLabel(),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _compliantBar({Color color, bool amountAbove = false}) {
-    var offsetX = amountAbove ? -30.0 : 10.0;
+  Widget _displayLabel() {
+    return Container(
+      height: labelBoxHeight,
+      width: width,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: labelBackColor,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
+      ),
+      child: Text(
+        labelLine1,
+        style: TextStyle(
+          color: labelColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  Widget _displayValue(
+      {Color color, bool amountAbove = false, double heightRatio}) {
+    var valueOffset = amountAbove ? 0.1 : -0.05;
+    return AlignPositioned(
+      alignment: Alignment.bottomCenter,
+      childHeightRatio: heightRatio + valueOffset,
+      childWidthRatio: 1.0,
+      child: Container(
+        alignment: Alignment.topCenter,
+        child: Text(
+          value.toStringAsFixed(0),
+          style: TextStyle(
+            color: amountAbove ? color : valueColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _compliantBar({Color color}) {
     return Container(
       width: width,
       alignment: Alignment.topCenter,
@@ -92,23 +144,10 @@ class ChartBarVertical extends StatelessWidget {
           topRight: Radius.circular(10),
         ),
       ),
-      child: Transform.translate(
-        offset: Offset(0, offsetX),
-        child: Container(
-          child: Text(
-            value.toStringAsFixed(0),
-            style: TextStyle(
-              color: amountAbove ? color : valueColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-        ),
-      ),
     );
   }
 
-  Widget _excessBar(Color color, valueColor) {
+  Widget _excessBar({Color color}) {
     return ClipPath(
       clipper: ExcessClipperBottom(),
       child: Container(
@@ -125,14 +164,6 @@ class ChartBarVertical extends StatelessWidget {
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),
             topRight: Radius.circular(10),
-          ),
-        ),
-        child: Text(
-          value.toStringAsFixed(0),
-          style: TextStyle(
-            color: valueColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
           ),
         ),
       ),
@@ -217,3 +248,17 @@ class NoClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(NoClipper oldClipper) => false;
 }
+
+//  AnimatedSpacer(begin: 1000, end: 101 - min(100, pct2)),
+//         Expanded(
+//           flex: min(100, pct2),
+//           child: pct2 > 100
+//               ? _excessBar(color, valueColor)
+//               : _compliantBar(color: color, amountAbove: showAmountAbove),
+//         ),
+// Expanded(
+//   flex: min(100, pct2),
+//   child: pct2 > 100
+//       ? _excessBar(color, valueColor)
+//       : _compliantBar(color: color, amountAbove: showAmountAbove),
+// ),

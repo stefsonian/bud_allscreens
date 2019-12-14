@@ -47,6 +47,7 @@ class _RecordAmountState extends State<RecordAmount> {
 class AmountDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    RecordState recordState = Provider.of<RecordState>(context);
     return Container(
       padding: EdgeInsets.only(right: 20),
       child: Row(
@@ -68,11 +69,12 @@ class AmountDisplay extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '77.00',
+                  recordState.numpadValue,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 34,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2),
                 ),
               ],
             ),

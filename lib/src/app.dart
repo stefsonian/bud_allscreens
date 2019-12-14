@@ -20,8 +20,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    records.createTestData(
-        90, 30, 60); // TODO: Only for testing. Remove before release.
+    if (records.full.length == 0) {
+      records.createTestData(
+          90, 30, 60); // TODO: Only for testing. Remove before release.
+    }
     FlutterStatusbarcolor.setStatusBarColor(col_aqua.withOpacity(1.0));
     FlutterStatusbarcolor.setNavigationBarColor(col_aqua);
     return MultiProvider(
