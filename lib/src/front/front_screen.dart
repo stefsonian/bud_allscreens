@@ -62,10 +62,10 @@ class _FrontScreenState extends State<FrontScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: FrontStats(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FrontAverages(),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: FrontAverages(),
+                // ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FrontByCategory(),
@@ -74,10 +74,10 @@ class _FrontScreenState extends State<FrontScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: FrontByHashtag(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FrontByPerson(),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: FrontByPerson(),
+                // ),
                 SizedBox(height: 100),
               ],
             ),

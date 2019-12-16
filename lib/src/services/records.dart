@@ -19,11 +19,10 @@ class Records with ChangeNotifier {
       var y = Random().nextInt(start + end) - start;
       e.expenseDT = DateTime.now().add(Duration(days: y));
       var x = Random().nextInt(sData.subcats.length);
-      var subCat = sData.subcats[x];
-      var mainCat =
-          sData.maincats.singleWhere((cat) => cat.id == subCat.groupId);
-      e.subCategory = subCat;
-      e.mainCategory = mainCat;
+      var subCats = sData.subcats.keys.toList();
+      var subCat = subCats[x];
+      e.subCategory = sData.subcats[subCat];
+      e.mainCategory = sData.maincats[sData.subcats[subCat].groupId];
       var amount = Random().nextDouble() * 100;
       var fa = FrozenAmount.withTestData(amount);
       e.amount = fa;
@@ -34,6 +33,16 @@ class Records with ChangeNotifier {
       e.note = 'A quick note';
       e.paymentType = ['Cash', 'Credit', 'Debit'][Random().nextInt(2)];
       e.tripId = 'demo trip';
+      int noteIndex = Random().nextInt(7);
+      e.note = [
+        '#fancydinner with text #beachday',
+        'a #beachday',
+        'a #coffeefix wt',
+        '',
+        '',
+        '',
+        ''
+      ].elementAt(noteIndex);
       _full.add(e);
     }
     notifyListeners();
@@ -55,5 +64,36 @@ class Records with ChangeNotifier {
             e.expenseDT.compareTo(dStart) >= 0 &&
             e.expenseDT.compareTo(dEnd) <= 0)
         .toList();
+  }
+
+  Map<String, double> totalByMainCat() {
+    Map<String, double> result = {};
+    full.forEach((e) {
+      var cat = e.mainCategory.id;
+      var updateAmount = e.amount.amountInHome;
+      if (!result.containsKey(cat)) result[cat] = 0.0;
+      result.update(cat, (current) => current + updateAmount);
+    });
+    return result;
+  }
+
+  Map<String, double> totalByHashtag() {
+    Map<String, double> result = {};
+    full.forEach((e) {
+      e.tags.forEach((tag) {
+        var updateAmount = e.amount.amountInHome;
+        if (!result.containsKey(tag)) result[tag] = 0.0;
+        result.update(tag, (current) => current + updateAmount);
+      });
+    });
+    return result;
+  }
+
+  List<String> uniqueHashtags() {
+    List<String> result = [];
+    full.forEach((e) {
+      e.tags.forEach((t) => result.add(t));
+    });
+    return result.toSet().toList();
   }
 }

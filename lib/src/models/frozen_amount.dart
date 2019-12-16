@@ -1,6 +1,6 @@
 class FrozenAmount {
-  var currency, homeCurrency = '';
-  var frozenDT = DateTime.now();
+  String currency, homeCurrency = '';
+  DateTime frozenDT = DateTime.now();
   double value, amountInUSD, amountInEUR, amountInAUD, amountInHome = 0.0;
 
   FrozenAmount.withTestData(double amount) {

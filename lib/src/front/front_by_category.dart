@@ -1,10 +1,20 @@
+import 'dart:math';
+import 'package:allscreens/src/components/chart_bar_horizontal.dart';
 import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/front/budget_bar_horiz.dart';
+import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/services/records.dart';
+import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FrontByCategory extends StatelessWidget {
+  // TODO: Only show results from previous 7 days
   @override
   Widget build(BuildContext context) {
+    var records = Provider.of<Records>(context);
+    var sessionData = Provider.of<SessionData>(context);
+    var cats = records.totalByMainCat();
+    var maxAmount = cats.values.reduce(max).ceilToDouble();
     return Container(
       child: ContentBox(
         child: Column(
@@ -15,50 +25,56 @@ class FrontByCategory extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: BudgetBarHoriz(
-                    widthPct: 80,
-                    amount: '143',
-                    icon: Icons.restaurant,
-                  ),
+                buildChartBarHorizontal(
+                  icon: sessionData.maincats['eat'].icon,
+                  value: cats['eat'],
+                  maxAmount: maxAmount,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: BudgetBarHoriz(
-                    widthPct: 100,
-                    amount: '230',
-                    icon: Icons.hotel,
-                  ),
+                buildChartBarHorizontal(
+                  icon: sessionData.maincats['sleep'].icon,
+                  value: cats['sleep'],
+                  maxAmount: maxAmount,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: BudgetBarHoriz(
-                    widthPct: 40,
-                    amount: '76',
-                    icon: Icons.train,
-                  ),
+                buildChartBarHorizontal(
+                  icon: sessionData.maincats['travel'].icon,
+                  value: cats['travel'],
+                  maxAmount: maxAmount,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: BudgetBarHoriz(
-                    widthPct: 70,
-                    amount: '123',
-                    icon: Icons.camera_alt,
-                  ),
+                buildChartBarHorizontal(
+                  icon: sessionData.maincats['experience'].icon,
+                  value: cats['experience'],
+                  maxAmount: maxAmount,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: BudgetBarHoriz(
-                    widthPct: 20,
-                    amount: '40',
-                    icon: Icons.scatter_plot,
-                  ),
+                buildChartBarHorizontal(
+                  icon: sessionData.maincats['other'].icon,
+                  value: cats['other'],
+                  maxAmount: maxAmount,
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildChartBarHorizontal(
+      {IconData icon, double value, double maxAmount}) {
+    if (maxAmount < 1) return Container();
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5),
+      child: ChartBarHorizontal(
+        complyColor: Colors.white,
+        exceedColor: col_orange,
+        valueColor: col_aqua,
+        showAmountAbove: value / maxAmount < 0.18,
+        label: Icon(
+          icon,
+          color: Colors.white,
+        ),
+        threshold1: maxAmount,
+        threshold2: maxAmount,
+        value: value,
       ),
     );
   }

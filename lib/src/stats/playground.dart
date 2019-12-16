@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:allscreens/src/components/chart_bar_horizontal.dart';
 import 'package:allscreens/src/components/chart_bar_vertical.dart';
 import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/front/budget_bar_box.dart';
@@ -18,7 +19,7 @@ class Playground extends StatefulWidget {
 
 class _PlaygroundState extends State<Playground> {
   var budget = 100.0;
-  List<ChartBarVertical> budgetBars = [];
+  List<ChartBarHorizontal> budgetBars = [];
   Records records;
   SessionData session;
 
@@ -31,7 +32,7 @@ class _PlaygroundState extends State<Playground> {
   }
 
   createTestData() {
-    List<ChartBarVertical> bb = [];
+    List<ChartBarHorizontal> bb = [];
     List<Expense> rs = List.from(records.full);
     rs.sort((curr, next) => curr.expenseDT.compareTo(next.expenseDT));
     double threshold1 = 100.0;
@@ -45,10 +46,10 @@ class _PlaygroundState extends State<Playground> {
       var height = min(1.0, budgetFactor) * 100;
       var overRatio = min(1.2, budgetFactor);
       var label = Jiffy(date).format('d/M');
-      bb.add(ChartBarVertical(
+      bb.add(ChartBarHorizontal(
         complyColor: Colors.white,
         exceedColor: col_orange,
-        labelLine1: label,
+        label: Icon(Icons.flight, color: Colors.white),
         labelColor: Colors.white,
         valueColor: col_aqua,
         threshold1: threshold1,
@@ -65,7 +66,7 @@ class _PlaygroundState extends State<Playground> {
   Widget build(BuildContext context) {
     return ContentBox(
       child: Container(
-        height: 350,
+        height: 450,
         child: Column(
           children: <Widget>[
             Row(
@@ -98,10 +99,16 @@ class _PlaygroundState extends State<Playground> {
                 ),
               ],
             ),
-            SizedBox(height: 2),
+            SizedBox(height: 30),
             Expanded(
-              child: BudgetBarBox(
-                budgetBars: budgetBars,
+              child: Column(
+                children: budgetBars
+                    .take(5)
+                    .map((b) => Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: b,
+                        ))
+                    .toList(),
               ),
             ),
           ],

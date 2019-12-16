@@ -10,8 +10,8 @@ import 'package:allscreens/src/models/User.dart';
 import 'package:flutter/material.dart';
 
 class SessionData with ChangeNotifier {
-  List<MainCategory> maincats;
-  List<SubCategory> subcats;
+  Map<String, MainCategory> maincats;
+  Map<String, SubCategory> subcats;
   List<Currency> currencies;
   User user;
   List<User> onDeviceUsers = [];
@@ -67,236 +67,236 @@ class SessionData with ChangeNotifier {
   Trip get trip => trips.firstWhere((t) => t.id == user.currentTrip);
 
   void _initialiseMainCats() {
-    maincats = [];
+    maincats = {};
 
-    maincats.add(MainCategory(
+    maincats['eat'] = MainCategory(
       id: 'eat',
       name: 'Eat',
       icon: Icons.restaurant,
-    ));
-    maincats.add(MainCategory(
+    );
+    maincats['sleep'] = MainCategory(
       id: 'sleep',
       name: 'Sleep',
       icon: Icons.local_hotel,
-    ));
-    maincats.add(MainCategory(
+    );
+    maincats['travel'] = MainCategory(
       id: 'travel',
       name: 'Travel',
       icon: Icons.directions_walk,
-    ));
-    maincats.add(MainCategory(
+    );
+    maincats['experience'] = MainCategory(
       id: 'experience',
       name: 'Experience',
       icon: Icons.camera_alt,
-    ));
-    maincats.add(MainCategory(
+    );
+    maincats['other'] = MainCategory(
       id: 'other',
       name: 'Other',
       icon: Icons.scatter_plot,
-    ));
+    );
   }
 
   void _initialiseSubCats() {
-    subcats = [];
+    subcats = {};
 
-    subcats.add(SubCategory(
+    subcats['breakfast'] = SubCategory(
       groupId: 'eat',
       id: 'breakfast',
       name: 'Breakfast',
       icon: Icons.restaurant,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['lunch'] = SubCategory(
       groupId: 'eat',
       id: 'lunch',
       name: 'Lunch',
       icon: Icons.fastfood,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['dinner'] = SubCategory(
       groupId: 'eat',
       id: 'dinner',
       name: 'Dinner',
       icon: Icons.local_dining,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['snack'] = SubCategory(
       groupId: 'eat',
       id: 'snack',
       name: 'Snack',
       icon: Icons.local_pizza,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['drink'] = SubCategory(
       groupId: 'eat',
       id: 'drink',
       name: 'Drink',
       icon: Icons.local_bar,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['cafe'] = SubCategory(
       groupId: 'eat',
       id: 'cafe',
       name: 'Cafe',
       icon: Icons.local_cafe,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['hydration'] = SubCategory(
       groupId: 'eat',
       id: 'hydration',
       name: 'Hydration',
       icon: Icons.local_drink,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['eat_other'] = SubCategory(
       groupId: 'eat',
       id: 'eat_other',
       name: 'Other (Eat)',
       icon: Icons.restaurant,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['train'] = SubCategory(
       groupId: 'travel',
       id: 'train',
       name: 'Train',
       icon: Icons.train,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['tram'] = SubCategory(
       groupId: 'travel',
       id: 'tram',
       name: 'Tram',
       icon: Icons.tram,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['metro'] = SubCategory(
       groupId: 'travel',
       id: 'metro',
       name: 'Metro',
       icon: Icons.directions_subway,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['bus'] = SubCategory(
       groupId: 'travel',
       id: 'bus',
       name: 'Bus',
       icon: Icons.directions_bus,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['flight'] = SubCategory(
       groupId: 'travel',
       id: 'flight',
       name: 'Flight',
       icon: Icons.flight,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['ferry'] = SubCategory(
       groupId: 'travel',
       id: 'ferry',
       name: 'Ferry',
       icon: Icons.directions_boat,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['car'] = SubCategory(
       groupId: 'travel',
       id: 'car',
       name: 'Car',
       icon: Icons.directions_car,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['motorcycle'] = SubCategory(
       groupId: 'travel',
       id: 'motorcycle',
       name: 'Motorcycle',
       icon: Icons.motorcycle,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['bike'] = SubCategory(
       groupId: 'travel',
       id: 'bike',
       name: 'Bike',
       icon: Icons.directions_bike,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['travel_other'] = SubCategory(
       groupId: 'travel',
       id: 'travel_other',
       name: 'Other (Travel)',
       icon: Icons.directions_walk,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['hotel'] = SubCategory(
       groupId: 'sleep',
       id: 'hotel',
       name: 'Hotel',
       icon: Icons.hotel,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['hostel'] = SubCategory(
       groupId: 'sleep',
       id: 'hostel',
       name: 'Hostel',
       icon: Icons.location_city,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['camping'] = SubCategory(
       groupId: 'sleep',
       id: 'camping',
       name: 'Camping',
       icon: Icons.event_seat,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['airbnb'] = SubCategory(
       groupId: 'sleep',
       id: 'airbnb',
       name: 'Airbnb',
       icon: Icons.category,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['sleep_other'] = SubCategory(
       groupId: 'sleep',
       id: 'sleep_other',
       name: 'Other (Sleep)',
       icon: Icons.local_hotel,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['tour'] = SubCategory(
       groupId: 'experience',
       id: 'tour',
       name: 'Tour',
       icon: Icons.share,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['sight'] = SubCategory(
       groupId: 'experience',
       id: 'sight',
       name: 'Sight',
       icon: Icons.camera_alt,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['activity'] = SubCategory(
       groupId: 'experience',
       id: 'activity',
       name: 'Activity',
       icon: Icons.local_activity,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['shopping'] = SubCategory(
       groupId: 'experience',
       id: 'shopping',
       name: 'Shopping',
       icon: Icons.add_shopping_cart,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['market'] = SubCategory(
       groupId: 'experience',
       id: 'market',
       name: 'Market',
       icon: Icons.shopping_basket,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['experience_other'] = SubCategory(
       groupId: 'experience',
       id: 'experience_other',
       name: 'Other (Experience)',
       icon: Icons.camera_alt,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['groceries'] = SubCategory(
       groupId: 'other',
       id: 'groceries',
       name: 'Groceries',
       icon: Icons.shopping_cart,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['medical'] = SubCategory(
       groupId: 'other',
       id: 'medical',
       name: 'Medical',
       icon: Icons.local_hospital,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['laundry'] = SubCategory(
       groupId: 'other',
       id: 'laundry',
       name: 'Laundry',
       icon: Icons.local_laundry_service,
-    ));
-    subcats.add(SubCategory(
+    );
+    subcats['other_other'] = SubCategory(
       groupId: 'other',
       id: 'other_other',
       name: 'Other',
       icon: Icons.scatter_plot,
-    ));
+    );
   }
 }
 

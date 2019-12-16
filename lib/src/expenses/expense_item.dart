@@ -2,7 +2,9 @@ import 'package:allscreens/src/components/Ikon_button.dart';
 import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/models/Expense.dart';
+import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ExpenseItem extends StatelessWidget {
   const ExpenseItem({Key key, this.expense}) : super(key: key);
