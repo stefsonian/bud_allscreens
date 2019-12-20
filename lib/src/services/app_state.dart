@@ -28,6 +28,11 @@ class AppState with ChangeNotifier {
     _newExpense.initialise(trip: trip, user: user);
   }
 
+  void updateNewExpense(String property, dynamic value) {
+    newExpense.update(property, value);
+    notifyListeners();
+  }
+
   int _activeTabIndex = 0;
   int get activeTabIndex => _activeTabIndex;
   set activeTabIndex(int activeTabIndex) {

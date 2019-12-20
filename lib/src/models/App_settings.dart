@@ -15,7 +15,7 @@ class AppSettings extends ChangeNotifier {
 
 class Cols {
   Color background2 = Color(0xFFFF37474F);
-  Color background1 = Color(0xFFFF546E7A);
+  Color background1 = Color(0xFFFF1F6F94);
   Color action = Color(0xFFFFE4D554);
   Color actionlight = Color(0xFFFFF5E760);
   Color actioncontent = Color(0xFFFF303030);

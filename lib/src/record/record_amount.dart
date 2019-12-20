@@ -53,34 +53,46 @@ class AmountDisplay extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(right: 20),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Spacer(flex: 2),
-          Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 8, 2, 0),
-                  child: Text(
-                    'AUD  \$',
-                    style: TextStyle(
-                      color: appState.cols.actionlight,
-                      fontSize: 20,
-                    ),
+          selectButton('Credit', Icons.credit_card, appState.cols.content),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 8, 2, 0),
+                child: Text(
+                  'AUD  \$',
+                  style: TextStyle(
+                    color: appState.cols.actionlight,
+                    fontSize: 20,
                   ),
                 ),
-                Text(
-                  recordState.numpadValue,
-                  style: TextStyle(
-                      color: appState.cols.actionlight,
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2),
-                ),
-              ],
-            ),
+              ),
+              Text(
+                recordState.numpadValue,
+                style: TextStyle(
+                    color: appState.cols.actionlight,
+                    fontSize: 34,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2),
+              ),
+            ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget selectButton(String label, IconData icon, Color color) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Icon(icon, color: color),
+          SizedBox(width: 4),
+          Text(label,
+              style: TextStyle(color: Colors.white),
+              overflow: TextOverflow.visible),
         ],
       ),
     );

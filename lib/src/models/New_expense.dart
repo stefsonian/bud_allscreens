@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:allscreens/src/models/Location.dart';
 import 'package:allscreens/src/models/MainCategory.dart';
 import 'package:allscreens/src/models/SubCategory.dart';
+import 'package:flutter/material.dart';
 
 class NewExpense extends ChangeNotifier {
   DateTime creationDT = DateTime.now();
@@ -33,9 +34,24 @@ class NewExpense extends ChangeNotifier {
     paidByName = user.name;
     paymentType = user.paymentMethodLastUsed;
     tripId = trip.id;
+    mainCategory = MainCategory(id: 'eat', name: 'Eat', icon: Icons.restaurant);
+    //TODO: The initial main category should be the quick/speed category
     notifyListeners();
     getLocation();
     //location
+  }
+
+  void update(String property, dynamic value) {
+    switch (property) {
+      case 'mainCategory':
+        mainCategory = value;
+        break;
+      case 'subCategory':
+        subCategory = value;
+        break;
+      default:
+    }
+    notifyListeners();
   }
 
   void getLocation() async {

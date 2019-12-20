@@ -1,6 +1,7 @@
+import 'package:allscreens/src/models/Category.dart';
 import 'package:flutter/material.dart';
 
-class SubCategory {
+class SubCategory extends Category {
   String id;
   String groupId;
   String name;

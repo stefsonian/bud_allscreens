@@ -53,7 +53,7 @@ class _RecordScreenState extends State<RecordScreen>
       left: false,
       right: false,
       child: Container(
-        color: appState.cols.action.withOpacity(0.9),
+        color: appState.cols.action.withOpacity(0.92),
         child: Stack(
           children: <Widget>[
             ClipShadow(

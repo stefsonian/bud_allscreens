@@ -1,11 +1,14 @@
 import 'package:allscreens/src/components/splitter.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //WHERE
 class RecordDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Container(
       padding: EdgeInsets.all(15),
       child: Column(
@@ -26,13 +29,13 @@ class RecordDetails extends StatelessWidget {
                     Icon(
                       Icons.restaurant,
                       size: 30,
-                      color: Colors.white,
+                      color: appState.cols.content,
                     ),
                     SizedBox(width: 10),
                     Text(
                       'Breakfast',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: appState.cols.content,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.1,
@@ -49,7 +52,7 @@ class RecordDetails extends StatelessWidget {
                               child: Text(
                                 'AUD  \$',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: appState.cols.content,
                                   fontSize: 15,
                                 ),
                               ),
@@ -57,7 +60,7 @@ class RecordDetails extends StatelessWidget {
                             Text(
                               '77.00',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: appState.cols.content,
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -73,13 +76,13 @@ class RecordDetails extends StatelessWidget {
                     Icon(
                       Icons.location_on,
                       size: 15,
-                      color: Colors.white,
+                      color: appState.cols.content,
                     ),
                     SizedBox(width: 10),
                     Text(
                       'Melbourne, Australia',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: appState.cols.content,
                         fontSize: 15,
                       ),
                     ),
@@ -96,9 +99,9 @@ class RecordDetails extends StatelessWidget {
           Row(
             // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _optionBox('Plato', true),
-              _optionBox('Aristotle', false),
-              _optionBox('Pick', false),
+              _optionBox('Plato', true, appState),
+              _optionBox('Aristotle', false, appState),
+              _optionBox('Pick', false, appState),
             ],
           ),
           Splitter(
@@ -109,9 +112,9 @@ class RecordDetails extends StatelessWidget {
           Row(
             // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _optionBox('Today', true),
-              _optionBox('Yesterday', false),
-              _optionBox('Pick', false),
+              _optionBox('Today', true, appState),
+              _optionBox('Yesterday', false, appState),
+              _optionBox('Pick', false, appState),
             ],
           ),
           Splitter(
@@ -124,9 +127,9 @@ class RecordDetails extends StatelessWidget {
             alignment: Alignment.center,
             padding: EdgeInsets.fromLTRB(1, 7, 1, 7),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: appState.cols.content,
               borderRadius: BorderRadius.circular(360),
-              border: Border.all(width: 1, color: Colors.white),
+              border: Border.all(width: 1, color: appState.cols.content),
             ),
             child: Text(
               'Add a note with #hashtags',
@@ -146,8 +149,8 @@ class RecordDetails extends StatelessWidget {
           Row(
             // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _optionBox('Camera', true),
-              _optionBox('Select', true),
+              _optionBox('Camera', true, appState),
+              _optionBox('Select', true, appState),
             ],
           ),
           Container(height: 50),
@@ -156,13 +159,26 @@ class RecordDetails extends StatelessWidget {
     );
   }
 
-  Widget _optionBox(String label, bool selected) {
+  Widget _optionBox(String label, bool selected, AppState appState) {
+    final _optionTextStyleSelected = TextStyle(
+      color: appState.cols.background2,
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 1.1,
+    );
+
+    final _optionTextStyle = TextStyle(
+      color: appState.cols.content,
+      fontSize: 14,
+      letterSpacing: 1.1,
+    );
+
     var textStyle = _optionTextStyle;
     var backColor = Colors.transparent;
 
     if (selected) {
       textStyle = _optionTextStyleSelected;
-      backColor = Colors.white;
+      backColor = appState.cols.content;
     }
 
     return Expanded(
@@ -173,23 +189,10 @@ class RecordDetails extends StatelessWidget {
         decoration: BoxDecoration(
           color: backColor,
           borderRadius: BorderRadius.circular(360),
-          border: Border.all(width: 1, color: Colors.white),
+          border: Border.all(width: 1, color: appState.cols.content),
         ),
         child: Text(label, style: textStyle),
       ),
     );
   }
-
-  final _optionTextStyleSelected = TextStyle(
-    color: col_main1,
-    fontSize: 14,
-    fontWeight: FontWeight.bold,
-    letterSpacing: 1.1,
-  );
-
-  final _optionTextStyle = TextStyle(
-    color: Colors.white,
-    fontSize: 14,
-    letterSpacing: 1.1,
-  );
 }

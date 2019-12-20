@@ -15,13 +15,13 @@ class RecordOptions extends StatelessWidget {
             child: selectButton('Currency', Icons.monetization_on, color),
           ),
           Expanded(
-            child: selectButton('Credit', Icons.credit_card, color),
-          ),
-          Expanded(
             child: selectButton('Split', Icons.call_split, color),
           ),
           Expanded(
             child: selectButton('Repeat', Icons.repeat, color),
+          ),
+          Expanded(
+            child: selectButton('Clear all', Icons.cancel, color),
           ),
         ],
       ),

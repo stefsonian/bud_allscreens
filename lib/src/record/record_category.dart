@@ -1,7 +1,10 @@
 import 'package:allscreens/src/components/splitter.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/models/Category.dart';
+import 'package:allscreens/src/models/MainCategory.dart';
 import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
+import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,62 +12,56 @@ const Color col_content = col_main1;
 const Color col_back = Colors.white;
 
 class RecordCategory extends StatelessWidget {
-  static const IconData tags =
-      const IconData(0xe801, fontFamily: 'MyFlutterApp');
+  // static const IconData tags =
+  //     const IconData(0xe801, fontFamily: 'MyFlutterApp');
   @override
   Widget build(BuildContext context) {
+    final sessionData = Provider.of<SessionData>(context);
+    final appState = Provider.of<AppState>(context);
+    // Make catButtons from main categories
+    List<CatButton> mainCatButtons = sessionData.maincats.entries.map((c) {
+      return CatButton(
+        category: c.value,
+        showLabel: false,
+        isMainCat: true,
+        isDimmed: true,
+      );
+    }).toList();
+
+    // Add the 'quick' category to main categories
+    mainCatButtons.insert(
+        0,
+        CatButton(
+          category: MainCategory(
+            icon: Icons.flash_on,
+            name: 'Quick',
+            id: 'quick',
+          ),
+          showLabel: false,
+          isMainCat: true,
+          isDimmed: true,
+        ));
+
+    // Make CatButtons from subcategories belonging to the selected main category
+    List<CatButton> subCatButtons = sessionData.subcats.entries
+        .where((c) => c.value.groupId == appState.newExpense.mainCategory.id)
+        .map((c) {
+      return CatButton(
+        category: c.value,
+        showLabel: false,
+        isMainCat: false,
+        isDimmed: true,
+      );
+    }).toList();
+
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          // Splitter(
-          //   label: 'Category',
-          //   icon: Icons.select_all,
-          //   padding: EdgeInsets.only(bottom: 20),
-          //   showLine: true,
-          // ),
-          // Categories
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              CatButton(icon: Icons.flash_on, label: 'Quick', isMainCat: true),
-              CatButton(
-                icon: Icons.restaurant,
-                label: 'Eat',
-                showLabel: false,
-                isMainCat: true,
-                isDimmed: true,
-              ),
-              CatButton(
-                icon: Icons.hotel,
-                label: 'Sleep',
-                showLabel: false,
-                isMainCat: true,
-                isDimmed: true,
-              ),
-              CatButton(
-                icon: Icons.train,
-                label: 'Travel',
-                showLabel: false,
-                isMainCat: true,
-                isDimmed: true,
-              ),
-              CatButton(
-                icon: Icons.camera_alt,
-                label: 'See',
-                showLabel: false,
-                isMainCat: true,
-                isDimmed: true,
-              ),
-              CatButton(
-                icon: Icons.scatter_plot,
-                label: 'Other',
-                showLabel: false,
-                isMainCat: true,
-                isDimmed: true,
-              ),
-            ],
+            children: mainCatButtons,
           ),
           SizedBox(height: 20),
           Container(
@@ -78,19 +75,7 @@ class RecordCategory extends StatelessWidget {
             height: 55,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                CatButton(
-                    icon: Icons.restaurant, label: 'Breakfast', isDimmed: true),
-                CatButton(icon: Icons.train, label: 'Train'),
-                CatButton(
-                    icon: Icons.shopping_cart,
-                    label: 'Groceries',
-                    isDimmed: true),
-                CatButton(icon: Icons.hotel, label: 'Hotel', isDimmed: true),
-                CatButton(icon: Icons.map, label: 'Hike', isDimmed: true),
-                CatButton(
-                    icon: Icons.local_drink, label: 'Drink', isDimmed: true),
-              ],
+              children: subCatButtons,
             ),
           ),
           Container(
@@ -107,14 +92,13 @@ class RecordCategory extends StatelessWidget {
 class CatButton extends StatefulWidget {
   const CatButton(
       {Key key,
-      this.icon,
-      this.label,
+      this.category,
       this.isMainCat = false,
       this.isDimmed = false,
       this.showLabel = true})
       : super(key: key);
-  final IconData icon;
-  final String label;
+
+  final Category category;
   final bool isMainCat;
   final isDimmed;
   final showLabel;
@@ -124,35 +108,55 @@ class CatButton extends StatefulWidget {
 }
 
 class _CatButtonState extends State<CatButton> {
+  AppState appState;
+
+  @override
+  void didChangeDependencies() {
+    appState = Provider.of<AppState>(context);
+    super.didChangeDependencies();
+  }
+
+  void handleTap() {
+    print('i was tapped');
+    if (widget.isMainCat) {
+      appState.updateNewExpense('mainCategory', widget.category);
+    }
+    if (!widget.isMainCat) {
+      appState.updateNewExpense('subCategory', widget.category);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
     var iconOpacity = widget.isDimmed ? 0.7 : 1.0;
     var labelOpacity = widget.isDimmed ? 0.7 : 1.0;
     var color = widget.isDimmed
         ? appState.cols.content.withOpacity(0.7)
         : appState.cols.actionlight;
     if (widget.isMainCat && !widget.showLabel) labelOpacity = 0.0;
-    return Container(
-      width: widget.isMainCat ? null : 85,
-      child: Column(
-        verticalDirection:
-            widget.isMainCat ? VerticalDirection.up : VerticalDirection.down,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Icon(
-            widget.icon,
-            size: 30,
-            color: color,
-          ),
-          SizedBox(height: 5),
-          Text(
-            widget.label,
-            style: TextStyle(color: color, fontSize: 12),
-            maxLines: 1,
-            overflow: TextOverflow.clip,
-          ),
-        ],
+    return GestureDetector(
+      onTap: handleTap,
+      child: Container(
+        width: widget.isMainCat ? null : 85,
+        child: Column(
+          verticalDirection:
+              widget.isMainCat ? VerticalDirection.up : VerticalDirection.down,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Icon(
+              widget.category.icon,
+              size: 30,
+              color: color,
+            ),
+            SizedBox(height: 5),
+            Text(
+              widget.category.name,
+              style: TextStyle(color: color, fontSize: 12),
+              maxLines: 1,
+              overflow: TextOverflow.clip,
+            ),
+          ],
+        ),
       ),
     );
   }
