@@ -1,5 +1,6 @@
 import 'package:allscreens/src/components/splitter.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -78,12 +79,17 @@ class RecordCategory extends StatelessWidget {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                CatButton(icon: Icons.restaurant, label: 'Breakfast'),
+                CatButton(
+                    icon: Icons.restaurant, label: 'Breakfast', isDimmed: true),
                 CatButton(icon: Icons.train, label: 'Train'),
-                CatButton(icon: Icons.shopping_cart, label: 'Groceries'),
-                CatButton(icon: Icons.hotel, label: 'Hotel'),
-                CatButton(icon: Icons.map, label: 'Hike'),
-                CatButton(icon: Icons.local_drink, label: 'Drink'),
+                CatButton(
+                    icon: Icons.shopping_cart,
+                    label: 'Groceries',
+                    isDimmed: true),
+                CatButton(icon: Icons.hotel, label: 'Hotel', isDimmed: true),
+                CatButton(icon: Icons.map, label: 'Hike', isDimmed: true),
+                CatButton(
+                    icon: Icons.local_drink, label: 'Drink', isDimmed: true),
               ],
             ),
           ),
@@ -120,8 +126,12 @@ class CatButton extends StatefulWidget {
 class _CatButtonState extends State<CatButton> {
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     var iconOpacity = widget.isDimmed ? 0.7 : 1.0;
     var labelOpacity = widget.isDimmed ? 0.7 : 1.0;
+    var color = widget.isDimmed
+        ? appState.cols.content.withOpacity(0.7)
+        : appState.cols.actionlight;
     if (widget.isMainCat && !widget.showLabel) labelOpacity = 0.0;
     return Container(
       width: widget.isMainCat ? null : 85,
@@ -133,13 +143,12 @@ class _CatButtonState extends State<CatButton> {
           Icon(
             widget.icon,
             size: 30,
-            color: Colors.white.withOpacity(iconOpacity),
+            color: color,
           ),
           SizedBox(height: 5),
           Text(
             widget.label,
-            style: TextStyle(
-                color: Colors.white.withOpacity(labelOpacity), fontSize: 12),
+            style: TextStyle(color: color, fontSize: 12),
             maxLines: 1,
             overflow: TextOverflow.clip,
           ),

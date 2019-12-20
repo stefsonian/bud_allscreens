@@ -2,6 +2,7 @@ import 'package:allscreens/src/components/divider_grid.dart';
 import 'package:allscreens/src/components/splitter.dart';
 import 'package:allscreens/src/record/numpad.dart';
 import 'package:allscreens/src/record/record_options.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,7 @@ class AmountDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RecordState recordState = Provider.of<RecordState>(context);
+    final appState = Provider.of<AppState>(context);
     return Container(
       padding: EdgeInsets.only(right: 20),
       child: Row(
@@ -63,7 +65,7 @@ class AmountDisplay extends StatelessWidget {
                   child: Text(
                     'AUD  \$',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: appState.cols.actionlight,
                       fontSize: 20,
                     ),
                   ),
@@ -71,7 +73,7 @@ class AmountDisplay extends StatelessWidget {
                 Text(
                   recordState.numpadValue,
                   style: TextStyle(
-                      color: Colors.white,
+                      color: appState.cols.actionlight,
                       fontSize: 34,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2),

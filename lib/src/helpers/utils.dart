@@ -1,4 +1,7 @@
 import 'dart:math';
+import 'package:geolocator/geolocator.dart';
+
+import 'package:allscreens/src/models/Location.dart';
 
 class Utils {
   List<Map<String, double>> sortMapByDoubleValue(
@@ -15,5 +18,12 @@ class Utils {
       vals.removeAt(maxIndex);
     }
     return result;
+  }
+
+  Future<Location> getCurrentLocation() async {
+    Location location = Location();
+    // var position = await Geolocator().getCurrentPosition();
+
+    return location;
   }
 }

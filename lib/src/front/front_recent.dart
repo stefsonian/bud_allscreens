@@ -66,7 +66,7 @@ class FrontRecent extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(20, 6, 0, 6),
           child: IkonButton(
             backColor: appState.cols.action,
-            color: appState.cols.actionContent,
+            color: appState.cols.actioncontent,
             icon: Icons.add,
             onTap: () {},
             size: 30,

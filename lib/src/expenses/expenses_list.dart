@@ -1,6 +1,7 @@
 import 'package:allscreens/src/expenses/expense_item.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/models/Expense.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/records.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -11,6 +12,7 @@ class ExpensesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Records records = Provider.of<Records>(context);
+    final appState = Provider.of<AppState>(context);
     return Container(
       child: CustomScrollView(
         slivers: <Widget>[
@@ -35,7 +37,7 @@ class ExpensesList extends StatelessWidget {
             ],
             floating: true,
             snap: true,
-            backgroundColor: col_main1,
+            backgroundColor: appState.cols.background1,
             expandedHeight: 70.0,
             // flexibleSpace: FlexibleSpaceBar(
             //   background: FlutterLogo(),
@@ -48,7 +50,7 @@ class ExpensesList extends StatelessWidget {
                 return Dismissible(
                   key: Key(keyString),
                   background: dismissCopy(),
-                  secondaryBackground: dismissEditDelete(),
+                  secondaryBackground: dismissEditDelete(appState),
                   onDismissed: (direction) {
                     // setState(() {
                     //   items.removeAt(index);
@@ -77,21 +79,21 @@ Widget expenseSliver(Expense expense) {
   );
 }
 
-Widget dismissEditDelete() {
+Widget dismissEditDelete(AppState appState) {
   return Row(
     children: <Widget>[
       Expanded(
         flex: 1,
         child: Container(
           padding: EdgeInsets.only(right: 20),
-          color: col_main2,
+          color: Colors.pink,
           height: double.infinity,
           child: Align(
             alignment: Alignment.centerRight,
             child: Text(
               'Delete',
               style: TextStyle(
-                color: Colors.white,
+                color: appState.cols.content,
                 fontSize: 20,
               ),
             ),

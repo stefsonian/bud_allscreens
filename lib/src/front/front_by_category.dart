@@ -76,7 +76,7 @@ class FrontByCategory extends StatelessWidget {
       child: ChartBarHorizontal(
         complyColor: appState.cols.chartbar1,
         exceedColor: appState.cols.chartbar1,
-        valueColor: appState.cols.chartValue,
+        valueColor: appState.cols.chartvalue,
         labelColor: appState.cols.boxcontent,
         labelBackColor: appState.cols.box,
         showAmountAbove: value / maxAmount < 0.18,

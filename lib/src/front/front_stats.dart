@@ -55,7 +55,7 @@ class _FrontStatsState extends State<FrontStats> {
         exceedColor: appState.cols.chartbar2,
         labelLine1: label,
         labelColor: appState.cols.boxcontent,
-        valueColor: appState.cols.chartValue,
+        valueColor: appState.cols.chartvalue,
         labelBackColor: appState.cols.box,
         threshold1: threshold1,
         threshold2: threshold2,

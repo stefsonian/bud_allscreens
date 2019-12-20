@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:allscreens/src/day/day_item.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DayList extends StatelessWidget {
   const DayList({Key key, this.itemHeight}) : super(key: key);
@@ -14,6 +16,7 @@ class DayList extends StatelessWidget {
     // final double screenHeight = MediaQuery.of(context).size.height;
     // print('w: $screenWidth');
     // print('h: $screenHeight');
+    final appState = Provider.of<AppState>(context);
     return Container(
       child: CustomScrollView(
         slivers: <Widget>[
@@ -43,7 +46,7 @@ class DayList extends StatelessWidget {
             ],
             floating: true,
             snap: true,
-            backgroundColor: col_main1,
+            backgroundColor: appState.cols.background1,
             expandedHeight: 70.0,
             // flexibleSpace: FlexibleSpaceBar(
             //   background: FlutterLogo(),
@@ -52,8 +55,10 @@ class DayList extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                final Color color = index.isEven ? Colors.white : col_main1;
-                final Color nextColor = index.isEven ? col_main1 : Colors.white;
+                final col1 = appState.cols.background1;
+                final col2 = appState.cols.content;
+                final Color color = index.isEven ? col2 : col1;
+                final Color nextColor = index.isEven ? col1 : col2;
                 return DayItem(
                   itemHeight: itemHeight,
                   color: color,

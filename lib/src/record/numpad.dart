@@ -1,3 +1,4 @@
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -119,9 +120,16 @@ class _Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RecordState recordState = Provider.of<RecordState>(context);
+    AppState appState = Provider.of<AppState>(context);
     Widget w = number == null
-        ? Icon(icon, size: 30, color: Colors.white)
-        : Text(number.toString(), style: _textStyle);
+        ? Icon(icon, size: 30, color: appState.cols.content)
+        : Text(
+            number.toString(),
+            style: TextStyle(
+              fontSize: 30,
+              color: appState.cols.content,
+            ),
+          );
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -137,8 +145,3 @@ class _Item extends StatelessWidget {
     );
   }
 }
-
-TextStyle _textStyle = TextStyle(
-  fontSize: 30,
-  color: Colors.white,
-);

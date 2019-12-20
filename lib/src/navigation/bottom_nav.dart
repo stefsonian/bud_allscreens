@@ -38,7 +38,7 @@ class _BottomNavState extends State<BottomNav>
       floatingActionButton: appState.showQuickAddButton
           ? FloatingActionButton(
               backgroundColor: appState.cols.action,
-              child: Icon(Icons.add, color: appState.cols.actionContent),
+              child: Icon(Icons.add, color: appState.cols.actioncontent),
               heroTag: 'Add expense',
               onPressed: () => _handleAppBarTap(2),
             )

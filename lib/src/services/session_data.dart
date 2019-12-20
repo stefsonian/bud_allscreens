@@ -9,6 +9,10 @@ import 'package:allscreens/src/models/SubCategory.dart';
 import 'package:allscreens/src/models/User.dart';
 import 'package:flutter/material.dart';
 
+// Contains all data from external sources and files
+// *except* record data (expenses), which has its own service.
+// This class only receives data from db, files and categories.
+// No user input is or appstate-related info is stored here.
 class SessionData with ChangeNotifier {
   Map<String, MainCategory> maincats;
   Map<String, SubCategory> subcats;

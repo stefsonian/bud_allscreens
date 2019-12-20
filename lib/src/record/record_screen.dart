@@ -1,10 +1,12 @@
 import 'package:allscreens/src/background/background.dart';
+import 'package:allscreens/src/models/New_expense.dart';
 import 'package:allscreens/src/record/record_amount.dart';
 import 'package:allscreens/src/record/record_category.dart';
 import 'package:allscreens/src/record/record_details.dart';
 import 'package:allscreens/src/record/record_options.dart';
 import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
+import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,7 @@ class _RecordScreenState extends State<RecordScreen>
     with SingleTickerProviderStateMixin {
   AppState appState;
   RecordState recordState;
+  SessionData sessionData;
 
   final stages = [Stage0(), Stage1()];
 
@@ -26,7 +29,8 @@ class _RecordScreenState extends State<RecordScreen>
     super.didChangeDependencies();
     recordState = Provider.of<RecordState>(context);
     appState = Provider.of<AppState>(context);
-    // Future.microtask(() => appState.showQuickAddButton = false);
+    sessionData = Provider.of<SessionData>(context);
+    appState.initaliseNewExpense(sessionData.trip, sessionData.user);
   }
 
   tapNextButton() {
@@ -35,6 +39,8 @@ class _RecordScreenState extends State<RecordScreen>
   }
 
   tapPreviousButton() {
+    if (recordState.recordStage == 0)
+      appState.activeTabIndex = appState.previousTabIndex;
     if (recordState.recordStage != 0) recordState.recordStage -= 1;
   }
 
@@ -47,7 +53,7 @@ class _RecordScreenState extends State<RecordScreen>
       left: false,
       right: false,
       child: Container(
-        color: col_main1,
+        color: appState.cols.action.withOpacity(0.9),
         child: Stack(
           children: <Widget>[
             ClipShadow(
@@ -87,7 +93,7 @@ class _RecordScreenState extends State<RecordScreen>
                 width: 40,
                 child: FloatingActionButton(
                   heroTag: 'go back (expense)',
-                  backgroundColor: col_main2,
+                  backgroundColor: appState.cols.background2,
                   elevation: 2,
                   child: Icon(Icons.arrow_back, color: Colors.white, size: 33),
                   onPressed: tapPreviousButton,
@@ -102,7 +108,7 @@ class _RecordScreenState extends State<RecordScreen>
                 width: 70,
                 child: FloatingActionButton(
                   heroTag: 'go on (expense)',
-                  backgroundColor: col_main2,
+                  backgroundColor: appState.cols.background2,
                   elevation: 2,
                   child: recordState.recordStage < 1
                       ? Icon(Icons.arrow_forward, color: Colors.white, size: 44)

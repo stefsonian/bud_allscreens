@@ -1,4 +1,7 @@
 import 'package:allscreens/src/models/App_settings.dart';
+import 'package:allscreens/src/models/New_expense.dart';
+import 'package:allscreens/src/models/Trip.dart';
+import 'package:allscreens/src/models/User.dart';
 import 'package:flutter/material.dart';
 
 class AppState with ChangeNotifier {
@@ -16,10 +19,14 @@ class AppState with ChangeNotifier {
   Cols get cols => settings.cols;
   void changeColor(String name, Color color) =>
       settings.changeColor(name, color);
-  // set settings(AppSettings settings) {
-  //   _settings = settings;
-  //   notifyListeners();
-  // }
+
+  NewExpense _newExpense;
+  NewExpense get newExpense => _newExpense;
+  initaliseNewExpense(Trip trip, User user) {
+    _newExpense = NewExpense();
+    _newExpense.addListener(() => shareUpdate);
+    _newExpense.initialise(trip: trip, user: user);
+  }
 
   int _activeTabIndex = 0;
   int get activeTabIndex => _activeTabIndex;

@@ -16,14 +16,15 @@ class AppSettings extends ChangeNotifier {
 class Cols {
   Color background2 = Color(0xFFFF37474F);
   Color background1 = Color(0xFFFF546E7A);
-  Color action = Color(0xFFFFFFEE58);
-  Color actionContent = Color(0xFFFF303030);
-  Color content = Color(0xFFFFFFFDE7);
-  Color chartbar1 = Color(0xFFFFFFFDE7);
+  Color action = Color(0xFFFFE4D554);
+  Color actionlight = Color(0xFFFFF5E760);
+  Color actioncontent = Color(0xFFFF303030);
+  Color content = Color(0xFFfbf9ef);
+  Color chartbar1 = Color(0xFFfbf9ef);
   Color chartbar2 = Color(0xFFFFFF3D00);
-  Color chartValue = Color(0xFFFF526B9D);
+  Color chartvalue = Color(0xFFFF526B9D);
   Color box = Color(0xFFFF78909C);
-  Color boxcontent = Color(0xFFFFFFFDE7);
+  Color boxcontent = Color(0xFFfbf9ef);
 
   void changeColor(String name, Color color) {
     switch (name) {
@@ -36,8 +37,11 @@ class Cols {
       case 'action':
         action = color;
         break;
+      case 'actionlight':
+        actionlight = color;
+        break;
       case 'actionContent':
-        actionContent = color;
+        actioncontent = color;
         break;
       case 'content':
         content = color;
@@ -49,7 +53,7 @@ class Cols {
         chartbar2 = color;
         break;
       case 'chartValue':
-        chartValue = color;
+        chartvalue = color;
         break;
       case 'box':
         box = color;
@@ -66,11 +70,12 @@ class Cols {
       'background2': background2,
       'background1': background1,
       'action': action,
-      'actionContent': actionContent,
+      'actionlight': actionlight,
+      'actionContent': actioncontent,
       'content': content,
       'chartbar1': chartbar1,
       'chartbar2': chartbar2,
-      'chartValue': chartValue,
+      'chartValue': chartvalue,
       'box': box,
       'boxcontent': boxcontent
     };
