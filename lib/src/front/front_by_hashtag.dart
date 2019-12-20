@@ -3,6 +3,7 @@ import 'package:allscreens/src/components/chart_bar_horizontal.dart';
 import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/helpers/utils.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/records.dart';
 import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class FrontByHashtag extends StatelessWidget {
   // TODO: Only show results from previous 7 days
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<AppState>(context);
     var records = Provider.of<Records>(context);
     var mapTotals = records.totalByHashtag();
     if (mapTotals.isEmpty) return Container();
@@ -22,7 +24,11 @@ class FrontByHashtag extends StatelessWidget {
       var hashTag = m.keys.single;
       var value = m.values.single;
       return buildChartBarHorizontal(
-          hashtag: hashTag, value: value, maxAmount: maxAmount);
+        hashtag: hashTag,
+        value: value,
+        maxAmount: maxAmount,
+        appState: appState,
+      );
     }).toList();
     return Container(
       child: ContentBox(
@@ -30,7 +36,7 @@ class FrontByHashtag extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text('Top 10 hashtag spend (total AUD)',
-                style: TextStyle(fontSize: 16)),
+                style: TextStyle(fontSize: 16, color: appState.cols.content)),
             SizedBox(height: 14),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -43,14 +49,16 @@ class FrontByHashtag extends StatelessWidget {
   }
 
   Widget buildChartBarHorizontal(
-      {String hashtag, double value, double maxAmount}) {
+      {String hashtag, double value, double maxAmount, AppState appState}) {
     if (maxAmount < 1) return Container();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: ChartBarHorizontal(
-        complyColor: Colors.white,
-        exceedColor: col_orange,
-        valueColor: col_aqua,
+        complyColor: appState.cols.chartbar1,
+        exceedColor: appState.cols.chartbar1,
+        valueColor: appState.cols.chartValue,
+        labelColor: appState.cols.boxcontent,
+        labelBackColor: appState.cols.box,
         labelBoxWidth: 110.0,
         showAmountAbove: value / maxAmount < 0.2,
         label: Container(
@@ -58,7 +66,7 @@ class FrontByHashtag extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             hashtag,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: appState.cols.boxcontent),
             maxLines: 2,
             overflow: TextOverflow.clip,
           ),

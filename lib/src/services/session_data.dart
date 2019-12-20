@@ -41,7 +41,7 @@ class SessionData with ChangeNotifier {
   }
 
   Future<void> initialiseUser() async {
-    await Future.delayed(Duration(seconds: 1), () {
+    await Future.delayed(Duration(milliseconds: 100), () {
       user = User.withDemoData('demouser A', 'Plato');
       onDeviceUsers.add(User.withDemoData('onDeviceUser1', 'Aristotle'));
       onDeviceUsers.add(User.withDemoData('onDeviceUser2', 'Anaximander'));

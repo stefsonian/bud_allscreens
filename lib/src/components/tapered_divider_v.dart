@@ -5,7 +5,7 @@ class TaperedDividerV extends StatelessWidget {
   const TaperedDividerV({
     Key key,
     this.color1 = Colors.white70,
-    this.color2 = col_aqua_light,
+    this.color2 = col_main4,
     this.thickness = 2.0,
   }) : super(key: key);
 

@@ -1,6 +1,3 @@
-import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/components/gradient_box_simple.dart';
-import 'package:allscreens/src/components/splitter.dart';
 import 'package:flutter/material.dart';
 import '../helpers/colors.dart';
 

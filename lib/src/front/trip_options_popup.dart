@@ -10,7 +10,7 @@ class TripOptionsPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     return PopupMenuButton<TripOption>(
-      icon: Icon(Icons.edit, color: Colors.white),
+      icon: Icon(Icons.edit, color: appState.cols.content),
       onSelected: (TripOption result) {
         appState.showQuickAddButton = false;
         switch (result) {
@@ -35,7 +35,7 @@ class TripOptionsPopup extends StatelessWidget {
           child: _PopupItem(
             label: 'Edit trip',
             icon: Icons.edit,
-            color: col_aqua_dark2,
+            color: col_main3,
           ),
         ),
         const PopupMenuItem<TripOption>(
@@ -43,7 +43,7 @@ class TripOptionsPopup extends StatelessWidget {
           child: _PopupItem(
             label: 'Change trip',
             icon: Icons.compare_arrows,
-            color: col_aqua_dark2,
+            color: col_main3,
           ),
         ),
         const PopupMenuItem<TripOption>(
@@ -51,7 +51,7 @@ class TripOptionsPopup extends StatelessWidget {
           child: _PopupItem(
             label: 'New trip',
             icon: Icons.add,
-            color: col_aqua_dark2,
+            color: col_main3,
           ),
         ),
         const PopupMenuItem<TripOption>(
@@ -59,7 +59,7 @@ class TripOptionsPopup extends StatelessWidget {
           child: _PopupItem(
             label: 'Trip companions',
             icon: Icons.person_add,
-            color: col_aqua_dark2,
+            color: col_main3,
           ),
         ),
       ],

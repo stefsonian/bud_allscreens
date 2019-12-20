@@ -27,9 +27,9 @@ class LoginScreen extends StatelessWidget {
           FloatingActionButton.extended(
             label: Text(
               'Log in',
-              style: TextStyle(color: col_aqua),
+              style: TextStyle(color: col_main1),
             ),
-            icon: Icon(Icons.person, color: col_aqua),
+            icon: Icon(Icons.person, color: col_main1),
             backgroundColor: Colors.white,
             heroTag: 'Log in',
             onPressed: () => _onPressedHandler(sessionData, context),

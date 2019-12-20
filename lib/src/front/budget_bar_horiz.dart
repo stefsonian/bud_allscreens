@@ -25,7 +25,7 @@ class BudgetBarHoriz extends StatefulWidget {
 class _BudgetBarHorizState extends State<BudgetBarHoriz> {
   @override
   Widget build(BuildContext context) {
-    final Color color = col_aqua_light;
+    final Color color = col_main4;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[

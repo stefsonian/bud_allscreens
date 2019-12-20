@@ -1,7 +1,25 @@
+import 'package:allscreens/src/models/App_settings.dart';
 import 'package:flutter/material.dart';
 
 class AppState with ChangeNotifier {
-  AppState();
+  // AppSettings _settings;
+  AppState() {
+    _settings.addListener(() => shareUpdate());
+  }
+
+  shareUpdate() {
+    notifyListeners();
+  }
+
+  AppSettings _settings = AppSettings();
+  AppSettings get settings => _settings;
+  Cols get cols => settings.cols;
+  void changeColor(String name, Color color) =>
+      settings.changeColor(name, color);
+  // set settings(AppSettings settings) {
+  //   _settings = settings;
+  //   notifyListeners();
+  // }
 
   int _activeTabIndex = 0;
   int get activeTabIndex => _activeTabIndex;

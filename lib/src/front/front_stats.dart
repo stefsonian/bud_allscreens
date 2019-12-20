@@ -5,6 +5,7 @@ import 'package:allscreens/src/front/budget_bar.dart';
 import 'package:allscreens/src/front/budget_bar_box.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/models/Expense.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/records.dart';
 import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +24,12 @@ class _FrontStatsState extends State<FrontStats> {
   List<ChartBarVertical> budgetBars = [];
   Records records;
   SessionData session;
+  AppState appState;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    appState = Provider.of<AppState>(context);
     records = Provider.of<Records>(context);
     session = Provider.of<SessionData>(context);
     createTestData();
@@ -48,11 +51,12 @@ class _FrontStatsState extends State<FrontStats> {
       var overRatio = min(1.2, budgetFactor);
       var label = Jiffy(date).format('d/M');
       bb.add(ChartBarVertical(
-        complyColor: Colors.white,
-        exceedColor: col_orange,
+        complyColor: appState.cols.chartbar1,
+        exceedColor: appState.cols.chartbar2,
         labelLine1: label,
-        labelColor: Colors.white,
-        valueColor: col_aqua,
+        labelColor: appState.cols.boxcontent,
+        valueColor: appState.cols.chartValue,
+        labelBackColor: appState.cols.box,
         threshold1: threshold1,
         threshold2: threshold2,
         showAmountAbove: amount < 0.15 * threshold1 ? true : false,
@@ -81,7 +85,7 @@ class _FrontStatsState extends State<FrontStats> {
                           fontSize: 16,
                           letterSpacing: 1.1,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                          color: appState.cols.content),
                     ),
                   ],
                 ),

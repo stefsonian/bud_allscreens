@@ -30,17 +30,17 @@ class FrontAverages extends StatelessWidget {
               FactoidCircle(
                 fact: '42',
                 label: 'day',
-                backColor: col_aqua_light,
+                backColor: col_main4,
               ),
               FactoidCircle(
                 fact: '588',
                 label: 'week',
-                backColor: col_aqua_light,
+                backColor: col_main4,
               ),
               FactoidCircle(
                 fact: '1773',
                 label: 'month',
-                backColor: col_aqua_light,
+                backColor: col_main4,
               ),
             ],
           ),

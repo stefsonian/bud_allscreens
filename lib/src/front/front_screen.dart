@@ -1,3 +1,4 @@
+import 'package:allscreens/src/components/tapered_divider_h.dart';
 import 'package:allscreens/src/front/front_averages.dart';
 import 'package:allscreens/src/front/front_by_category.dart';
 import 'package:allscreens/src/front/front_by_hashtag.dart';
@@ -7,6 +8,7 @@ import 'package:allscreens/src/front/front_stats.dart';
 import 'package:allscreens/src/front/trip_options_popup.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/models/Trip.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,10 +20,12 @@ class FrontScreen extends StatefulWidget {
 
 class _FrontScreenState extends State<FrontScreen> {
   SessionData session;
+  AppState appState;
 
   @override
   void didChangeDependencies() {
     session = Provider.of<SessionData>(context);
+    appState = Provider.of<AppState>(context);
     super.didChangeDependencies();
   }
 
@@ -33,22 +37,23 @@ class _FrontScreenState extends State<FrontScreen> {
           SliverAppBar(
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.person),
+                icon: Icon(Icons.person, color: appState.cols.content),
                 tooltip: 'User settings',
                 onPressed: () {},
               ),
               IconButton(
-                icon: Icon(Icons.settings),
+                icon: Icon(Icons.settings, color: appState.cols.content),
                 tooltip: 'App settings',
                 onPressed: () {},
               ),
             ],
             floating: true,
             snap: true,
-            backgroundColor: col_aqua,
+            backgroundColor: appState.cols.background1,
+            // backgroundColor: Colors.transparent,
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(
-              background: _tripInfo(context),
+              background: _tripInfo(context, appState),
             ),
           ),
           SliverList(
@@ -58,10 +63,12 @@ class _FrontScreenState extends State<FrontScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: FrontRecent(),
                 ),
+                taperedDivder(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FrontStats(),
                 ),
+                taperedDivder(),
                 // Padding(
                 //   padding: const EdgeInsets.all(8.0),
                 //   child: FrontAverages(),
@@ -70,10 +77,12 @@ class _FrontScreenState extends State<FrontScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: FrontByCategory(),
                 ),
+                taperedDivder(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FrontByHashtag(),
                 ),
+
                 // Padding(
                 //   padding: const EdgeInsets.all(8.0),
                 //   child: FrontByPerson(),
@@ -99,7 +108,7 @@ class _FrontScreenState extends State<FrontScreen> {
     );
   }
 
-  Widget _tripInfo(BuildContext context) {
+  Widget _tripInfo(BuildContext context, AppState appState) {
     var tripText = session.trip.name;
     return Container(
       padding: EdgeInsets.only(left: 8),
@@ -119,35 +128,11 @@ class _FrontScreenState extends State<FrontScreen> {
                         style: TextStyle(
                           fontSize: tripText.length < 19 ? 22 : 18,
                           letterSpacing: 1.1,
-                          color: Colors.white,
+                          color: appState.cols.content,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    // IconButton(
-                    //   icon: Icon(Icons.edit),
-                    //   color: Colors.white,
-                    //   tooltip: 'Edit trip',
-                    //   // padding: EdgeInsets.fromLTRB(8, 16, 8, 0),
-                    //   // onPressed: () =>
-                    //   //     Navigator.pushNamed(context, 'edit trip'),
-                    //   onPressed: () {
-                    //     showDialog(
-                    //       context: context,
-                    //       builder: (context) => SimpleDialog(
-                    //         backgroundColor: Colors.transparent,
-                    //         elevation: 0,
-
-                    //         // shape: RoundedRectangleBorder(
-                    //         //     borderRadius: BorderRadius.circular(14)),
-                    //         children: <Widget>[
-                    //           TripOptionsDialog(),
-                    //         ],
-                    //       ),
-                    //     );
-
-                    //   },
-                    // ),
                     TripOptionsPopup(),
                   ],
                 ),
@@ -159,16 +144,23 @@ class _FrontScreenState extends State<FrontScreen> {
           Text(
             '${session.trip.startDayMonth} - ${session.trip.endDayMonth}  •  day ${session.trip.travelDay}',
             style: TextStyle(
-              fontSize: 12,
-              letterSpacing: 1.1,
-              color: Colors.white,
-            ),
+                fontSize: 12, letterSpacing: 1.1, color: appState.cols.content),
           ),
         ],
       ),
     );
   }
 
+  Widget taperedDivder() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(40, 5, 40, 5),
+      child: TaperedDividerH(
+        color1: appState.cols.content,
+        color2: appState.cols.background1,
+        thickness: 1,
+      ),
+    );
+  }
   // Widget build(BuildContext context) {
   //   return SafeArea(
   //     child: Container(

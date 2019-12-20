@@ -4,7 +4,7 @@ import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-const Color col_content = col_aqua;
+const Color col_content = col_main1;
 const Color col_back = Colors.white;
 
 class RecordCategory extends StatelessWidget {

@@ -8,7 +8,7 @@ class BudgetBarBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(budgetBars.length);
+    // print(budgetBars.length);
     return ListView.builder(
       reverse: true,
       scrollDirection: Axis.horizontal,

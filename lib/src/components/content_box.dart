@@ -19,10 +19,10 @@ class ContentBox extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(14),
         // boxShadow: kElevationToShadow[1],
-        border: Border.all(
-          width: 1,
-          color: Colors.white,
-        ),
+        // border: Border.all(
+        //   width: 1,
+        //   color: Colors.white,
+        // ),
       ),
       child: child,
     );

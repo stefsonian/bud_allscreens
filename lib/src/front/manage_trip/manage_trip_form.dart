@@ -35,7 +35,7 @@ class _ManageTripFormState extends State<ManageTripForm> {
           primaryColor: Colors.white,
           primaryColorDark: Colors.white,
           hintColor: Colors.white,
-          canvasColor: col_aqua_darker),
+          canvasColor: col_main3),
       child: Form(
         key: _formKey,
         child: ListView(
@@ -154,9 +154,9 @@ class _ManageTripFormState extends State<ManageTripForm> {
                 backgroundColor: Colors.white,
                 label: Text(
                   'Save',
-                  style: TextStyle(color: col_aqua, fontSize: 18),
+                  style: TextStyle(color: col_main1, fontSize: 18),
                 ),
-                icon: Icon(Icons.check, color: col_aqua),
+                icon: Icon(Icons.check, color: col_main1),
                 onPressed: () {
                   // Validate will return true if the form is valid, or false if
                   // the form is invalid.

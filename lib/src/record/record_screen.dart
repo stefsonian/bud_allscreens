@@ -47,7 +47,7 @@ class _RecordScreenState extends State<RecordScreen>
       left: false,
       right: false,
       child: Container(
-        color: col_aqua,
+        color: col_main1,
         child: Stack(
           children: <Widget>[
             ClipShadow(
@@ -87,7 +87,7 @@ class _RecordScreenState extends State<RecordScreen>
                 width: 40,
                 child: FloatingActionButton(
                   heroTag: 'go back (expense)',
-                  backgroundColor: col_orange,
+                  backgroundColor: col_main2,
                   elevation: 2,
                   child: Icon(Icons.arrow_back, color: Colors.white, size: 33),
                   onPressed: tapPreviousButton,
@@ -102,7 +102,7 @@ class _RecordScreenState extends State<RecordScreen>
                 width: 70,
                 child: FloatingActionButton(
                   heroTag: 'go on (expense)',
-                  backgroundColor: col_orange,
+                  backgroundColor: col_main2,
                   elevation: 2,
                   child: recordState.recordStage < 1
                       ? Icon(Icons.arrow_forward, color: Colors.white, size: 44)

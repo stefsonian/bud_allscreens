@@ -18,7 +18,7 @@ class ExpenseItem extends StatelessWidget {
         children: <Widget>[
           IkonButton(
             backColor: Colors.white,
-            color: col_aqua,
+            color: col_main1,
             elevation: 0.0,
             icon: expense.subCategory.icon,
           ),
@@ -30,7 +30,7 @@ class ExpenseItem extends StatelessWidget {
                   expense.subCategory.name,
                   style: TextStyle(
                     fontSize: 16,
-                    color: col_aqua,
+                    color: col_main1,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.1,
                   ),
@@ -71,7 +71,7 @@ class ExpenseItem extends StatelessWidget {
               '\$${expense.amount.value.toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 18,
-                color: col_aqua,
+                color: col_main1,
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -12,7 +12,7 @@ class ExpensesOptions extends StatelessWidget {
             onPressed: () {},
             label: Text("Sort"),
             icon: Icon(Icons.calendar_today),
-            color: col_aqua,
+            color: col_main1,
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
@@ -23,7 +23,7 @@ class ExpensesOptions extends StatelessWidget {
             onPressed: () {},
             label: Text('Filter'),
             icon: Icon(Icons.payment),
-            color: col_aqua,
+            color: col_main1,
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
@@ -34,7 +34,7 @@ class ExpensesOptions extends StatelessWidget {
             onPressed: () {},
             label: Text('Options'),
             icon: Icon(Icons.menu),
-            color: col_aqua,
+            color: col_main1,
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),

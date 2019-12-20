@@ -19,7 +19,7 @@ class BudgetBar extends StatefulWidget {
 class _BudgetBarState extends State<BudgetBar> {
   @override
   Widget build(BuildContext context) {
-    final Color color = widget.ratioOver > 0 ? col_orange : col_aqua_light;
+    final Color color = widget.ratioOver > 0 ? col_main2 : col_main4;
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[

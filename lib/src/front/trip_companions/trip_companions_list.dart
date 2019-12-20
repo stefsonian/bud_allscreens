@@ -74,7 +74,7 @@ class TripCompanionsList extends StatelessWidget {
                     Icons.remove,
                     color: Colors.white,
                   ),
-                  backgroundColor: col_orange_dark,
+                  backgroundColor: col_main1,
                   onPressed: () {},
                 ),
               ],

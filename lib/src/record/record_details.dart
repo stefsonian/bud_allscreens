@@ -131,7 +131,7 @@ class RecordDetails extends StatelessWidget {
             child: Text(
               'Add a note with #hashtags',
               style: TextStyle(
-                color: col_aqua,
+                color: col_main1,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.1,
@@ -181,7 +181,7 @@ class RecordDetails extends StatelessWidget {
   }
 
   final _optionTextStyleSelected = TextStyle(
-    color: col_aqua,
+    color: col_main1,
     fontSize: 14,
     fontWeight: FontWeight.bold,
     letterSpacing: 1.1,

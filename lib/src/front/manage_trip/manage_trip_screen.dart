@@ -13,7 +13,7 @@ class ManageTripScreen extends StatelessWidget {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         leading: BackButtonShowQuickAdd(),
-        backgroundColor: col_aqua,
+        backgroundColor: col_main1,
         title: Text('Edit current trip'),
         automaticallyImplyLeading: true,
       ),

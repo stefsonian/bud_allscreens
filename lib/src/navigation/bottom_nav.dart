@@ -37,8 +37,8 @@ class _BottomNavState extends State<BottomNav>
       floatingActionButtonAnimator: null,
       floatingActionButton: appState.showQuickAddButton
           ? FloatingActionButton(
-              backgroundColor: col_orange,
-              child: Icon(Icons.add),
+              backgroundColor: appState.cols.action,
+              child: Icon(Icons.add, color: appState.cols.actionContent),
               heroTag: 'Add expense',
               onPressed: () => _handleAppBarTap(2),
             )
@@ -58,7 +58,7 @@ class _BottomNavState extends State<BottomNav>
       ),
       bottomNavigationBar: BottomAppBar(
         // notchMargin: 20,
-        color: col_aqua,
+        color: appState.cols.background2,
         elevation: 0,
         shape: CircularNotchedRectangle(),
         child: Container(

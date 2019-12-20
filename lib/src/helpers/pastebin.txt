@@ -1,0 +1,25 @@
+I/flutter (21746): ---------------------------------------
+I/flutter (21746): Color background2 = Color(0xFFFF37474F);
+I/flutter (21746): Color background1 = Color(0xFFFF546E7A);
+I/flutter (21746): Color action = Color(0xFFFFFFEE58);
+I/flutter (21746): Color actionContent = Color(0xFFFF303030);
+I/flutter (21746): Color content = Color(0xFFFFFFFDE7);
+I/flutter (21746): Color chartbar1 = Color(0xFFFFEEEEEE);
+I/flutter (21746): Color chartbar2 = Color(0xFFFFE91E63);
+I/flutter (21746): Color chartValue = Color(0xFFFF000000);
+I/flutter (21746): Color box = Color(0xFFFF424242);
+I/flutter (21746): Color boxcontent = Color(0xFFFFFAFAFA);
+I/flutter (21746): ---------------------------------------
+
+I/flutter (21746): ---------------------------------------
+I/flutter (21746): Color background2 = Color(0xFFFF37474F);
+I/flutter (21746): Color background1 = Color(0xFFFF546E7A);
+I/flutter (21746): Color action = Color(0xFFFFFFEE58);
+I/flutter (21746): Color actionContent = Color(0xFFFF303030);
+I/flutter (21746): Color content = Color(0xFFFFFFFDE7);
+I/flutter (21746): Color chartbar1 = Color(0xFFFFFFFDE7);
+I/flutter (21746): Color chartbar2 = Color(0xFFFFFF3D00);
+I/flutter (21746): Color chartValue = Color(0xFFFF000000);
+I/flutter (21746): Color box = Color(0xFFFF78909C);
+I/flutter (21746): Color boxcontent = Color(0xFFFFFFFDE7);
+I/flutter (21746): ---------------------------------------

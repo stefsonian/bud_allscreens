@@ -48,10 +48,10 @@ class _PlaygroundState extends State<Playground> {
       var label = Jiffy(date).format('d/M');
       bb.add(ChartBarHorizontal(
         complyColor: Colors.white,
-        exceedColor: col_orange,
+        exceedColor: col_main2,
         label: Icon(Icons.flight, color: Colors.white),
         labelColor: Colors.white,
-        valueColor: col_aqua,
+        valueColor: col_main1,
         threshold1: threshold1,
         threshold2: threshold2,
         showAmountAbove: amount < 0.15 * threshold1 ? true : false,

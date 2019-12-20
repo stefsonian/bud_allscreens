@@ -27,16 +27,16 @@ class TripOptionsDialog extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _button('Edit current trip', Icon(Icons.edit),
-              () => tapEditCurrent(context), col_aqua),
+              () => tapEditCurrent(context), col_main1),
           SizedBox(height: 20),
-          _button('Change trip', Icon(Icons.compare_arrows), () {}, col_aqua),
+          _button('Change trip', Icon(Icons.compare_arrows), () {}, col_main1),
           SizedBox(height: 20),
-          _button('New trip', Icon(Icons.add), () {}, col_aqua),
+          _button('New trip', Icon(Icons.add), () {}, col_main1),
           SizedBox(height: 20),
           _button('Manage travel companions', Icon(Icons.person_add), () {},
-              col_aqua),
+              col_main1),
           SizedBox(height: 60),
-          _button('Cancel', Icon(Icons.cancel), () {}, col_orange_dark)
+          _button('Cancel', Icon(Icons.cancel), () {}, col_main1)
         ],
       ),
     );

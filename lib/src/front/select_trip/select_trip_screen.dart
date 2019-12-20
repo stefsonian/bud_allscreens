@@ -12,7 +12,7 @@ class SelectTripScreen extends StatelessWidget {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         leading: BackButtonShowQuickAdd(),
-        backgroundColor: col_aqua,
+        backgroundColor: col_main1,
         title: Text('Select trip'),
         automaticallyImplyLeading: true,
       ),

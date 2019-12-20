@@ -24,8 +24,8 @@ class App extends StatelessWidget {
       records.createTestData(
           90, 30, 60); // TODO: Only for testing. Remove before release.
     }
-    FlutterStatusbarcolor.setStatusBarColor(col_aqua.withOpacity(1.0));
-    FlutterStatusbarcolor.setNavigationBarColor(col_aqua);
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
+    FlutterStatusbarcolor.setNavigationBarColor(appState.cols.background2);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AppState>.value(

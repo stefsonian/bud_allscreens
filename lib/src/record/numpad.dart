@@ -142,9 +142,3 @@ TextStyle _textStyle = TextStyle(
   fontSize: 30,
   color: Colors.white,
 );
-
-class AppState {
-  onNumpadTap(value, context) {
-    print(value);
-  }
-}

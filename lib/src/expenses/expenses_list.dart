@@ -35,7 +35,7 @@ class ExpensesList extends StatelessWidget {
             ],
             floating: true,
             snap: true,
-            backgroundColor: col_aqua,
+            backgroundColor: col_main1,
             expandedHeight: 70.0,
             // flexibleSpace: FlexibleSpaceBar(
             //   background: FlutterLogo(),
@@ -84,7 +84,7 @@ Widget dismissEditDelete() {
         flex: 1,
         child: Container(
           padding: EdgeInsets.only(right: 20),
-          color: col_orange,
+          color: col_main2,
           height: double.infinity,
           child: Align(
             alignment: Alignment.centerRight,

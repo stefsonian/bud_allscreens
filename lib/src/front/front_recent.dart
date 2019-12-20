@@ -1,11 +1,14 @@
 import 'package:allscreens/src/components/Ikon_button.dart';
 import 'package:allscreens/src/components/content_box.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/services/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FrontRecent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<AppState>(context);
     return Container(
       child: ContentBox(
         child: Column(
@@ -17,7 +20,7 @@ class FrontRecent extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 letterSpacing: 1.1,
-                color: Colors.white,
+                color: appState.cols.content,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -26,9 +29,10 @@ class FrontRecent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _activityRow(Icons.restaurant, 'Breakfast', '\$12.44'),
-                _activityRow(Icons.fastfood, 'Snack', '\$3.50'),
-                _activityRow(Icons.camera_alt, 'Tour', '\$50.00'),
+                _activityRow(
+                    Icons.restaurant, 'Breakfast', '\$12.44', appState),
+                _activityRow(Icons.fastfood, 'Snack', '\$3.50', appState),
+                _activityRow(Icons.camera_alt, 'Tour', '\$50.00', appState),
               ],
             ),
           ],
@@ -37,22 +41,23 @@ class FrontRecent extends StatelessWidget {
     );
   }
 
-  Row _activityRow(IconData icon, String label, String price) {
+  Row _activityRow(
+      IconData icon, String label, String price, AppState appState) {
     return Row(
       children: <Widget>[
-        Icon(icon, color: Colors.white),
+        Icon(icon, color: appState.cols.content),
         SizedBox(width: 16),
         Text(
           label,
-          style:
-              TextStyle(fontSize: 16, color: Colors.white, letterSpacing: 1.1),
+          style: TextStyle(
+              fontSize: 16, color: appState.cols.content, letterSpacing: 1.1),
         ),
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,
             child: Text(
               price,
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(fontSize: 16, color: appState.cols.content),
             ),
           ),
         ),
@@ -60,8 +65,8 @@ class FrontRecent extends StatelessWidget {
         Padding(
           padding: EdgeInsets.fromLTRB(20, 6, 0, 6),
           child: IkonButton(
-            backColor: col_orange,
-            color: Colors.white,
+            backColor: appState.cols.action,
+            color: appState.cols.actionContent,
             icon: Icons.add,
             onTap: () {},
             size: 30,

@@ -43,7 +43,7 @@ class DayList extends StatelessWidget {
             ],
             floating: true,
             snap: true,
-            backgroundColor: col_aqua,
+            backgroundColor: col_main1,
             expandedHeight: 70.0,
             // flexibleSpace: FlexibleSpaceBar(
             //   background: FlutterLogo(),
@@ -52,8 +52,8 @@ class DayList extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                final Color color = index.isEven ? Colors.white : col_aqua;
-                final Color nextColor = index.isEven ? col_aqua : Colors.white;
+                final Color color = index.isEven ? Colors.white : col_main1;
+                final Color nextColor = index.isEven ? col_main1 : Colors.white;
                 return DayItem(
                   itemHeight: itemHeight,
                   color: color,

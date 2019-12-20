@@ -51,19 +51,19 @@ class _FrontTripState extends State<FrontTrip> {
               // Factoid(fact: "27 Oct '19", label: 'End'),
               // Factoid(fact: '5', label: 'Day', center: true),
               InfoBubble(
-                backcolor: col_aqua,
+                backcolor: col_main1,
                 textcolor: Colors.white,
                 text1: "Start  ",
                 text2: "14 Aug",
               ),
               InfoBubble(
-                backcolor: col_aqua,
+                backcolor: col_main1,
                 textcolor: Colors.white,
                 text1: "End  ",
                 text2: "27 Oct",
               ),
               InfoBubble(
-                backcolor: col_aqua,
+                backcolor: col_main1,
                 textcolor: Colors.white,
                 text1: "Day  ",
                 text2: "5",
