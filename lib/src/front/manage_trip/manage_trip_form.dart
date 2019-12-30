@@ -1,7 +1,10 @@
 import 'package:allscreens/src/components/currency_selector.dart';
 import 'package:allscreens/src/front/manage_trip/manage_trip_model.dart';
 import 'package:allscreens/src/helpers/colors.dart';
+import 'package:allscreens/src/services/app_state.dart';
+import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ManageTripForm extends StatefulWidget {
   ManageTripForm({Key key}) : super(key: key);
@@ -12,7 +15,19 @@ class ManageTripForm extends StatefulWidget {
 
 class _ManageTripFormState extends State<ManageTripForm> {
   final _formKey = GlobalKey<FormState>();
-  final data = ManageTripModel();
+  var data = ManageTripModel();
+  SessionData sessionData;
+  AppState appState;
+
+  void didChangeDependencies() {
+    appState = Provider.of<AppState>(context);
+    sessionData = Provider.of<SessionData>(context);
+    // if no data, fill data with current trip values if exists
+    if (data.name == '' && sessionData.trip != null) {
+      data = ManageTripModel.withTripData(sessionData.trip);
+    }
+    super.didChangeDependencies();
+  }
 
   _springCurrencyDialog() {
     showDialog(
@@ -28,14 +43,59 @@ class _ManageTripFormState extends State<ManageTripForm> {
     );
   }
 
-  @override
+  _springStartDatePicker(DateTime currentStart) async {
+    var selectedDate = await showDatePicker(
+      context: context,
+      initialDate: currentStart,
+      firstDate: currentStart.subtract(Duration(days: 365)),
+      lastDate: DateTime(2030),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.dark(),
+          child: child,
+        );
+      },
+    );
+    data.startDate = selectedDate;
+    setState(() => data = data);
+  }
+
+  _springEndDatePicker(DateTime currentStart, DateTime currentEnd) async {
+    var selectedDate = await showDatePicker(
+      context: context,
+      initialDate: currentEnd,
+      firstDate: currentStart,
+      lastDate: DateTime(2030),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.dark(),
+          child: child,
+        );
+      },
+    );
+    data.endDate = selectedDate;
+    setState(() => data = data);
+  }
+
   Widget build(BuildContext context) {
+    TextStyle _textStyleLarge = TextStyle(
+      color: appState.cols.content,
+      fontSize: 20,
+      letterSpacing: 1.1,
+    );
+
+    TextStyle _textStyleHint = TextStyle(
+      color: appState.cols.content.withOpacity(0.8),
+      fontSize: 16,
+      letterSpacing: 1.1,
+    );
+
     return Theme(
       data: ThemeData(
-          primaryColor: Colors.white,
-          primaryColorDark: Colors.white,
-          hintColor: Colors.white,
-          canvasColor: col_main3),
+        primaryColor: appState.cols.content,
+        primaryColorDark: appState.cols.content,
+        hintColor: appState.cols.content,
+      ),
       child: Form(
         key: _formKey,
         child: ListView(
@@ -43,6 +103,7 @@ class _ManageTripFormState extends State<ManageTripForm> {
             Container(
               height: 90,
               child: TextFormField(
+                initialValue: data.name,
                 decoration: _inputDecoration('Trip name'),
                 onChanged: (val) => data.name = val,
                 style: _textStyleLarge,
@@ -55,78 +116,79 @@ class _ManageTripFormState extends State<ManageTripForm> {
                 children: <Widget>[
                   Expanded(
                     child: TextFormField(
-                      decoration: _inputDecoration('Budget amount'),
-                      onChanged: (val) => data.name = val,
+                      keyboardType: TextInputType.number,
+                      initialValue: data.budgetAmount,
+                      decoration: _inputDecoration('Budget amount (per day)'),
+                      onChanged: (val) => data.budgetAmount = val,
                       style: _textStyleLarge,
                       validator: (value) => _validator(value),
                     ),
                   ),
-                  Expanded(
-                    child: Center(
-                      child: DropdownButton<String>(
-                        value: 'per day',
-                        icon: Icon(
-                          Icons.arrow_downward,
-                          color: Colors.white,
-                        ),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: _textStyleLarge,
-                        underline: Container(
-                          height: 2,
-                          color: Colors.transparent,
-                        ),
-                        onChanged: (String newValue) {
-                          // setState(() {
-                          //   dropdownValue = newValue;
-                          // });
-                        },
-                        items: <String>[
-                          'per day',
-                          'per week',
-                          'per month',
-                          'trip total'
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value, style: _textStyleLarge),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Center(
+                  //     child: DropdownButton<String>(
+                  //       value: 'per day',
+                  //       icon: Icon(
+                  //         Icons.arrow_downward,
+                  //         color: Colors.white,
+                  //       ),
+                  //       iconSize: 24,
+                  //       elevation: 16,
+                  //       style: _textStyleLarge,
+                  //       underline: Container(
+                  //         height: 2,
+                  //         color: Colors.transparent,
+                  //       ),
+                  //       onChanged: (String newValue) {
+                  //         // setState(() {
+                  //         //   dropdownValue = newValue;
+                  //         // });
+                  //       },
+                  //       items: <String>[
+                  //         'per day',
+                  //         'per week',
+                  //         'per month',
+                  //         'trip total'
+                  //       ].map<DropdownMenuItem<String>>((String value) {
+                  //         return DropdownMenuItem<String>(
+                  //           value: value,
+                  //           child: Text(value, style: _textStyleLarge),
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
+            SizedBox(height: 26),
             SizedBox(
               height: 90,
               child: Container(
                 child: Row(
                   children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Budget currency', style: _textStyleHint),
-                          SizedBox(height: 6),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                'AUD (Australian Dollars)',
-                                style: _textStyleLarge,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Budget currency', style: _textStyleHint),
+                        // SizedBox(height: 6),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              'AUD (Australian Dollars)',
+                              style: _textStyleLarge,
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.arrow_downward,
+                                color: appState.cols.content,
                               ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.arrow_downward,
-                                  color: Colors.white,
-                                ),
-                                onPressed: _springCurrencyDialog,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              onPressed: _springCurrencyDialog,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
 
                     // FloatingActionButton(
@@ -138,25 +200,55 @@ class _ManageTripFormState extends State<ManageTripForm> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
-            SizedBox(
-              height: 90,
-              child: Text('Start date', style: _textStyleHint),
+            SizedBox(height: 26),
+            Container(
+              // height: 90,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () => _springStartDatePicker(data.startDate),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Start date', style: _textStyleHint),
+                        SizedBox(height: 8),
+                        Text(
+                          data.startDateString,
+                          style: _textStyleLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        _springEndDatePicker(data.startDate, data.endDate),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('End date', style: _textStyleHint),
+                        SizedBox(height: 8),
+                        Text(
+                          data.endDateString,
+                          style: _textStyleLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 16),
-            SizedBox(
-              height: 90,
-              child: Text('End date', style: _textStyleHint),
-            ),
+            SizedBox(height: 50),
             Padding(
               padding: EdgeInsets.fromLTRB(80, 36, 80, 36),
               child: FloatingActionButton.extended(
-                backgroundColor: Colors.white,
+                backgroundColor: appState.cols.content,
                 label: Text(
                   'Save',
-                  style: TextStyle(color: col_main1, fontSize: 18),
+                  style:
+                      TextStyle(color: appState.cols.background2, fontSize: 18),
                 ),
-                icon: Icon(Icons.check, color: col_main1),
+                icon: Icon(Icons.check, color: appState.cols.background2),
                 onPressed: () {
                   // Validate will return true if the form is valid, or false if
                   // the form is invalid.
@@ -180,43 +272,16 @@ class _ManageTripFormState extends State<ManageTripForm> {
       // disabledBorder: _fieldBorder,
       // errorBorder: _fieldBorderError,
       // focusedErrorBorder: _fieldBorderError,
-      enabledBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-      focusedBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-      focusColor: Colors.white,
+      enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: appState.cols.content)),
+      focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: appState.cols.content)),
+      focusColor: appState.cols.content,
       labelText: label,
-      labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+      labelStyle: TextStyle(color: appState.cols.content.withOpacity(0.7)),
       hasFloatingPlaceholder: true,
     );
   }
-
-  TextStyle _textStyleLarge = TextStyle(
-    color: Colors.white,
-    fontSize: 20,
-    letterSpacing: 1.1,
-  );
-
-  TextStyle _textStyleSmall = TextStyle(
-    color: Colors.white,
-    fontSize: 20,
-    letterSpacing: 1.1,
-  );
-
-  TextStyle _textStyleHint = TextStyle(
-    color: Colors.white.withOpacity(0.8),
-    fontSize: 16,
-    letterSpacing: 1.1,
-  );
-
-  UnderlineInputBorder _fieldBorder = UnderlineInputBorder(
-    borderSide: BorderSide(color: Colors.white.withOpacity(0.8)),
-  );
-
-  // OutlineInputBorder _fieldBorderError = OutlineInputBorder(
-  //   borderRadius: BorderRadius.circular(10),
-  //   borderSide: BorderSide(color: Colors.red, width: 2),
-  // );
 
   _validator(String value) {
     if (value.isEmpty) {
@@ -229,33 +294,3 @@ class _ManageTripFormState extends State<ManageTripForm> {
 
   // }
 }
-
-//  SizedBox(
-//               height: 90,
-//               child: Container(
-//                 child: Row(
-//                   children: <Widget>[
-//                     Expanded(
-//                       child: Column(
-//                         mainAxisAlignment: MainAxisAlignment.center,
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: <Widget>[
-//                           Text('Currency', style: _textStyleHint),
-//                           SizedBox(height: 6),
-//                           Text(
-//                             'AUD (Australian Dollars)',
-//                             style: _textStyleLarge,
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     SizedBox(width: 4),
-//                     FloatingActionButton(
-//                       child: Icon(Icons.edit, color: col_aqua),
-//                       backgroundColor: Colors.white,
-//                       onPressed: _springCurrencyDialog,
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),

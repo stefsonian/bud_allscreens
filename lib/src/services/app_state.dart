@@ -10,7 +10,7 @@ class AppState with ChangeNotifier {
     _settings.addListener(() => shareUpdate());
   }
 
-  shareUpdate() {
+  void shareUpdate() {
     notifyListeners();
   }
 
@@ -22,15 +22,16 @@ class AppState with ChangeNotifier {
 
   NewExpense _newExpense;
   NewExpense get newExpense => _newExpense;
-  initaliseNewExpense(Trip trip, User user) {
+  void initaliseNewExpense(Trip trip, User user) {
+    if (_newExpense != null) return;
     _newExpense = NewExpense();
-    _newExpense.addListener(() => shareUpdate);
     _newExpense.initialise(trip: trip, user: user);
+    _newExpense.addListener(() => shareUpdate());
+    // _newExpense.addListener(() => notifyListeners());
   }
 
   void updateNewExpense(String property, dynamic value) {
     newExpense.update(property, value);
-    notifyListeners();
   }
 
   int _activeTabIndex = 0;

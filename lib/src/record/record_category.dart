@@ -1,9 +1,6 @@
-import 'package:allscreens/src/components/splitter.dart';
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/models/Category.dart';
-import 'package:allscreens/src/models/MainCategory.dart';
 import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/services/record_state.dart';
 import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,12 +16,14 @@ class RecordCategory extends StatelessWidget {
     final sessionData = Provider.of<SessionData>(context);
     final appState = Provider.of<AppState>(context);
     // Make catButtons from main categories
+    var selectedMainCatId = appState.newExpense.mainCategory?.id ?? 'quick';
+    var selectedSubCatId = appState.newExpense.subCategory?.id ?? '';
     List<CatButton> mainCatButtons = sessionData.maincats.entries.map((c) {
       return CatButton(
         category: c.value,
         showLabel: false,
         isMainCat: true,
-        isDimmed: true,
+        isDimmed: c.value.id != selectedMainCatId,
       );
     }).toList();
 
@@ -39,18 +38,18 @@ class RecordCategory extends StatelessWidget {
           ),
           showLabel: false,
           isMainCat: true,
-          isDimmed: true,
+          isDimmed: selectedMainCatId != 'quick',
         ));
 
     // Make CatButtons from subcategories belonging to the selected main category
     List<CatButton> subCatButtons = sessionData.subcats.entries
-        .where((c) => c.value.groupId == appState.newExpense.mainCategory.id)
+        .where((c) => c.value.groupId == selectedMainCatId)
         .map((c) {
       return CatButton(
         category: c.value,
         showLabel: false,
         isMainCat: false,
-        isDimmed: true,
+        isDimmed: c.value.id != selectedSubCatId,
       );
     }).toList();
 
@@ -120,6 +119,8 @@ class _CatButtonState extends State<CatButton> {
     print('i was tapped');
     if (widget.isMainCat) {
       appState.updateNewExpense('mainCategory', widget.category);
+      // appState.newExpense.mainCategory = widget.category;
+      setState(() {});
     }
     if (!widget.isMainCat) {
       appState.updateNewExpense('subCategory', widget.category);

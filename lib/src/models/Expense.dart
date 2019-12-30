@@ -1,6 +1,5 @@
 import 'package:allscreens/src/models/Location.dart';
-import 'package:allscreens/src/models/MainCategory.dart';
-import 'package:allscreens/src/models/SubCategory.dart';
+import 'package:allscreens/src/models/Category.dart';
 import 'package:allscreens/src/models/Frozen_amount.dart';
 import 'package:jiffy/jiffy.dart';
 

@@ -125,16 +125,16 @@ class RecordDetails extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 12),
             alignment: Alignment.center,
-            padding: EdgeInsets.fromLTRB(1, 7, 1, 7),
+            padding: EdgeInsets.fromLTRB(1, 12, 1, 12),
             decoration: BoxDecoration(
-              color: appState.cols.content,
+              // color: appState.cols.content,
               borderRadius: BorderRadius.circular(360),
               border: Border.all(width: 1, color: appState.cols.content),
             ),
             child: Text(
               'Add a note with #hashtags',
               style: TextStyle(
-                color: col_main1,
+                color: appState.cols.content,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.1,

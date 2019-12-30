@@ -3,8 +3,7 @@ import 'package:allscreens/src/models/Trip.dart';
 import 'package:allscreens/src/models/User.dart';
 import 'package:flutter/foundation.dart';
 import 'package:allscreens/src/models/Location.dart';
-import 'package:allscreens/src/models/MainCategory.dart';
-import 'package:allscreens/src/models/SubCategory.dart';
+import 'package:allscreens/src/models/Category.dart';
 import 'package:flutter/material.dart';
 
 class NewExpense extends ChangeNotifier {
@@ -36,7 +35,7 @@ class NewExpense extends ChangeNotifier {
     tripId = trip.id;
     mainCategory = MainCategory(id: 'eat', name: 'Eat', icon: Icons.restaurant);
     //TODO: The initial main category should be the quick/speed category
-    notifyListeners();
+
     getLocation();
     //location
   }

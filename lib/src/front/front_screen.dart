@@ -49,7 +49,7 @@ class _FrontScreenState extends State<FrontScreen> {
             ],
             floating: true,
             snap: true,
-            backgroundColor: appState.cols.background1,
+            backgroundColor: appState.cols.background2,
             // backgroundColor: Colors.transparent,
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(

@@ -4,8 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:allscreens/src/components/currency_selector.dart';
 import 'package:allscreens/src/models/Location.dart';
-import 'package:allscreens/src/models/MainCategory.dart';
-import 'package:allscreens/src/models/SubCategory.dart';
+import 'package:allscreens/src/models/Category.dart';
 import 'package:allscreens/src/models/User.dart';
 import 'package:flutter/material.dart';
 
