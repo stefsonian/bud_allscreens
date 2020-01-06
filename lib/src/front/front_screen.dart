@@ -47,11 +47,13 @@ class _FrontScreenState extends State<FrontScreen> {
                 onPressed: () {},
               ),
             ],
-            floating: true,
-            snap: true,
+            floating: false,
+            snap: false,
             backgroundColor: appState.cols.background2,
             // backgroundColor: Colors.transparent,
             expandedHeight: 100.0,
+            // elevation: 4,
+
             flexibleSpace: FlexibleSpaceBar(
               background: _tripInfo(context, appState),
             ),

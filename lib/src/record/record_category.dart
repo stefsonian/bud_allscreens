@@ -56,7 +56,7 @@ class RecordCategory extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -129,10 +129,10 @@ class _CatButtonState extends State<CatButton> {
 
   @override
   Widget build(BuildContext context) {
-    var iconOpacity = widget.isDimmed ? 0.7 : 1.0;
-    var labelOpacity = widget.isDimmed ? 0.7 : 1.0;
+    var iconOpacity = widget.isDimmed ? 0.8 : 1.0;
+    var labelOpacity = widget.isDimmed ? 0.8 : 1.0;
     var color = widget.isDimmed
-        ? appState.cols.content.withOpacity(0.7)
+        ? appState.cols.content.withOpacity(0.9)
         : appState.cols.actionlight;
     if (widget.isMainCat && !widget.showLabel) labelOpacity = 0.0;
     return GestureDetector(

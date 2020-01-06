@@ -1,41 +1,117 @@
+import 'dart:math';
+
 import 'package:allscreens/src/components/divider_grid.dart';
-import 'package:allscreens/src/components/splitter.dart';
+import 'package:allscreens/src/components/option_button.dart';
+import 'package:allscreens/src/models/Numpad_input.dart';
 import 'package:allscreens/src/record/numpad.dart';
-import 'package:allscreens/src/record/record_options.dart';
 import 'package:allscreens/src/services/app_state.dart';
 import 'package:allscreens/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RecordAmount extends StatefulWidget {
-  const RecordAmount({this.showNumpad});
-  final bool showNumpad;
-
+  @override
   _RecordAmountState createState() => _RecordAmountState();
 }
 
 class _RecordAmountState extends State<RecordAmount> {
+  AppState appState;
+  RecordState recordState;
+  NumpadInput numpad = NumpadInput();
+  String amount = '0.00';
+
+  onNumberTap(String value) {
+    numpad.updateValue(value);
+    setState(() => amount = numpad.displayValue());
+  }
+
+  @override
+  void didChangeDependencies() {
+    appState = Provider.of<AppState>(context);
+    recordState = Provider.of<RecordState>(context);
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    RecordState recordState = Provider.of<RecordState>(context);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final BoxDecoration optionDecor = BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      // color: appState.cols.action,
+      // boxShadow: kElevationToShadow[4],
+      border: Border.all(
+        width: 2,
+        color: appState.cols.content.withOpacity(0.3),
+      ),
+    );
+    // final circleDiameter = max((screenHeight - 270))
     return Container(
-      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          AmountDisplay(),
           Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
-            color: Colors.white.withOpacity(0.4),
-            height: 1,
-          ),
-          SizedBox(height: 4),
-          Container(
-            // padding: EdgeInsets.symmetric(horizontal: 30),
-            height: 220,
+            alignment: Alignment.bottomCenter,
+            margin: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: <Widget>[
-                Flexible(flex: 1, child: RecordOptions()),
-                Expanded(flex: 2, child: Center(child: Numpad())),
+                Container(
+                  height: 80,
+                  width: 80,
+                  decoration: optionDecor,
+                  padding: EdgeInsets.all(2),
+                  child: DisplayPart(
+                    appState: appState,
+                    onTap: () {},
+                    icon: Icons.credit_card,
+                    label: 'Credit',
+                  ),
+                ),
+                SizedBox(width: 10),
+                Container(
+                  height: 80,
+                  width: 80,
+                  decoration: optionDecor,
+                  padding: EdgeInsets.all(2),
+                  child: DisplayPart(
+                    appState: appState,
+                    onTap: () {},
+                    icon: Icons.monetization_on,
+                    label: 'AUD',
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(right: 12),
+                    height: 80,
+                    decoration: optionDecor,
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      amount,
+                      style: TextStyle(
+                        color: appState.cols.content,
+                        fontSize: 30,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(20, 40, 20, 20),
+            height: 220,
+            child: Stack(
+              children: <Widget>[
+                Numpad(onTap: onNumberTap),
+                DividerGrid(
+                  horizontalDividers: 3,
+                  verticalDividers: 2,
+                  color1: appState.cols.content.withOpacity(0.3),
+                  color2: appState.cols.content.withOpacity(0.25),
+                ),
               ],
             ),
           ),
@@ -45,55 +121,42 @@ class _RecordAmountState extends State<RecordAmount> {
   }
 }
 
-class AmountDisplay extends StatelessWidget {
+class DisplayPart extends StatelessWidget {
+  const DisplayPart({
+    Key key,
+    @required this.appState,
+    this.onTap,
+    this.icon,
+    this.label,
+  }) : super(key: key);
+
+  final AppState appState;
+  final Function onTap;
+  final IconData icon;
+  final String label;
+
   @override
   Widget build(BuildContext context) {
-    RecordState recordState = Provider.of<RecordState>(context);
-    final appState = Provider.of<AppState>(context);
-    return Container(
-      padding: EdgeInsets.only(right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          selectButton('Credit', Icons.credit_card, appState.cols.content),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 8, 2, 0),
-                child: Text(
-                  'AUD  \$',
-                  style: TextStyle(
-                    color: appState.cols.actionlight,
-                    fontSize: 20,
-                  ),
-                ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Icon(
+              icon,
+              color: appState.cols.content,
+            ),
+            Text(
+              label,
+              style: TextStyle(
+                color: appState.cols.content,
+                fontSize: 17,
               ),
-              Text(
-                recordState.numpadValue,
-                style: TextStyle(
-                    color: appState.cols.actionlight,
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget selectButton(String label, IconData icon, Color color) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Icon(icon, color: color),
-          SizedBox(width: 4),
-          Text(label,
-              style: TextStyle(color: Colors.white),
-              overflow: TextOverflow.visible),
-        ],
+            )
+          ],
+        ),
+        onTap: onTap,
       ),
     );
   }

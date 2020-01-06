@@ -1,4 +1,5 @@
 import 'package:allscreens/src/background/background.dart';
+import 'package:allscreens/src/components/option_button.dart';
 import 'package:allscreens/src/models/New_expense.dart';
 import 'package:allscreens/src/record/record_amount.dart';
 import 'package:allscreens/src/record/record_category.dart';
@@ -36,12 +37,14 @@ class _RecordScreenState extends State<RecordScreen>
   tapNextButton() {
     if (recordState.recordStage == 1) recordState.recordStage = -1;
     recordState.recordStage = recordState.recordStage + 1;
+    setState(() {});
   }
 
   tapPreviousButton() {
     if (recordState.recordStage == 0)
       appState.activeTabIndex = appState.previousTabIndex;
     if (recordState.recordStage != 0) recordState.recordStage -= 1;
+    setState(() {});
   }
 
   Widget build(BuildContext context) {
@@ -56,15 +59,11 @@ class _RecordScreenState extends State<RecordScreen>
         color: appState.cols.action.withOpacity(0.92),
         child: Stack(
           children: <Widget>[
-            ClipShadow(
-              clipper: RecordScreenClipper(),
-              boxShadow: kElevationToShadow[2],
-              child: Background(),
-            ),
+            Background(),
             // Content
             Positioned(
               top: 0,
-              bottom: 100,
+              bottom: 60,
               left: 0,
               right: 0,
               child: AnimatedSwitcher(
@@ -84,42 +83,60 @@ class _RecordScreenState extends State<RecordScreen>
               ),
             ),
             // Buttons
-
             Positioned(
-              bottom: 23,
-              left: 45,
-              child: SizedBox(
-                height: 40,
-                width: 40,
-                child: FloatingActionButton(
-                  heroTag: 'go back (expense)',
-                  backgroundColor: appState.cols.background2,
-                  elevation: 2,
-                  child: Icon(Icons.arrow_back, color: Colors.white, size: 33),
-                  onPressed: tapPreviousButton,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 8,
-              left: width * 0.5 - 35,
-              child: SizedBox(
-                height: 70,
-                width: 70,
-                child: FloatingActionButton(
-                  heroTag: 'go on (expense)',
-                  backgroundColor: appState.cols.background2,
-                  elevation: 2,
-                  child: recordState.recordStage < 1
-                      ? Icon(Icons.arrow_forward, color: Colors.white, size: 44)
-                      : Icon(Icons.check, color: Colors.white, size: 44),
-                  onPressed: tapNextButton,
+              bottom: 10,
+              left: 20,
+              right: 20,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  height: 42,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: buildNavButton(() {}, Icons.delete),
+                      ),
+                      SizedBox(width: 14),
+                      Expanded(
+                        flex: 1,
+                        child: buildNavButton(() {}, Icons.arrow_back_ios),
+                      ),
+                      SizedBox(width: 14),
+                      Expanded(
+                        flex: 3,
+                        child: buildNavButton(() {}, Icons.arrow_forward_ios),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  InkWell buildNavButton(Function onTap, IconData icon) {
+    return InkWell(
+      splashColor: appState.cols.actioncontent,
+      child: Container(
+        padding: EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: appState.cols.action.withOpacity(0.85),
+          boxShadow: kElevationToShadow[4],
+        ),
+        child: FittedBox(
+          fit: BoxFit.fitHeight,
+          child: Icon(
+            icon,
+            color: appState.cols.actioncontent,
+          ),
+        ),
+      ),
+      onTap: onTap,
     );
   }
 }
@@ -131,18 +148,17 @@ class Stage0 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            RecordCategory(),
-            SizedBox(height: 20),
-            RecordAmount(),
-          ],
-        ),
-      ],
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Center(
+              child: RecordCategory(),
+            ),
+          ),
+          RecordAmount(),
+        ],
+      ),
     );
   }
 }
@@ -154,7 +170,7 @@ class Stage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RecordDetails();
+    return RecordCategory();
   }
 }
 
