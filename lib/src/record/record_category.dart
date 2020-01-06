@@ -21,11 +21,11 @@ class RecordCategory extends StatelessWidget {
     bool isShort = false;
     bool isNarrow = false;
 
-    if (h < 1735) {
+    if (h < 735) {
       isShort = true;
     }
 
-    if (w < 1400) {
+    if (w < 400) {
       isNarrow = true;
     }
     // ------
@@ -47,7 +47,7 @@ class RecordCategory extends StatelessWidget {
         CatButton(
           category: MainCategory(
             icon: Icons.flash_on,
-            name: 'Quick',
+            name: '',
             id: 'quick',
           ),
           showLabel: false,

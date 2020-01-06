@@ -39,18 +39,21 @@ class _RecordAmountState extends State<RecordAmount> {
     final w = appState.viewWidth;
     double amountBoxHeight = 80.0;
     double boxSpace = 10.0;
+    double amountMargin = 20.0;
     bool isShort = false;
     bool isNarrow = false;
 
-    if (h < 1735) {
-      amountBoxHeight = 56.0;
+    if (h < 735) {
+      amountBoxHeight = 58.0;
       isShort = true;
     }
 
-    if (w < 1400) {
-      boxSpace = 5.0;
+    if (w < 373) {
+      boxSpace = 7.0;
       isNarrow = true;
     }
+
+    if (w < 400) amountMargin = 6.0;
     // ------
 
     final BoxDecoration optionDecor = BoxDecoration(
@@ -68,9 +71,7 @@ class _RecordAmountState extends State<RecordAmount> {
         children: <Widget>[
           Container(
             alignment: Alignment.bottomCenter,
-            margin: isNarrow
-                ? EdgeInsets.symmetric(horizontal: 5)
-                : EdgeInsets.symmetric(horizontal: 20),
+            margin: EdgeInsets.symmetric(horizontal: amountMargin),
             child: Row(
               children: <Widget>[
                 Container(

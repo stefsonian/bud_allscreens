@@ -22,6 +22,8 @@ class LoginScreen extends StatelessWidget {
     SessionData sessionData = Provider.of<SessionData>(context);
     appState.viewWidth = MediaQuery.of(context).size.width;
     appState.viewHeight = MediaQuery.of(context).size.height;
+    print(
+        'View width: ${appState.viewWidth}  |  View height: ${appState.viewHeight}');
     return Container(
       height: double.infinity,
       width: double.infinity,
