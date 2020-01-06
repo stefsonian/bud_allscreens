@@ -14,6 +14,9 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+  double viewHeight;
+  double viewWidth;
+
   AppSettings _settings = AppSettings();
   AppSettings get settings => _settings;
   Cols get cols => settings.cols;

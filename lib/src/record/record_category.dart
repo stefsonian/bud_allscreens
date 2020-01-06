@@ -15,6 +15,20 @@ class RecordCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     final sessionData = Provider.of<SessionData>(context);
     final appState = Provider.of<AppState>(context);
+    // Sizing
+    final h = appState.viewHeight;
+    final w = appState.viewWidth;
+    bool isShort = false;
+    bool isNarrow = false;
+
+    if (h < 1735) {
+      isShort = true;
+    }
+
+    if (w < 1400) {
+      isNarrow = true;
+    }
+    // ------
     // Make catButtons from main categories
     var selectedMainCatId = appState.newExpense.mainCategory?.id ?? 'quick';
     var selectedSubCatId = appState.newExpense.subCategory?.id ?? '';
@@ -54,7 +68,7 @@ class RecordCategory extends StatelessWidget {
     }).toList();
 
     return Container(
-      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+      // padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -62,13 +76,13 @@ class RecordCategory extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: mainCatButtons,
           ),
-          SizedBox(height: 20),
+          isShort ? SizedBox(height: 5) : SizedBox(height: 20),
           Container(
             margin: EdgeInsets.symmetric(vertical: 10),
             color: Colors.white.withOpacity(0.4),
             height: 1,
           ),
-          SizedBox(height: 20),
+          isShort ? SizedBox(height: 5) : SizedBox(height: 20),
           // Smart suggestions
           SizedBox(
             height: 55,

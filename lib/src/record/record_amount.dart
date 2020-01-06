@@ -34,8 +34,24 @@ class _RecordAmountState extends State<RecordAmount> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    // Sizing
+    final h = appState.viewHeight;
+    final w = appState.viewWidth;
+    double amountBoxHeight = 80.0;
+    double boxSpace = 10.0;
+    bool isShort = false;
+    bool isNarrow = false;
+
+    if (h < 1735) {
+      amountBoxHeight = 56.0;
+      isShort = true;
+    }
+
+    if (w < 1400) {
+      boxSpace = 5.0;
+      isNarrow = true;
+    }
+    // ------
 
     final BoxDecoration optionDecor = BoxDecoration(
       borderRadius: BorderRadius.circular(8),
@@ -52,12 +68,14 @@ class _RecordAmountState extends State<RecordAmount> {
         children: <Widget>[
           Container(
             alignment: Alignment.bottomCenter,
-            margin: EdgeInsets.symmetric(horizontal: 20),
+            margin: isNarrow
+                ? EdgeInsets.symmetric(horizontal: 5)
+                : EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: <Widget>[
                 Container(
-                  height: 80,
-                  width: 80,
+                  height: amountBoxHeight,
+                  width: amountBoxHeight,
                   decoration: optionDecor,
                   padding: EdgeInsets.all(2),
                   child: DisplayPart(
@@ -65,12 +83,13 @@ class _RecordAmountState extends State<RecordAmount> {
                     onTap: () {},
                     icon: Icons.credit_card,
                     label: 'Credit',
+                    isSmall: isShort,
                   ),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: boxSpace),
                 Container(
-                  height: 80,
-                  width: 80,
+                  height: amountBoxHeight,
+                  width: amountBoxHeight,
                   decoration: optionDecor,
                   padding: EdgeInsets.all(2),
                   child: DisplayPart(
@@ -78,20 +97,21 @@ class _RecordAmountState extends State<RecordAmount> {
                     onTap: () {},
                     icon: Icons.monetization_on,
                     label: 'AUD',
+                    isSmall: isShort,
                   ),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: boxSpace),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.only(right: 12),
-                    height: 80,
+                    height: amountBoxHeight,
                     decoration: optionDecor,
                     alignment: Alignment.centerRight,
                     child: Text(
                       amount,
                       style: TextStyle(
                         color: appState.cols.content,
-                        fontSize: 30,
+                        fontSize: isNarrow ? 24 : 30,
                         letterSpacing: 1.2,
                       ),
                     ),
@@ -101,8 +121,10 @@ class _RecordAmountState extends State<RecordAmount> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(20, 40, 20, 20),
-            height: 220,
+            margin: isShort
+                ? EdgeInsets.fromLTRB(10, 14, 10, 10)
+                : EdgeInsets.fromLTRB(20, 40, 20, 20),
+            height: isShort ? 180 : 220,
             child: Stack(
               children: <Widget>[
                 Numpad(onTap: onNumberTap),
@@ -128,12 +150,14 @@ class DisplayPart extends StatelessWidget {
     this.onTap,
     this.icon,
     this.label,
+    this.isSmall,
   }) : super(key: key);
 
   final AppState appState;
   final Function onTap;
   final IconData icon;
   final String label;
+  final bool isSmall;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +175,7 @@ class DisplayPart extends StatelessWidget {
               label,
               style: TextStyle(
                 color: appState.cols.content,
-                fontSize: 17,
+                fontSize: isSmall ? 12 : 17,
               ),
             )
           ],

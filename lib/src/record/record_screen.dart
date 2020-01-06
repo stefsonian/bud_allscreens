@@ -48,9 +48,6 @@ class _RecordScreenState extends State<RecordScreen>
   }
 
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-
     return SafeArea(
       // top: false,
       left: false,
