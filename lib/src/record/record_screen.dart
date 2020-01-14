@@ -60,7 +60,7 @@ class _RecordScreenState extends State<RecordScreen>
             // Content
             Positioned(
               top: 0,
-              bottom: 60,
+              bottom: appState.viewHeight < 735 ? 60 : 76,
               left: 0,
               right: 0,
               child: AnimatedSwitcher(
@@ -84,28 +84,33 @@ class _RecordScreenState extends State<RecordScreen>
               bottom: 10,
               left: 20,
               right: 20,
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  height: 42,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: buildNavButton(() {}, Icons.delete),
+              child: Container(
+                height: 42,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: buildNavButton(() {}, Icons.delete),
+                    ),
+                    SizedBox(width: 14),
+                    Expanded(
+                      flex: 1,
+                      child: buildNavButton(
+                        tapPreviousButton,
+                        Icons.arrow_back_ios,
                       ),
-                      SizedBox(width: 14),
-                      Expanded(
-                        flex: 1,
-                        child: buildNavButton(() {}, Icons.arrow_back_ios),
+                    ),
+                    SizedBox(width: 14),
+                    Expanded(
+                      flex: 3,
+                      child: buildNavButton(
+                        tapNextButton,
+                        recordState.recordStage < 1
+                            ? Icons.arrow_forward_ios
+                            : Icons.check,
                       ),
-                      SizedBox(width: 14),
-                      Expanded(
-                        flex: 3,
-                        child: buildNavButton(() {}, Icons.arrow_forward_ios),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -115,25 +120,21 @@ class _RecordScreenState extends State<RecordScreen>
     );
   }
 
-  InkWell buildNavButton(Function onTap, IconData icon) {
-    return InkWell(
-      splashColor: appState.cols.actioncontent,
-      child: Container(
-        padding: EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: appState.cols.action.withOpacity(0.85),
-          boxShadow: kElevationToShadow[4],
-        ),
-        child: FittedBox(
-          fit: BoxFit.fitHeight,
-          child: Icon(
-            icon,
-            color: appState.cols.actioncontent,
-          ),
-        ),
+  Widget buildNavButton(Function onTap, IconData icon) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(360),
       ),
-      onTap: onTap,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      animationDuration: Duration(milliseconds: 300),
+      elevation: 8,
+      color: appState.cols.action,
+      child: Icon(
+        icon,
+        color: appState.cols.actioncontent,
+        size: icon == Icons.check ? 34 : 26,
+      ),
+      onPressed: onTap,
     );
   }
 }
@@ -167,7 +168,7 @@ class Stage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RecordCategory();
+    return RecordDetails();
   }
 }
 

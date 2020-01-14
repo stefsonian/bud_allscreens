@@ -87,9 +87,9 @@ class SessionData with ChangeNotifier {
       name: 'Travel',
       icon: Icons.directions_walk,
     );
-    maincats['experience'] = MainCategory(
-      id: 'experience',
-      name: 'Experience',
+    maincats['explore'] = MainCategory(
+      id: 'explore',
+      name: 'Explore',
       icon: Icons.camera_alt,
     );
     maincats['other'] = MainCategory(
@@ -241,39 +241,39 @@ class SessionData with ChangeNotifier {
       icon: Icons.local_hotel,
     );
     subcats['tour'] = SubCategory(
-      groupId: 'experience',
+      groupId: 'explore',
       id: 'tour',
       name: 'Tour',
       icon: Icons.share,
     );
     subcats['sight'] = SubCategory(
-      groupId: 'experience',
+      groupId: 'explore',
       id: 'sight',
       name: 'Sight',
       icon: Icons.camera_alt,
     );
     subcats['activity'] = SubCategory(
-      groupId: 'experience',
+      groupId: 'explore',
       id: 'activity',
       name: 'Activity',
       icon: Icons.local_activity,
     );
     subcats['shopping'] = SubCategory(
-      groupId: 'experience',
+      groupId: 'explore',
       id: 'shopping',
       name: 'Shopping',
       icon: Icons.add_shopping_cart,
     );
     subcats['market'] = SubCategory(
-      groupId: 'experience',
+      groupId: 'explore',
       id: 'market',
       name: 'Market',
       icon: Icons.shopping_basket,
     );
-    subcats['experience_other'] = SubCategory(
-      groupId: 'experience',
-      id: 'experience_other',
-      name: 'Other (Experience)',
+    subcats['explore_other'] = SubCategory(
+      groupId: 'explore',
+      id: 'explore_other',
+      name: 'Other (Explore)',
       icon: Icons.camera_alt,
     );
     subcats['groceries'] = SubCategory(
@@ -329,12 +329,12 @@ class SessionData with ChangeNotifier {
 // SubCategory(groupId: 'sleep', id:'airbnb', name: 'Airbnb', icon: Icons.category);
 // SubCategory(groupId: 'sleep', id:'sleep_other', name:'Other (Sleep)', icon: Icons.local_hotel);
 
-// SubCategory(groupId: 'experience', id:'tour', name: 'Tour', icon: Icons.share);
-// SubCategory(groupId: 'experience', id:'sight', name: 'Sight', icon: Icons.camera_alt);
-// SubCategory(groupId: 'experience', id:'activity', name: 'Activity', icon: Icons.local_activity);
-// SubCategory(groupId: 'experience', id:'shopping', name: 'Shopping', icon: Icons.add_shopping_cart);
-// SubCategory(groupId: 'experience', id:'market', name: 'Market', icon: Icons.shopping_basket);
-// SubCategory(groupId: 'experience', id:'experience_other', name: 'Other (Experience)', icon: Icons.camera_alt);
+// SubCategory(groupId: 'explore', id:'tour', name: 'Tour', icon: Icons.share);
+// SubCategory(groupId: 'explore', id:'sight', name: 'Sight', icon: Icons.camera_alt);
+// SubCategory(groupId: 'explore', id:'activity', name: 'Activity', icon: Icons.local_activity);
+// SubCategory(groupId: 'explore', id:'shopping', name: 'Shopping', icon: Icons.add_shopping_cart);
+// SubCategory(groupId: 'explore', id:'market', name: 'Market', icon: Icons.shopping_basket);
+// SubCategory(groupId: 'explore', id:'explore_other', name: 'Other (Explore)', icon: Icons.camera_alt);
 
 // SubCategory(groupId: 'other', id:'groceries', name: 'Groceries', icon: Icons.shopping_cart);
 // SubCategory(groupId: 'other', id:'medical', name: 'Medical', icon: Icons.local_hospital);

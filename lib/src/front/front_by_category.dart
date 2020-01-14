@@ -49,8 +49,8 @@ class FrontByCategory extends StatelessWidget {
                   appState: appState,
                 ),
                 buildChartBarHorizontal(
-                  icon: sessionData.maincats['experience'].icon,
-                  value: cats['experience'],
+                  icon: sessionData.maincats['explore'].icon,
+                  value: cats['explore'],
                   maxAmount: maxAmount,
                   appState: appState,
                 ),
