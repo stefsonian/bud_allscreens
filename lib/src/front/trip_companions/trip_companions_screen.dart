@@ -1,7 +1,7 @@
-import 'package:allscreens/src/background/background.dart';
-import 'package:allscreens/src/components/back_button_show_quick_add.dart';
-import 'package:allscreens/src/front/trip_companions/trip_companions_list.dart';
-import 'package:allscreens/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/background/background.dart';
+import 'package:eatsleeptravel/src/components/back_button_show_quick_add.dart';
+import 'package:eatsleeptravel/src/front/trip_companions/trip_companions_list.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
 class TripCompanionsScreen extends StatelessWidget {

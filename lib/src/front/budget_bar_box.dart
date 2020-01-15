@@ -1,5 +1,5 @@
-import 'package:allscreens/src/components/chart_bar_vertical.dart';
-import 'package:allscreens/src/front/budget_bar.dart';
+import 'package:eatsleeptravel/src/components/chart_bar_vertical.dart';
+import 'package:eatsleeptravel/src/front/budget_bar.dart';
 import 'package:flutter/material.dart';
 
 class BudgetBarBox extends StatelessWidget {

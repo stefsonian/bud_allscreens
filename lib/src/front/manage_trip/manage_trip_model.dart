@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:allscreens/src/models/Trip.dart';
+import 'package:eatsleeptravel/src/models/Trip.dart';
 
 class ManageTripModel {
   String tripId;

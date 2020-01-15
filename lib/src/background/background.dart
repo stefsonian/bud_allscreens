@@ -1,6 +1,6 @@
-import 'package:allscreens/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:allscreens/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:provider/provider.dart';
 
 class Background extends StatelessWidget {
@@ -28,3 +28,5 @@ class Background extends StatelessWidget {
     );
   }
 }
+
+// distributionUrl=https\://services.gradle.org/distributions/gradle-4.10.2-all.zip

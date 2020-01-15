@@ -1,5 +1,5 @@
-// import 'package:allscreens/src/record/record_screen.dart';
-// import 'package:allscreens/src/start/start_screen.dart';
+// import 'package:eatsleeptravel/src/record/record_screen.dart';
+// import 'package:eatsleeptravel/src/start/start_screen.dart';
 // import 'package:flutter/material.dart';
 
 // import 'destination.dart';

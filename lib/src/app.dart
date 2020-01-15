@@ -1,13 +1,13 @@
-import 'package:allscreens/src/login/login_screen.dart';
-import 'package:allscreens/src/navigation/bottom_nav.dart';
-import 'package:allscreens/src/services/records.dart';
-import 'package:allscreens/src/services/home_state.dart';
-import 'package:allscreens/src/services/record_state.dart';
-import 'package:allscreens/src/services/session_data.dart';
+import 'package:eatsleeptravel/src/login/login_screen.dart';
+import 'package:eatsleeptravel/src/navigation/bottom_nav.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
+import 'package:eatsleeptravel/src/services/home_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:allscreens/src/background/background.dart';
-import 'package:allscreens/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/background/background.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 import 'helpers/colors.dart';

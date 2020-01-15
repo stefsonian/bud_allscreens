@@ -1,5 +1,5 @@
-import 'package:allscreens/src/components/splitter.dart';
-import 'package:allscreens/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/components/splitter.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:allscreens/src/models/Expense.dart';
-import 'package:allscreens/src/models/Frozen_amount.dart';
-import 'package:allscreens/src/models/Location.dart';
-import 'package:allscreens/src/services/session_data.dart';
+import 'package:eatsleeptravel/src/models/Expense.dart';
+import 'package:eatsleeptravel/src/models/Frozen_amount.dart';
+import 'package:eatsleeptravel/src/models/Location.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 

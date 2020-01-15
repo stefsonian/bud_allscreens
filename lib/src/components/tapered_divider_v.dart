@@ -1,4 +1,4 @@
-import 'package:allscreens/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
 class TaperedDividerV extends StatelessWidget {

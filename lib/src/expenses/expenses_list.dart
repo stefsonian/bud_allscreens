@@ -1,8 +1,8 @@
-import 'package:allscreens/src/expenses/expense_item.dart';
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/models/Expense.dart';
-import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/services/records.dart';
+import 'package:eatsleeptravel/src/expenses/expense_item.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/models/Expense.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 

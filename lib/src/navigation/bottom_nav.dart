@@ -1,10 +1,10 @@
-import 'package:allscreens/src/day/day_screen.dart';
-import 'package:allscreens/src/expenses/expenses_screen.dart';
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/navigation/start_nav.dart';
-import 'package:allscreens/src/record/record_screen.dart';
-import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/stats/stats_screen.dart';
+import 'package:eatsleeptravel/src/day/day_screen.dart';
+import 'package:eatsleeptravel/src/expenses/expenses_screen.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/navigation/start_nav.dart';
+import 'package:eatsleeptravel/src/record/record_screen.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/stats/stats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

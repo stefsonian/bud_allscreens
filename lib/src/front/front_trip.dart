@@ -1,7 +1,7 @@
-import 'package:allscreens/src/components/factoid.dart';
-import 'package:allscreens/src/components/info_bubble.dart';
-import 'package:allscreens/src/front/trip_options_popup.dart';
-import 'package:allscreens/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/components/factoid.dart';
+import 'package:eatsleeptravel/src/components/info_bubble.dart';
+import 'package:eatsleeptravel/src/front/trip_options_popup.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
 class FrontTrip extends StatefulWidget {

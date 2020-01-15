@@ -1,6 +1,6 @@
-import 'package:allscreens/src/models/Location.dart';
-import 'package:allscreens/src/models/Category.dart';
-import 'package:allscreens/src/models/Frozen_amount.dart';
+import 'package:eatsleeptravel/src/models/Location.dart';
+import 'package:eatsleeptravel/src/models/Category.dart';
+import 'package:eatsleeptravel/src/models/Frozen_amount.dart';
 import 'package:jiffy/jiffy.dart';
 
 class Expense {

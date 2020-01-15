@@ -1,5 +1,5 @@
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

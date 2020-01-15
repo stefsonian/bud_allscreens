@@ -1,6 +1,6 @@
-import 'package:allscreens/src/models/Numpad_input.dart';
-import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/models/Numpad_input.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:splitsi/src/services/appState.dart';

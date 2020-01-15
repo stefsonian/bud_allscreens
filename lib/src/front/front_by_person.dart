@@ -1,5 +1,5 @@
-import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/front/budget_bar_horiz.dart';
+import 'package:eatsleeptravel/src/components/content_box.dart';
+import 'package:eatsleeptravel/src/front/budget_bar_horiz.dart';
 import 'package:flutter/material.dart';
 
 class FrontByPerson extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/components/factoid_circle.dart';
-import 'package:allscreens/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/components/content_box.dart';
+import 'package:eatsleeptravel/src/components/factoid_circle.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
 class FrontAverages extends StatelessWidget {

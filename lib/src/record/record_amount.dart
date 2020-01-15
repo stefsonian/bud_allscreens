@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:allscreens/src/components/divider_grid.dart';
-import 'package:allscreens/src/components/option_button.dart';
-import 'package:allscreens/src/models/Numpad_input.dart';
-import 'package:allscreens/src/record/numpad.dart';
-import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/components/divider_grid.dart';
+import 'package:eatsleeptravel/src/components/option_button.dart';
+import 'package:eatsleeptravel/src/models/Numpad_input.dart';
+import 'package:eatsleeptravel/src/record/numpad.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

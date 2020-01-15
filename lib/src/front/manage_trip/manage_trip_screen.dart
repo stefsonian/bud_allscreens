@@ -1,8 +1,8 @@
-import 'package:allscreens/src/background/background.dart';
-import 'package:allscreens/src/components/back_button_show_quick_add.dart';
-import 'package:allscreens/src/front/manage_trip/manage_trip_form.dart';
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/background/background.dart';
+import 'package:eatsleeptravel/src/components/back_button_show_quick_add.dart';
+import 'package:eatsleeptravel/src/front/manage_trip/manage_trip_form.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

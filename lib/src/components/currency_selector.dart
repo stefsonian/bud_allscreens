@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:allscreens/src/components/loading_spinner.dart';
+import 'package:eatsleeptravel/src/components/loading_spinner.dart';
 import 'package:flutter/material.dart';
 
 class CurrencySelector extends StatefulWidget {

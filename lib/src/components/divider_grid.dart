@@ -1,5 +1,5 @@
-import 'package:allscreens/src/components/tapered_divider_h.dart';
-import 'package:allscreens/src/components/tapered_divider_v.dart';
+import 'package:eatsleeptravel/src/components/tapered_divider_h.dart';
+import 'package:eatsleeptravel/src/components/tapered_divider_v.dart';
 import 'package:flutter/material.dart';
 
 class DividerGrid extends StatelessWidget {

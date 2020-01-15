@@ -1,8 +1,8 @@
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/models/Category.dart';
-import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/services/record_state.dart';
-import 'package:allscreens/src/services/session_data.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/models/Category.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

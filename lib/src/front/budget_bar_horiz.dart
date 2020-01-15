@@ -1,5 +1,5 @@
-import 'package:allscreens/src/components/animated_spacer.dart';
-import 'package:allscreens/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/components/animated_spacer.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
 class BudgetBarHoriz extends StatefulWidget {

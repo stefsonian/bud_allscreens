@@ -1,5 +1,5 @@
-import 'package:allscreens/src/day/day_item.dart';
-import 'package:allscreens/src/day/day_list.dart';
+import 'package:eatsleeptravel/src/day/day_item.dart';
+import 'package:eatsleeptravel/src/day/day_list.dart';
 import 'package:flutter/material.dart';
 
 class DayScreen extends StatelessWidget {

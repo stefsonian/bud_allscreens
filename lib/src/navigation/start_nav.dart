@@ -1,7 +1,7 @@
-import 'package:allscreens/src/front/front_screen.dart';
-import 'package:allscreens/src/front/manage_trip/manage_trip_screen.dart';
-import 'package:allscreens/src/front/select_trip/select_trip_screen.dart';
-import 'package:allscreens/src/front/trip_companions/trip_companions_screen.dart';
+import 'package:eatsleeptravel/src/front/front_screen.dart';
+import 'package:eatsleeptravel/src/front/manage_trip/manage_trip_screen.dart';
+import 'package:eatsleeptravel/src/front/select_trip/select_trip_screen.dart';
+import 'package:eatsleeptravel/src/front/trip_companions/trip_companions_screen.dart';
 
 import 'package:flutter/material.dart';
 

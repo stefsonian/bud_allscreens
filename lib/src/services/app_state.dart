@@ -1,7 +1,7 @@
-import 'package:allscreens/src/models/App_settings.dart';
-import 'package:allscreens/src/models/New_expense.dart';
-import 'package:allscreens/src/models/Trip.dart';
-import 'package:allscreens/src/models/User.dart';
+import 'package:eatsleeptravel/src/models/App_settings.dart';
+import 'package:eatsleeptravel/src/models/New_expense.dart';
+import 'package:eatsleeptravel/src/models/Trip.dart';
+import 'package:eatsleeptravel/src/models/User.dart';
 import 'package:flutter/material.dart';
 
 class AppState with ChangeNotifier {

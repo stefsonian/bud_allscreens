@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:geolocator/geolocator.dart';
 
-import 'package:allscreens/src/models/Location.dart';
+import 'package:eatsleeptravel/src/models/Location.dart';
 
 class Utils {
   List<Map<String, double>> sortMapByDoubleValue(

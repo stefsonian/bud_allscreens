@@ -1,4 +1,4 @@
-// import 'package:allscreens/src/front/front_box.dart';
+// import 'package:eatsleeptravel/src/front/front_box.dart';
 // import 'package:flutter/material.dart';
 
 // class StatsList extends StatelessWidget {

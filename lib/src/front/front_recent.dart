@@ -1,7 +1,7 @@
-import 'package:allscreens/src/components/Ikon_button.dart';
-import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/components/Ikon_button.dart';
+import 'package:eatsleeptravel/src/components/content_box.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

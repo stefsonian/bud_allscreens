@@ -1,15 +1,15 @@
-import 'package:allscreens/src/components/tapered_divider_h.dart';
-import 'package:allscreens/src/front/front_averages.dart';
-import 'package:allscreens/src/front/front_by_category.dart';
-import 'package:allscreens/src/front/front_by_hashtag.dart';
-import 'package:allscreens/src/front/front_by_person.dart';
-import 'package:allscreens/src/front/front_recent.dart';
-import 'package:allscreens/src/front/front_stats.dart';
-import 'package:allscreens/src/front/trip_options_popup.dart';
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/models/Trip.dart';
-import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/services/session_data.dart';
+import 'package:eatsleeptravel/src/components/tapered_divider_h.dart';
+import 'package:eatsleeptravel/src/front/front_averages.dart';
+import 'package:eatsleeptravel/src/front/front_by_category.dart';
+import 'package:eatsleeptravel/src/front/front_by_hashtag.dart';
+import 'package:eatsleeptravel/src/front/front_by_person.dart';
+import 'package:eatsleeptravel/src/front/front_recent.dart';
+import 'package:eatsleeptravel/src/front/front_stats.dart';
+import 'package:eatsleeptravel/src/front/trip_options_popup.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/models/Trip.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

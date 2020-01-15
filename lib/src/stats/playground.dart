@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:allscreens/src/components/chart_bar_horizontal.dart';
-import 'package:allscreens/src/components/chart_bar_vertical.dart';
-import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/front/budget_bar_box.dart';
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/models/Expense.dart';
-import 'package:allscreens/src/services/records.dart';
-import 'package:allscreens/src/services/session_data.dart';
+import 'package:eatsleeptravel/src/components/chart_bar_horizontal.dart';
+import 'package:eatsleeptravel/src/components/chart_bar_vertical.dart';
+import 'package:eatsleeptravel/src/components/content_box.dart';
+import 'package:eatsleeptravel/src/front/budget_bar_box.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/models/Expense.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';

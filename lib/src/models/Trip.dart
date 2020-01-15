@@ -1,6 +1,6 @@
-import 'package:allscreens/src/models/User.dart';
+import 'package:eatsleeptravel/src/models/User.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:allscreens/src/models/Member.dart';
+import 'package:eatsleeptravel/src/models/Member.dart';
 
 class Trip {
   String id, budgetCurrency, name = '';

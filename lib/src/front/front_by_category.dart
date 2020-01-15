@@ -1,10 +1,10 @@
 import 'dart:math';
-import 'package:allscreens/src/components/chart_bar_horizontal.dart';
-import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/helpers/colors.dart';
-import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/services/records.dart';
-import 'package:allscreens/src/services/session_data.dart';
+import 'package:eatsleeptravel/src/components/chart_bar_horizontal.dart';
+import 'package:eatsleeptravel/src/components/content_box.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,9 +1,9 @@
-import 'package:allscreens/src/helpers/utils.dart';
-import 'package:allscreens/src/models/Trip.dart';
-import 'package:allscreens/src/models/User.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
+import 'package:eatsleeptravel/src/models/Trip.dart';
+import 'package:eatsleeptravel/src/models/User.dart';
 import 'package:flutter/foundation.dart';
-import 'package:allscreens/src/models/Location.dart';
-import 'package:allscreens/src/models/Category.dart';
+import 'package:eatsleeptravel/src/models/Location.dart';
+import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:flutter/material.dart';
 
 class NewExpense extends ChangeNotifier {

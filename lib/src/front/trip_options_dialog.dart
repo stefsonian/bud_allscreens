@@ -1,5 +1,5 @@
-import 'package:allscreens/src/front/manage_trip/manage_trip_screen.dart';
-import 'package:allscreens/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/front/manage_trip/manage_trip_screen.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
 class TripOptionsDialog extends StatelessWidget {

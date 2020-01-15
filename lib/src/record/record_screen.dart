@@ -1,15 +1,15 @@
-import 'package:allscreens/src/background/background.dart';
-import 'package:allscreens/src/components/option_button.dart';
-import 'package:allscreens/src/models/New_expense.dart';
-import 'package:allscreens/src/record/record_amount.dart';
-import 'package:allscreens/src/record/record_category.dart';
-import 'package:allscreens/src/record/record_details.dart';
-import 'package:allscreens/src/record/record_options.dart';
-import 'package:allscreens/src/services/app_state.dart';
-import 'package:allscreens/src/services/record_state.dart';
-import 'package:allscreens/src/services/session_data.dart';
+import 'package:eatsleeptravel/src/background/background.dart';
+import 'package:eatsleeptravel/src/components/option_button.dart';
+import 'package:eatsleeptravel/src/models/New_expense.dart';
+import 'package:eatsleeptravel/src/record/record_amount.dart';
+import 'package:eatsleeptravel/src/record/record_category.dart';
+import 'package:eatsleeptravel/src/record/record_details.dart';
+import 'package:eatsleeptravel/src/record/record_options.dart';
+import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
-import 'package:allscreens/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:clip_shadow/clip_shadow.dart';
 

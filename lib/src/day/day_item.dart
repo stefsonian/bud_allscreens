@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:allscreens/src/components/Ikon_button.dart';
-import 'package:allscreens/src/components/content_box.dart';
-import 'package:allscreens/src/day/day_box.dart';
+import 'package:eatsleeptravel/src/components/Ikon_button.dart';
+import 'package:eatsleeptravel/src/components/content_box.dart';
+import 'package:eatsleeptravel/src/day/day_box.dart';
 import 'package:flutter/material.dart';
 
 class DayItem extends StatelessWidget {
