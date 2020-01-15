@@ -1,6 +1,7 @@
 import 'package:allscreens/src/helpers/colors.dart';
 import 'package:allscreens/src/models/Category.dart';
 import 'package:allscreens/src/services/app_state.dart';
+import 'package:allscreens/src/services/record_state.dart';
 import 'package:allscreens/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -122,10 +123,12 @@ class CatButton extends StatefulWidget {
 
 class _CatButtonState extends State<CatButton> {
   AppState appState;
+  RecordState recordState;
 
   @override
   void didChangeDependencies() {
     appState = Provider.of<AppState>(context);
+    recordState = Provider.of<RecordState>(context);
     super.didChangeDependencies();
   }
 
@@ -133,11 +136,13 @@ class _CatButtonState extends State<CatButton> {
     print('i was tapped');
     if (widget.isMainCat) {
       appState.updateNewExpense('mainCategory', widget.category);
+
       // appState.newExpense.mainCategory = widget.category;
       setState(() {});
     }
     if (!widget.isMainCat) {
       appState.updateNewExpense('subCategory', widget.category);
+      recordState.isSubCatRecorded = true;
     }
   }
 

@@ -23,6 +23,8 @@ class _RecordAmountState extends State<RecordAmount> {
   onNumberTap(String value) {
     numpad.updateValue(value);
     setState(() => amount = numpad.displayValue());
+    appState.updateNewExpense('amount', numpad.valueDouble);
+    appState.updateNewExpense('currencyId', 'AUD');
   }
 
   @override

@@ -190,13 +190,13 @@ class RecordDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Icon(
-            Icons.restaurant,
+            appState.newExpense.subCategory.icon,
             color: color,
             size: 50,
           ),
           SizedBox(height: 20),
           Text(
-            'Restaurant',
+            appState.newExpense.subCategory.name,
             style: TextStyle(
               color: color,
               fontSize: 35,
@@ -210,7 +210,7 @@ class RecordDetails extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 15, 2, 0),
                 child: Text(
-                  'AUD  \$',
+                  '${appState.newExpense.currencyId}  \$',
                   style: TextStyle(
                     color: color,
                     fontSize: 18,
@@ -218,7 +218,7 @@ class RecordDetails extends StatelessWidget {
                 ),
               ),
               Text(
-                '77.00',
+                appState.newExpense.amount.toStringAsFixed(2),
                 style: TextStyle(
                     color: color, fontSize: 30, fontWeight: FontWeight.bold),
               ),

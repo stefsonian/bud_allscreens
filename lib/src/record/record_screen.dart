@@ -90,25 +90,28 @@ class _RecordScreenState extends State<RecordScreen>
                   children: <Widget>[
                     Expanded(
                       flex: 1,
-                      child: buildNavButton(() {}, Icons.delete),
+                      child: buildNavButton(
+                        onTap: () {},
+                        icon: Icons.delete,
+                      ),
                     ),
                     SizedBox(width: 14),
                     Expanded(
                       flex: 1,
                       child: buildNavButton(
-                        tapPreviousButton,
-                        Icons.arrow_back_ios,
-                      ),
+                          onTap: tapPreviousButton,
+                          icon: Icons.arrow_back_ios,
+                          isEnabled: recordState.recordStage > 0),
                     ),
                     SizedBox(width: 14),
                     Expanded(
                       flex: 3,
                       child: buildNavButton(
-                        tapNextButton,
-                        recordState.recordStage < 1
-                            ? Icons.arrow_forward_ios
-                            : Icons.check,
-                      ),
+                          onTap: tapNextButton,
+                          icon: recordState.recordStage < 1
+                              ? Icons.arrow_forward_ios
+                              : Icons.check,
+                          isEnabled: recordState.isSubCatRecorded),
                     ),
                   ],
                 ),
@@ -120,7 +123,9 @@ class _RecordScreenState extends State<RecordScreen>
     );
   }
 
-  Widget buildNavButton(Function onTap, IconData icon) {
+  Widget buildNavButton(
+      {Function onTap, IconData icon, bool isEnabled = true}) {
+    var opacity = isEnabled ? 1.0 : 0.3;
     return RaisedButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(360),
@@ -129,12 +134,13 @@ class _RecordScreenState extends State<RecordScreen>
       animationDuration: Duration(milliseconds: 300),
       elevation: 8,
       color: appState.cols.action,
+      disabledColor: appState.cols.action.withOpacity(opacity),
       child: Icon(
         icon,
-        color: appState.cols.actioncontent,
+        color: appState.cols.actioncontent.withOpacity(opacity),
         size: icon == Icons.check ? 34 : 26,
       ),
-      onPressed: onTap,
+      onPressed: isEnabled ? onTap : null,
     );
   }
 }

@@ -48,6 +48,15 @@ class NewExpense extends ChangeNotifier {
       case 'subCategory':
         subCategory = value;
         break;
+      case 'amount':
+        amount = value;
+        break;
+      case 'currencyId':
+        currencyId = value;
+        break;
+      case 'note':
+        note = value;
+        break;
       default:
     }
     notifyListeners();
