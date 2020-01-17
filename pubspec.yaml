@@ -24,24 +24,21 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   provider: ^3.0.0+1
-  charts_flutter: ^0.8.0
+  # charts_flutter: ^0.8.0
   flutter_statusbarcolor: ^0.2.1
   animator: ^1.0.0+1
-  flutter_swiper: ^1.1.6
+  # flutter_swiper: ^1.1.6
   clip_shadow: any
   jiffy: ^2.1.2
   matrix4_transform: ^1.1.3
   align_positioned: ^1.2.5
   flutter_colorpicker: ^0.2.6
   geolocator: ^5.1.5
-  # Add the dependency for the Firebase Core Flutter SDK
-  firebase_core: ^0.4.0+9
-    # Add the dependency for the FlutterFire plugin for Google Analytics
-  firebase_analytics: ^5.0.2
-  # Add the dependencies for any other Firebase products you want to use in your app
-  # For example, to use Firebase Authentication and Cloud Firestore
-  firebase_auth: ^0.14.0+5
-  cloud_firestore: ^0.12.9+5
+  # Add the dependency for the Firebase and Firestore
+  # firebase_core: ^0.4.3+2
+  # firebase_analytics: ^5.0.9
+  firebase_auth: ^0.15.3+1
+  # cloud_firestore: ^0.13.0+1
 
 dev_dependencies:
   flutter_test:

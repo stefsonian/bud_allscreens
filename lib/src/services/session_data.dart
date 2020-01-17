@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:eatsleeptravel/src/models/Trip.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:eatsleeptravel/src/components/currency_selector.dart';
@@ -50,6 +51,12 @@ class SessionData with ChangeNotifier {
       onDeviceUsers.add(User.withDemoData('onDeviceUser2', 'Anaximander'));
       _updateTrips();
     });
+    notifyListeners();
+  }
+
+  void initialiseUserFromFirebaseUser(FirebaseUser fUser) {
+    user = User.fromFirebaseUser(fUser);
+    onDeviceUsers.add(user);
     notifyListeners();
   }
 

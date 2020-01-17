@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class User {
+  FirebaseUser fireUser;
   String id, email, name, homeCurrency, currentTrip = '';
   List<String> trips = [];
   bool isAnonymous = true;
@@ -6,7 +9,20 @@ class User {
   String countryLastIn; // id of the country they were in at last expense
   String paymentMethodLastUsed;
 
-  User() {}
+  User();
+
+  User.fromFirebaseUser(FirebaseUser user) {
+    fireUser = user;
+    id = user.uid;
+    name = user.displayName;
+    email = user.email;
+    homeCurrency = 'AUD';
+    trips = ['demotrip1', 'demotrip2'];
+    currentTrip = 'demotrip1';
+    currencyLastUsed = 'AUD';
+    countryLastIn = 'au';
+    paymentMethodLastUsed = 'card';
+  }
 
   User.withDemoData(String id, String name) {
     id = id;

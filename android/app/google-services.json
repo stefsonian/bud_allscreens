@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "327800571447",
+    "firebase_url": "https://eatsleeptravel-92110.firebaseio.com",
+    "project_id": "eatsleeptravel-92110",
+    "storage_bucket": "eatsleeptravel-92110.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327800571447:android:274cb9a1d6f399c77f21b2",
+        "android_client_info": {
+          "package_name": "app.eatsleeptravel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327800571447-obuttcfijmiu0lt5tqm3h3rjma260sm6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGmykV8-TuT929Rwd08L6hbluEnzsuYzM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327800571447-obuttcfijmiu0lt5tqm3h3rjma260sm6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "327800571447-5v66s503elm8b4gql2ud4f7tebcmgh5p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.eatsleeptravel.test1"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,8 @@
 import 'package:eatsleeptravel/src/background/background.dart';
 import 'package:eatsleeptravel/src/components/chart_bar_vertical.dart';
 import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/login/login_user.dart';
+import 'package:eatsleeptravel/src/login/register_user.dart';
 import 'package:eatsleeptravel/src/navigation/bottom_nav.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
@@ -24,23 +26,14 @@ class LoginScreen extends StatelessWidget {
     appState.viewHeight = MediaQuery.of(context).size.height;
     print(
         'View width: ${appState.viewWidth}  |  View height: ${appState.viewHeight}');
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          FloatingActionButton.extended(
-            label: Text(
-              'Log in',
-              style: TextStyle(color: col_main1),
-            ),
-            icon: Icon(Icons.person, color: col_main1),
-            backgroundColor: Colors.white,
-            heroTag: 'Log in',
-            onPressed: () => _onPressedHandler(sessionData, context),
-          ),
-        ],
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        padding: EdgeInsets.all(30),
+        height: double.infinity,
+        width: double.infinity,
+        child: appState.loginStage == 'sign in' ? LoginUser() : RegisterUser(),
       ),
     );
   }

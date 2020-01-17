@@ -67,4 +67,11 @@ class AppState with ChangeNotifier {
     _showQuickAddButton = showQuickAddButton;
     notifyListeners();
   }
+
+  String _loginStage = 'sign in';
+  String get loginStage => _loginStage;
+  set loginStage(String loginStage) {
+    _loginStage = loginStage;
+    notifyListeners();
+  }
 }

@@ -46,7 +46,7 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'eatsleeptravel',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
