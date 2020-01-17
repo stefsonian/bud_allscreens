@@ -92,101 +92,91 @@ class _RegisterUserState extends State<RegisterUser> {
       color: appState.cols.content.withOpacity(0.7),
       letterSpacing: 1.6,
     );
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'eat sleep travel',
-                  style: TextStyle(
-                      fontSize: 30,
-                      letterSpacing: 1.6,
-                      wordSpacing: 2,
-                      color: appState.cols.content),
-                ),
-                SizedBox(height: 40),
-                TextField(
-                  controller: _emailCtrl,
-                  style: fieldTextStyle,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.email,
-                      color: appState.cols.content,
-                    ),
-                    border: fieldBorder,
-                    enabledBorder: fieldBorder,
-                    focusedBorder: fieldBorderFocus,
-                    hintText: 'you@email.com',
-                    hintStyle: hintTextStyle,
-                    labelText: 'Email',
-                    labelStyle: fieldTextStyle,
-                    alignLabelWithHint: false,
-                  ),
-                ),
-                SizedBox(height: 30),
-                TextField(
-                  controller: _passwordCtrl,
-                  style: fieldTextStyle,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.vpn_key,
-                      color: appState.cols.content,
-                    ),
-                    border: fieldBorder,
-                    enabledBorder: fieldBorder,
-                    focusedBorder: fieldBorderFocus,
-                    hintText: '********',
-                    hintStyle: hintTextStyle,
-                    labelText: 'Password',
-                    labelStyle: fieldTextStyle,
-                    alignLabelWithHint: false,
-                  ),
-                ),
-                SizedBox(height: 50),
-                SizedBox(
-                  width: 180,
-                  child: FloatingActionButton.extended(
-                    label: Text(
-                      'Sign up',
-                      style: TextStyle(color: appState.cols.background1),
-                    ),
-                    icon: Icon(Icons.person, color: appState.cols.background1),
-                    backgroundColor: appState.cols.content,
-                    heroTag: 'Sign up',
-                    onPressed: () => onSignUpTap(context),
-                  ),
-                ),
-                SizedBox(height: 100),
-                SizedBox(
-                  // width: 180,
-                  child: FlatButton(
-                    child: Text(
-                      'Already signed up? Sign in now',
-                      style: TextStyle(
-                        color: appState.cols.content.withOpacity(0.7),
-                        letterSpacing: 1.6,
-                        fontSize: 16,
-                      ),
-                    ),
-                    onPressed: () => appState.loginStage = 'sign in',
-                  ),
-                ),
-                SizedBox(height: 30),
-                isWaiting ? LoadingSpinner() : Container(),
-              ],
+    return ListView(
+      physics: const NeverScrollableScrollPhysics(),
+      children: <Widget>[
+        SizedBox(height: 40),
+        Text(
+          'eat sleep travel',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 30,
+              letterSpacing: 1.6,
+              wordSpacing: 2,
+              color: appState.cols.content),
+        ),
+        SizedBox(height: 40),
+        TextField(
+          controller: _emailCtrl,
+          style: fieldTextStyle,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.email,
+              color: appState.cols.content,
             ),
+            border: fieldBorder,
+            enabledBorder: fieldBorder,
+            focusedBorder: fieldBorderFocus,
+            hintText: 'you@email.com',
+            hintStyle: hintTextStyle,
+            labelText: 'Email',
+            labelStyle: fieldTextStyle,
+            alignLabelWithHint: false,
           ),
-          // Expanded(
-          //   flex: 1,
-          //   child: Container(),
-          // ),
-        ],
-      ),
+        ),
+        SizedBox(height: 30),
+        TextField(
+          controller: _passwordCtrl,
+          style: fieldTextStyle,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.vpn_key,
+              color: appState.cols.content,
+            ),
+            border: fieldBorder,
+            enabledBorder: fieldBorder,
+            focusedBorder: fieldBorderFocus,
+            hintText: '********',
+            hintStyle: hintTextStyle,
+            labelText: 'Password',
+            labelStyle: fieldTextStyle,
+            alignLabelWithHint: false,
+          ),
+        ),
+        SizedBox(height: 50),
+        SizedBox(
+          width: 180,
+          child: FloatingActionButton.extended(
+            label: Text(
+              'Sign up',
+              style: TextStyle(color: appState.cols.background1),
+            ),
+            icon: Icon(Icons.person, color: appState.cols.background1),
+            backgroundColor: appState.cols.content,
+            heroTag: 'Sign up',
+            onPressed: () => onSignUpTap(context),
+          ),
+        ),
+        SizedBox(height: 100),
+        SizedBox(
+          // width: 180,
+          child: FlatButton(
+            child: Text(
+              'Already signed up?\nSign in',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: appState.cols.content.withOpacity(0.9),
+                letterSpacing: 1.6,
+                fontSize: 16,
+              ),
+            ),
+            onPressed: () => appState.loginStage = 'sign in',
+          ),
+        ),
+        SizedBox(height: 30),
+        isWaiting ? LoadingSpinner() : Container(),
+      ],
     );
   }
 }

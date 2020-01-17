@@ -102,122 +102,110 @@ class _LoginUserState extends State<LoginUser> {
       color: appState.cols.content.withOpacity(0.7),
       letterSpacing: 1.6,
     );
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'eat sleep travel',
-                  style: TextStyle(
-                      fontSize: 30,
-                      letterSpacing: 1.6,
-                      wordSpacing: 2,
-                      color: appState.cols.content),
-                ),
-                SizedBox(height: 40),
-                TextField(
-                  controller: _emailCtrl,
-                  style: fieldTextStyle,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.email,
-                      color: appState.cols.content,
-                    ),
-                    border: fieldBorder,
-                    enabledBorder: fieldBorder,
-                    focusedBorder: fieldBorderFocus,
-                    hintText: 'you@email.com',
-                    hintStyle: hintTextStyle,
-                    labelText: 'Email',
-                    labelStyle: fieldTextStyle,
-                    alignLabelWithHint: false,
-                  ),
-                ),
-                SizedBox(height: 30),
-                TextField(
-                  controller: _passwordCtrl,
-                  style: fieldTextStyle,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.vpn_key,
-                      color: appState.cols.content,
-                    ),
-                    border: fieldBorder,
-                    enabledBorder: fieldBorder,
-                    focusedBorder: fieldBorderFocus,
-                    hintText: '********',
-                    hintStyle: hintTextStyle,
-                    labelText: 'Password',
-                    labelStyle: fieldTextStyle,
-                    alignLabelWithHint: false,
-                  ),
-                ),
-                SizedBox(height: 40),
-                SizedBox(
-                  width: 180,
-                  child: FloatingActionButton.extended(
-                    label: Text(
-                      'Sign in',
-                      style: TextStyle(color: appState.cols.background1),
-                    ),
-                    icon: Icon(Icons.person, color: appState.cols.background1),
-                    backgroundColor: appState.cols.content,
-                    heroTag: 'Sign in',
-                    onPressed: onLoginTap,
-                  ),
-                ),
-                SizedBox(height: 70),
-                Text(
-                  "First time here?",
-                  style: TextStyle(
-                    color: appState.cols.content.withOpacity(0.8),
-                    letterSpacing: 1.6,
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(height: 15),
-                FlatButton(
-                  child: Text(
-                    'Sign up now',
-                    style: TextStyle(
-                      color: appState.cols.action,
-                      letterSpacing: 1.6,
-                      fontSize: 16,
-                    ),
-                  ),
-                  onPressed: () => appState.loginStage = 'sign up',
-                ),
-                SizedBox(height: 12),
-                FlatButton(
-                  child: Text(
-                    'Skip for now',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: appState.cols.content.withOpacity(0.6),
-                      letterSpacing: 1.6,
-                      fontSize: 14,
-                    ),
-                  ),
-                  onPressed: onSkipTap,
-                ),
-              ],
+    return ListView(
+      physics: const NeverScrollableScrollPhysics(),
+      children: <Widget>[
+        SizedBox(height: 40),
+        Text(
+          'eat sleep travel',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 30,
+              letterSpacing: 1.6,
+              wordSpacing: 2,
+              color: appState.cols.content),
+        ),
+        SizedBox(height: 40),
+        TextField(
+          controller: _emailCtrl,
+          style: fieldTextStyle,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.email,
+              color: appState.cols.content,
+            ),
+            border: fieldBorder,
+            enabledBorder: fieldBorder,
+            focusedBorder: fieldBorderFocus,
+            hintText: 'you@email.com',
+            hintStyle: hintTextStyle,
+            labelText: 'Email',
+            labelStyle: fieldTextStyle,
+            alignLabelWithHint: false,
+          ),
+        ),
+        SizedBox(height: 30),
+        TextField(
+          controller: _passwordCtrl,
+          style: fieldTextStyle,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.vpn_key,
+              color: appState.cols.content,
+            ),
+            border: fieldBorder,
+            enabledBorder: fieldBorder,
+            focusedBorder: fieldBorderFocus,
+            hintText: '********',
+            hintStyle: hintTextStyle,
+            labelText: 'Password',
+            labelStyle: fieldTextStyle,
+            alignLabelWithHint: false,
+          ),
+        ),
+        SizedBox(height: 40),
+        SizedBox(
+          width: 180,
+          child: FloatingActionButton.extended(
+            label: Text(
+              'Sign in',
+              style: TextStyle(color: appState.cols.background1),
+            ),
+            icon: Icon(Icons.person, color: appState.cols.background1),
+            backgroundColor: appState.cols.content,
+            heroTag: 'Sign in',
+            onPressed: onLoginTap,
+          ),
+        ),
+        SizedBox(height: 80),
+        Text(
+          "First time here?",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: appState.cols.content.withOpacity(0.9),
+            letterSpacing: 1.6,
+            fontSize: 16,
+          ),
+        ),
+        SizedBox(height: 15),
+        FlatButton(
+          child: Text(
+            'Sign up now',
+            style: TextStyle(
+              color: appState.cols.action,
+              letterSpacing: 1.6,
+              fontSize: 16,
             ),
           ),
-          SizedBox(height: 30),
-          isWaiting ? LoadingSpinner() : Container(),
-          // Expanded(
-          //   flex: 1,
-          //   child: Container(),
-          // ),
-        ],
-      ),
+          onPressed: () => appState.loginStage = 'sign up',
+        ),
+        SizedBox(height: 12),
+        FlatButton(
+          child: Text(
+            'Skip for now',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: appState.cols.content.withOpacity(0.6),
+              letterSpacing: 1.6,
+              fontSize: 14,
+            ),
+          ),
+          onPressed: onSkipTap,
+        ),
+        SizedBox(height: 30),
+        isWaiting ? LoadingSpinner() : Container(),
+      ],
     );
   }
 }
