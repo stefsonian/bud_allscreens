@@ -1,5 +1,6 @@
 import 'package:eatsleeptravel/src/day/day_screen.dart';
 import 'package:eatsleeptravel/src/expenses/expenses_screen.dart';
+import 'package:eatsleeptravel/src/front/user_settings/app_settings_drawer.dart';
 import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:eatsleeptravel/src/navigation/start_nav.dart';
 import 'package:eatsleeptravel/src/record/record_screen.dart';
@@ -29,6 +30,7 @@ class _BottomNavState extends State<BottomNav>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: AppSettingsDrawer(),
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
       extendBody: true,

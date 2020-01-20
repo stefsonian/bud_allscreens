@@ -36,16 +36,17 @@ class _FrontScreenState extends State<FrontScreen> {
         slivers: <Widget>[
           SliverAppBar(
             actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.person, color: appState.cols.content),
-                tooltip: 'User settings',
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.settings, color: appState.cols.content),
-                tooltip: 'App settings',
-                onPressed: () {},
-              ),
+              // IconButton(
+              //   padding: EdgeInsets.fromLTRB(8, 8, 18, 8),
+              //   icon: Icon(Icons.menu, color: appState.cols.content),
+              //   tooltip: 'User settings',
+              //   onPressed: () => Scaffold.of(context).openDrawer(),
+              // ),
+              // IconButton(
+              //   icon: Icon(Icons.settings, color: appState.cols.content),
+              //   tooltip: 'App settings',
+              //   onPressed: () {},
+              // ),
             ],
             floating: false,
             snap: false,
