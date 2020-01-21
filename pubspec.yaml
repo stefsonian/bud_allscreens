@@ -34,11 +34,12 @@ dependencies:
   align_positioned: ^1.2.5
   flutter_colorpicker: ^0.2.6
   geolocator: ^5.1.5
+  page_transition: ^1.1.5
   # Add the dependency for the Firebase and Firestore
   # firebase_core: ^0.4.3+2
   # firebase_analytics: ^5.0.9
   firebase_auth: ^0.15.3+1
-  # cloud_firestore: ^0.13.0+1
+  cloud_firestore: ^0.13.0+1
 
 dev_dependencies:
   flutter_test:

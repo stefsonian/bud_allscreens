@@ -2,6 +2,7 @@ import 'package:eatsleeptravel/src/background/background.dart';
 import 'package:eatsleeptravel/src/components/loading_spinner.dart';
 import 'package:eatsleeptravel/src/components/some_alert_dialog.dart';
 import 'package:eatsleeptravel/src/navigation/bottom_nav.dart';
+import 'package:eatsleeptravel/src/navigation/bottom_nav_providers.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/authentication_service.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
@@ -25,12 +26,27 @@ class _LoginUserState extends State<LoginUser> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     appState = Provider.of<AppState>(context);
-    sessionData = Provider.of<SessionData>(context);
+    if (_authService.user != null) _onSuccessfulSignIn();
+  }
+
+  _onSuccessfulSignIn() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Background(
+          child: BottomNavProviders(
+            user: _authService.user,
+            appState: appState,
+            child: BottomNav(),
+          ),
+        ),
+      ),
+    );
   }
 
   onLoginTap() async {
     setState(() => isWaiting = true);
-    var email = _emailCtrl.text;
+    var email = _emailCtrl.text.trim();
     var pwd = _passwordCtrl.text;
     var result = await _authService.loginWithEmail(
       email: email,
@@ -47,22 +63,16 @@ class _LoginUserState extends State<LoginUser> {
     setState(() => isWaiting = false);
   }
 
+  onSignUpTap() {
+    Navigator.pushNamed(context, 'sign up');
+  }
+
   _processLoginResult(dynamic result) async {
     // result is either a bool stating whether signup was successful,
     // or it is an error message emanating from the signup process.
     if (result is bool) {
       if (result) {
-        sessionData.initialiseUserFromFirebaseUser(_authService.user);
-
-        await sessionData.initialiseUser();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Background(
-              child: BottomNav(),
-            ),
-          ),
-        );
+        _onSuccessfulSignIn();
       } else {
         SomeAlertDialog(
           title: 'Oh no!',
@@ -181,14 +191,14 @@ class _LoginUserState extends State<LoginUser> {
         SizedBox(height: 15),
         FlatButton(
           child: Text(
-            'Sign up now',
+            'Sign up',
             style: TextStyle(
               color: appState.cols.action,
               letterSpacing: 1.6,
               fontSize: 16,
             ),
           ),
-          onPressed: () => appState.loginStage = 'sign up',
+          onPressed: onSignUpTap,
         ),
         SizedBox(height: 12),
         FlatButton(

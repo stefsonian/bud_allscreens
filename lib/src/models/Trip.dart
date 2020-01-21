@@ -1,14 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/models/User.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:eatsleeptravel/src/models/Member.dart';
 
 class Trip {
-  String id, budgetCurrency, name = '';
+  String id, budgetCurrency, budgetType, name = '';
   DateTime startDT, endDT = DateTime.now();
   double budgetAmount = 0.0;
   List<Member> members = [];
 
   Trip() {}
+
+  Trip.fromFirestoreData(String tripId, Map<String, dynamic> data) {
+    Timestamp dataStartDT = data['start_dt'] ?? null;
+    Timestamp dataEndDT = data['end_dt'] ?? null;
+    var dataBudgetAmount = data['budget_amount'] ?? 0;
+    id = tripId ?? '';
+    budgetCurrency = data['budget_currency'] ?? 'aud';
+    budgetType = data['budget_type'] ?? 'day';
+    name = data['name'] ?? '';
+    startDT = dataStartDT == null
+        ? startDT
+        : DateTime.fromMillisecondsSinceEpoch(
+            dataStartDT.millisecondsSinceEpoch);
+    endDT = dataEndDT == null
+        ? endDT
+        : DateTime.fromMillisecondsSinceEpoch(dataEndDT.millisecondsSinceEpoch);
+    budgetAmount = double.tryParse(dataBudgetAmount.toString());
+  }
 
   Trip.withDemoData(String id, String name, List<User> users) {
     this.id = id;

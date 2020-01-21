@@ -23,6 +23,7 @@ class _RecordScreenState extends State<RecordScreen>
   AppState appState;
   RecordState recordState;
   SessionData sessionData;
+  var isReady = false;
 
   final stages = [Stage0(), Stage1()];
 
@@ -31,7 +32,9 @@ class _RecordScreenState extends State<RecordScreen>
     recordState = Provider.of<RecordState>(context);
     appState = Provider.of<AppState>(context);
     sessionData = Provider.of<SessionData>(context);
-    appState.initaliseNewExpense(sessionData.trip, sessionData.user);
+    if (sessionData.isInitialisationComplete) {
+      appState.initaliseNewExpense(sessionData.trip, sessionData.user);
+    }
   }
 
   tapNextButton() {
@@ -48,6 +51,7 @@ class _RecordScreenState extends State<RecordScreen>
   }
 
   Widget build(BuildContext context) {
+    if (!sessionData.isInitialisationComplete) return Container();
     return SafeArea(
       // top: false,
       left: false,

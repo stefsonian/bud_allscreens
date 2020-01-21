@@ -32,7 +32,7 @@ class _FrontStatsState extends State<FrontStats> {
     appState = Provider.of<AppState>(context);
     records = Provider.of<Records>(context);
     session = Provider.of<SessionData>(context);
-    createTestData();
+    // createTestData();
   }
 
   createTestData() {

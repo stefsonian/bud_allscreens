@@ -1,8 +1,8 @@
 import 'package:eatsleeptravel/src/background/background.dart';
 import 'package:eatsleeptravel/src/components/loading_spinner.dart';
 import 'package:eatsleeptravel/src/components/some_alert_dialog.dart';
-import 'package:eatsleeptravel/src/models/User.dart';
 import 'package:eatsleeptravel/src/navigation/bottom_nav.dart';
+import 'package:eatsleeptravel/src/navigation/bottom_nav_providers.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/authentication_service.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
@@ -17,7 +17,6 @@ class RegisterUser extends StatefulWidget {
 
 class _RegisterUserState extends State<RegisterUser> {
   AppState appState;
-  SessionData sessionData;
   final _authService = AuthenticationService();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -26,7 +25,6 @@ class _RegisterUserState extends State<RegisterUser> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     appState = Provider.of<AppState>(context);
-    sessionData = Provider.of<SessionData>(context);
   }
 
   onSignUpTap(BuildContext context) async {
@@ -41,14 +39,15 @@ class _RegisterUserState extends State<RegisterUser> {
     // or it is an error message emanating from the signup process.
     if (result is bool) {
       if (result) {
-        sessionData.initialiseUserFromFirebaseUser(_authService.user);
-
-        await sessionData.initialiseUser();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => Background(
-              child: BottomNav(),
+              child: BottomNavProviders(
+                user: _authService.user,
+                appState: appState,
+                child: BottomNav(),
+              ),
             ),
           ),
         );
@@ -67,6 +66,10 @@ class _RegisterUserState extends State<RegisterUser> {
       ).flashDialog(context);
     }
     setState(() => isWaiting = false);
+  }
+
+  onLogInTap() {
+    Navigator.pushNamed(context, 'sign in');
   }
 
   Widget build(BuildContext context) {
@@ -171,7 +174,7 @@ class _RegisterUserState extends State<RegisterUser> {
                 fontSize: 16,
               ),
             ),
-            onPressed: () => appState.loginStage = 'sign in',
+            onPressed: () => onLogInTap(),
           ),
         ),
         SizedBox(height: 30),

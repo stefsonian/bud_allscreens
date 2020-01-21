@@ -31,6 +31,7 @@ class _FrontScreenState extends State<FrontScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!session.isInitialisationComplete) return _buildTripRequired();
     return Container(
       child: CustomScrollView(
         slivers: <Widget>[
@@ -112,6 +113,16 @@ class _FrontScreenState extends State<FrontScreen> {
   }
 
   Widget _tripInfo(BuildContext context, AppState appState) {
+    if (session.trip == null) {
+      return FlatButton(
+        child: Text(
+          'Tap to add a trip',
+          style: TextStyle(color: appState.cols.content),
+        ),
+        onPressed: () => Navigator.pushNamed(context, 'new trip'),
+      );
+    }
+    // else return the trip name
     var tripText = session.trip.name;
     return Container(
       padding: EdgeInsets.only(left: 8),
@@ -145,7 +156,9 @@ class _FrontScreenState extends State<FrontScreen> {
           ),
           // SizedBox(height: 2),
           Text(
-            '${session.trip.startDayMonth} - ${session.trip.endDayMonth}  •  day ${session.trip.travelDay}',
+            session.trip == null
+                ? ''
+                : '${session.trip.startDayMonth} - ${session.trip.endDayMonth}  •  day ${session.trip.travelDay}',
             style: TextStyle(
                 fontSize: 12, letterSpacing: 1.1, color: appState.cols.content),
           ),
@@ -162,6 +175,64 @@ class _FrontScreenState extends State<FrontScreen> {
         color2: appState.cols.background1,
         thickness: 1,
       ),
+    );
+  }
+
+  Widget _buildTripRequired() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Text(
+              'Welcome to',
+              style: TextStyle(
+                color: appState.cols.content,
+                fontSize: 18,
+                letterSpacing: 1.6,
+              ),
+            ),
+            SizedBox(height: 15),
+            Text(
+              'Eat Sleep Travel',
+              style: TextStyle(
+                color: appState.cols.content,
+                fontSize: 25,
+                letterSpacing: 1.6,
+              ),
+            ),
+          ],
+        ),
+        Text(
+          'Set up your first trip\nto get started',
+          style: TextStyle(
+            color: appState.cols.content,
+            fontSize: 18,
+            letterSpacing: 1.6,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          height: 70,
+          width: 200,
+          child: RaisedButton(
+            child: Text(
+              'New trip',
+              style: TextStyle(
+                color: appState.cols.actioncontent,
+                fontSize: 20,
+                letterSpacing: 1.6,
+              ),
+            ),
+            elevation: 16,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(360),
+            ),
+            color: appState.cols.action,
+            onPressed: () => Navigator.pushNamed(context, 'new trip'),
+          ),
+        ),
+      ],
     );
   }
   // Widget build(BuildContext context) {

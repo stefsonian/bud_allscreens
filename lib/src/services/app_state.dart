@@ -69,6 +69,7 @@ class AppState with ChangeNotifier {
   }
 
   String _loginStage = 'sign in';
+  // String _loginStage = 'check if signed in';
   String get loginStage => _loginStage;
   set loginStage(String loginStage) {
     _loginStage = loginStage;

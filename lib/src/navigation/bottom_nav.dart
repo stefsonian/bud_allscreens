@@ -5,6 +5,7 @@ import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:eatsleeptravel/src/navigation/start_nav.dart';
 import 'package:eatsleeptravel/src/record/record_screen.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:eatsleeptravel/src/stats/stats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +18,12 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav>
     with TickerProviderStateMixin<BottomNav> {
   AppState appState;
+  SessionData sessionData;
 
   didChangeDependencies() {
     super.didChangeDependencies();
     appState = Provider.of<AppState>(context);
+    sessionData = Provider.of<SessionData>(context);
   }
 
   _handleAppBarTap(int index) {
@@ -37,14 +40,15 @@ class _BottomNavState extends State<BottomNav>
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButtonAnimator: null,
-      floatingActionButton: appState.showQuickAddButton
-          ? FloatingActionButton(
-              backgroundColor: appState.cols.action,
-              child: Icon(Icons.add, color: appState.cols.actioncontent),
-              heroTag: 'Add expense',
-              onPressed: () => _handleAppBarTap(2),
-            )
-          : null,
+      floatingActionButton:
+          appState.showQuickAddButton && sessionData.isInitialisationComplete
+              ? FloatingActionButton(
+                  backgroundColor: appState.cols.action,
+                  child: Icon(Icons.add, color: appState.cols.actioncontent),
+                  heroTag: 'Add expense',
+                  onPressed: () => _handleAppBarTap(2),
+                )
+              : null,
       body: IndexedStack(
         index: appState.activeTabIndex,
         // children: allDestinations.map<Widget>((Destination destination) {
@@ -64,7 +68,9 @@ class _BottomNavState extends State<BottomNav>
         elevation: 0,
         shape: CircularNotchedRectangle(),
         child: Container(
-          height: appState.showToolBar ? 60 : 0,
+          height: appState.showToolBar && sessionData.isInitialisationComplete
+              ? 60
+              : 0,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,46 +114,7 @@ class _BottomNavState extends State<BottomNav>
             ],
           ),
         ),
-
-        // currentIndex: appState.activeTabIndex,
-        // onTap: (int index) => appState.activeTabIndex = index,
-        // items: allDestinations.map((Destination destination) {
-        //   return BottomNavigationBarItem(
-        //       icon: Icon(destination.icon),
-        //       // backgroundColor: Colors.black26,
-        //       backgroundColor: col_aqua,
-        //       title: Text(destination.title));
-        // }).toList(),
       ),
     );
   }
 }
-
-// old:
-//  Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.transparent,
-//       body: SafeArea(
-//         top: false,
-//         child: IndexedStack(
-//           index: appState.activeTabIndex,
-//           // children: allDestinations.map<Widget>((Destination destination) {
-//           //   return DestinationView(destination: destination);
-//           // }).toList(),
-//           children: [StartNav(), RecordScreen(), Start(), Start()],
-//         ),
-//       ),
-//       bottomNavigationBar: BottomNavigationBar(
-//         elevation: 0,
-//         currentIndex: appState.activeTabIndex,
-//         onTap: (int index) => appState.activeTabIndex = index,
-//         items: allDestinations.map((Destination destination) {
-//           return BottomNavigationBarItem(
-//               icon: Icon(destination.icon),
-//               // backgroundColor: Colors.black26,
-//               backgroundColor: col_aqua,
-//               title: Text(destination.title));
-//         }).toList(),
-//       ),
-//     );
-//   }

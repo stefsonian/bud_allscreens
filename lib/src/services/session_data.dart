@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -42,15 +43,6 @@ class SessionData with ChangeNotifier {
     Map currencyMap = json.decode(data);
     currencyMap.forEach((k, v) => currencies.add(Currency.fromMap({k: v})));
     currencies.sort((Currency a, Currency b) => a.id.compareTo(b.id));
-  }
-
-  Future<void> initialiseUser() async {
-    await Future.delayed(Duration(milliseconds: 100), () {
-      user = User.withDemoData('demouser A', 'Plato');
-      onDeviceUsers.add(User.withDemoData('onDeviceUser1', 'Aristotle'));
-      onDeviceUsers.add(User.withDemoData('onDeviceUser2', 'Anaximander'));
-      _updateTrips();
-    });
     notifyListeners();
   }
 
@@ -64,17 +56,48 @@ class SessionData with ChangeNotifier {
     location = Location.withDemoData();
   }
 
-  void _updateTrips() {
-    user.trips.forEach((id) {
-      var name = '$id name';
-      List<User> allUsers = List.from(onDeviceUsers);
-      allUsers.add(user);
-      var t = Trip.withDemoData(id, name, allUsers);
-      trips.add(t);
+  void initialiseTrips() {
+    Firestore.instance
+        .collection('trips')
+        .where('roles.${user.id}', isGreaterThan: "")
+        .snapshots()
+        .listen((data) {
+      print(data.documents.map((doc) => doc.documentID).toString());
+      print('document count: ${data.documents.length}');
+      List<Trip> newTrips = [];
+      data.documents.forEach((doc) =>
+          newTrips.add(Trip.fromFirestoreData(doc.documentID, doc.data)));
+      trips = newTrips;
+      notifyListeners();
     });
   }
 
-  Trip get trip => trips.firstWhere((t) => t.id == user.currentTrip);
+  void initialiseUserCurrentTrip() {
+    Firestore.instance
+        .collection('users')
+        .document(user.id)
+        .snapshots()
+        .listen((doc) {
+      final String curTripId = doc.data['current_trip'] ?? '';
+      user.currentTrip = curTripId;
+      print("User's current trip changed to: $curTripId");
+      notifyListeners();
+      print('Is initialisation complete: $isInitialisationComplete');
+    });
+  }
+
+  Trip get trip =>
+      trips.firstWhere((t) => t.id == user.currentTrip, orElse: () => null);
+
+  bool get isInitialisationComplete {
+    return trip != null &&
+        user != null &&
+        maincats.isNotEmpty &&
+        subcats.isNotEmpty &&
+        currencies.isNotEmpty;
+  }
+
+  // bool get isInitialisationComplete => true;
 
   void _initialiseMainCats() {
     maincats = {};
