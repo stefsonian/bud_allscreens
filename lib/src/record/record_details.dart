@@ -1,7 +1,9 @@
 import 'package:eatsleeptravel/src/components/splitter.dart';
 import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/models/New_expense.dart';
 import 'package:eatsleeptravel/src/record/note_dialog.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,13 +24,14 @@ class RecordDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
+    final recordState = Provider.of<RecordState>(context);
     return Container(
       padding: EdgeInsets.all(15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          amountHeaderLarge(appState),
+          amountHeaderLarge(appState, recordState.newExpense),
           FlatButton(
             padding: EdgeInsets.all(0),
             child: Row(
@@ -176,7 +179,7 @@ class RecordDetails extends StatelessWidget {
     );
   }
 
-  Widget amountHeaderLarge(AppState appState) {
+  Widget amountHeaderLarge(AppState appState, NewExpense newExpense) {
     final Color color = appState.cols.content;
     return Container(
       height: 300,
@@ -190,13 +193,13 @@ class RecordDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Icon(
-            appState.newExpense.subCategory.icon,
+            newExpense.subCategory.icon,
             color: color,
             size: 50,
           ),
           SizedBox(height: 20),
           Text(
-            appState.newExpense.subCategory.name,
+            newExpense.subCategory.name,
             style: TextStyle(
               color: color,
               fontSize: 35,
@@ -210,7 +213,7 @@ class RecordDetails extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 15, 2, 0),
                 child: Text(
-                  '${appState.newExpense.currencyId}  \$',
+                  '${newExpense.currencyId}  \$',
                   style: TextStyle(
                     color: color,
                     fontSize: 18,
@@ -218,7 +221,7 @@ class RecordDetails extends StatelessWidget {
                 ),
               ),
               Text(
-                appState.newExpense.amount.toStringAsFixed(2),
+                newExpense.amount.toStringAsFixed(2),
                 style: TextStyle(
                     color: color, fontSize: 30, fontWeight: FontWeight.bold),
               ),

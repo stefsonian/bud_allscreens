@@ -1,13 +1,17 @@
 import 'package:eatsleeptravel/src/components/currency_selector.dart';
 import 'package:eatsleeptravel/src/front/manage_trip/manage_trip_model.dart';
 import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/models/Trip.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:jiffy/jiffy.dart';
 
 class ManageTripForm extends StatefulWidget {
-  ManageTripForm({Key key}) : super(key: key);
+  ManageTripForm({Key key, this.isCreateMode = false}) : super(key: key);
+  final bool isCreateMode;
 
   @override
   _ManageTripFormState createState() => _ManageTripFormState();
@@ -15,6 +19,7 @@ class ManageTripForm extends StatefulWidget {
 
 class _ManageTripFormState extends State<ManageTripForm> {
   final _formKey = GlobalKey<FormState>();
+  final _firestore = FirestoreService();
   var data = ManageTripModel();
   SessionData sessionData;
   AppState appState;
@@ -22,9 +27,11 @@ class _ManageTripFormState extends State<ManageTripForm> {
   void didChangeDependencies() {
     appState = Provider.of<AppState>(context);
     sessionData = Provider.of<SessionData>(context);
-    // if no data, fill data with current trip values if exists
-    if (data.name == '' && sessionData.trip != null) {
-      data = ManageTripModel.withTripData(sessionData.trip);
+    // only populate fields if in manage mode (leave empty if in create mode)
+    if (!widget.isCreateMode) {
+      if (data.name == '' && sessionData.trip != null) {
+        data = ManageTripModel.withTripData(sessionData.trip);
+      }
     }
     super.didChangeDependencies();
   }
@@ -44,6 +51,7 @@ class _ManageTripFormState extends State<ManageTripForm> {
   }
 
   _springStartDatePicker(DateTime currentStart) async {
+    FocusScope.of(context).requestFocus(FocusNode());
     var selectedDate = await showDatePicker(
       context: context,
       initialDate: currentStart,
@@ -56,11 +64,12 @@ class _ManageTripFormState extends State<ManageTripForm> {
         );
       },
     );
-    data.startDate = selectedDate;
+    data.startDate = Jiffy(selectedDate).startOf('day');
     setState(() => data = data);
   }
 
   _springEndDatePicker(DateTime currentStart, DateTime currentEnd) async {
+    FocusScope.of(context).requestFocus(FocusNode());
     var selectedDate = await showDatePicker(
       context: context,
       initialDate: currentEnd,
@@ -73,8 +82,30 @@ class _ManageTripFormState extends State<ManageTripForm> {
         );
       },
     );
-    data.endDate = selectedDate;
+    data.endDate = Jiffy(selectedDate).endOf('day');
     setState(() => data = data);
+  }
+
+  onCreateNewTrip() async {
+    var userId = sessionData.user.id;
+    Trip trip = Trip();
+    trip.updateFromManageTrip(data);
+    trip.creator = userId;
+    trip.roles[userId] = 'owner';
+    var newTripId = await _firestore.createTrip(userId: userId, trip: trip);
+    await _firestore.setUserCurrentTrip(
+      userId: userId,
+      tripId: newTripId.documentID,
+    );
+    // TODO: maybe show pop-up confirmation
+  }
+
+  onUpdateExistingTrip() async {
+    var userId = sessionData.user.id;
+    Trip trip = sessionData.trip;
+    trip.updateFromManageTrip(data);
+    await _firestore.updateExistingTrip(trip: trip);
+    // TODO: maybe show pop-up confirmation
   }
 
   Widget build(BuildContext context) {
@@ -253,8 +284,8 @@ class _ManageTripFormState extends State<ManageTripForm> {
                   // Validate will return true if the form is valid, or false if
                   // the form is invalid.
                   if (_formKey.currentState.validate()) {
-                    // Process data.
-                    print(data.name);
+                    if (widget.isCreateMode) onCreateNewTrip();
+                    if (!widget.isCreateMode) onUpdateExistingTrip();
                   }
                 },
               ),

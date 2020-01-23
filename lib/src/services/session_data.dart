@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';
@@ -22,11 +23,47 @@ class SessionData with ChangeNotifier {
   List<User> onDeviceUsers = [];
   List<Trip> trips = [];
   Location location;
+  bool isInitMaincats = false;
+  bool isInitSubcats = false;
+  bool isInitLocation = false;
+  bool isInitCurrencies = false;
+  bool isInitUser = false;
+  bool isInitTrips = false;
+  bool isInitUserCurrentTrip = false;
+
+  bool get isInitialisationComplete {
+    return isInitMaincats &&
+        isInitSubcats &&
+        isInitCurrencies &&
+        isInitUser &&
+        isInitTrips &&
+        isInitUserCurrentTrip;
+  }
+
+  Future<bool> completeIntialisation() async {
+    Completer<bool> completer = Completer();
+    var attempts = 0;
+    Timer.periodic(Duration(milliseconds: 50), (Timer t) {
+      attempts += 1;
+      print('attempt: $attempts, is init complete: $isInitialisationComplete');
+      if (isInitialisationComplete) {
+        completer.complete(true);
+        t.cancel();
+      }
+      if (attempts == 120) {
+        completer.complete(false);
+        t.cancel();
+      }
+    });
+    return completer.future;
+  }
+
+  // bool get isInitialisationComplete => true;
 
   SessionData() {
     _initialiseMainCats();
     _initialiseSubCats();
-    _initialiseLocation();
+    // _initialiseLocation();
     _initialiseCurrencies();
   }
 
@@ -43,18 +80,18 @@ class SessionData with ChangeNotifier {
     Map currencyMap = json.decode(data);
     currencyMap.forEach((k, v) => currencies.add(Currency.fromMap({k: v})));
     currencies.sort((Currency a, Currency b) => a.id.compareTo(b.id));
-    notifyListeners();
+    if (!isInitCurrencies) isInitCurrencies = true;
   }
 
   void initialiseUserFromFirebaseUser(FirebaseUser fUser) {
     user = User.fromFirebaseUser(fUser);
     onDeviceUsers.add(user);
-    notifyListeners();
+    if (!isInitUser) isInitUser = true;
   }
 
-  void _initialiseLocation() {
-    location = Location.withDemoData();
-  }
+  // void _initialiseLocation() {
+  //   location = Location.withDemoData();
+  // }
 
   void initialiseTrips() {
     Firestore.instance
@@ -62,14 +99,15 @@ class SessionData with ChangeNotifier {
         .where('roles.${user.id}', isGreaterThan: "")
         .snapshots()
         .listen((data) {
-      print(data.documents.map((doc) => doc.documentID).toString());
-      print('document count: ${data.documents.length}');
+      // print(data.documents.map((doc) => doc.documentID).toString());
+      // print('document count: ${data.documents.length}');
       List<Trip> newTrips = [];
       data.documents.forEach((doc) =>
           newTrips.add(Trip.fromFirestoreData(doc.documentID, doc.data)));
       trips = newTrips;
       notifyListeners();
-    });
+      if (!isInitTrips) isInitTrips = true;
+    }).onError((err) => print(err.toString()));
   }
 
   void initialiseUserCurrentTrip() {
@@ -78,26 +116,19 @@ class SessionData with ChangeNotifier {
         .document(user.id)
         .snapshots()
         .listen((doc) {
-      final String curTripId = doc.data['current_trip'] ?? '';
-      user.currentTrip = curTripId;
-      print("User's current trip changed to: $curTripId");
-      notifyListeners();
-      print('Is initialisation complete: $isInitialisationComplete');
+      if (doc.exists) {
+        final String curTripId = doc.data['current_trip'] ?? '';
+        user.currentTrip = curTripId;
+        print("User's current trip changed to: $curTripId");
+        notifyListeners();
+      }
+      if (!isInitUserCurrentTrip) isInitUserCurrentTrip = true;
+      // print('Is initialisation complete: $isInitialisationComplete');
     });
   }
 
   Trip get trip =>
       trips.firstWhere((t) => t.id == user.currentTrip, orElse: () => null);
-
-  bool get isInitialisationComplete {
-    return trip != null &&
-        user != null &&
-        maincats.isNotEmpty &&
-        subcats.isNotEmpty &&
-        currencies.isNotEmpty;
-  }
-
-  // bool get isInitialisationComplete => true;
 
   void _initialiseMainCats() {
     maincats = {};
@@ -127,6 +158,7 @@ class SessionData with ChangeNotifier {
       name: 'Other',
       icon: Icons.scatter_plot,
     );
+    if (!isInitMaincats) isInitMaincats = true;
   }
 
   void _initialiseSubCats() {
@@ -330,6 +362,7 @@ class SessionData with ChangeNotifier {
       name: 'Other',
       icon: Icons.scatter_plot,
     );
+    if (!isInitSubcats) isInitSubcats = true;
   }
 }
 

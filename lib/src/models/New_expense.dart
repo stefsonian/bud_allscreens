@@ -26,6 +26,12 @@ class NewExpense extends ChangeNotifier {
   bool isSplit = false;
   bool isRepeat = false;
 
+  NewExpense();
+
+  NewExpense.withUserandTrip({Trip trip, User user}) {
+    initialise(trip: trip, user: user);
+  }
+
   void initialise({Trip trip, User user}) {
     createdBy = user.id;
     currencyId = user.currencyLastUsed;
@@ -33,10 +39,9 @@ class NewExpense extends ChangeNotifier {
     paidByName = user.name;
     paymentType = user.paymentMethodLastUsed;
     tripId = trip.id;
-    mainCategory = MainCategory(id: 'eat', name: 'Eat', icon: Icons.restaurant);
     //TODO: The initial main category should be the quick/speed category
 
-    getLocation();
+    // getLocation();
     //location
   }
 

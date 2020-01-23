@@ -16,6 +16,7 @@ class RecordCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     final sessionData = Provider.of<SessionData>(context);
     final appState = Provider.of<AppState>(context);
+    final recordState = Provider.of<RecordState>(context);
     // Sizing
     final h = appState.viewHeight;
     final w = appState.viewWidth;
@@ -31,8 +32,8 @@ class RecordCategory extends StatelessWidget {
     }
     // ------
     // Make catButtons from main categories
-    var selectedMainCatId = appState.newExpense.mainCategory?.id ?? 'quick';
-    var selectedSubCatId = appState.newExpense.subCategory?.id ?? '';
+    var selectedMainCatId = recordState.newExpense?.mainCategory?.id ?? 'quick';
+    var selectedSubCatId = recordState.newExpense?.subCategory?.id ?? '';
     List<CatButton> mainCatButtons = sessionData.maincats.entries.map((c) {
       return CatButton(
         category: c.value,
@@ -135,14 +136,13 @@ class _CatButtonState extends State<CatButton> {
   void handleTap() {
     print('i was tapped');
     if (widget.isMainCat) {
-      appState.updateNewExpense('mainCategory', widget.category);
+      recordState.updateNewExpense('mainCategory', widget.category);
 
       // appState.newExpense.mainCategory = widget.category;
       setState(() {});
     }
     if (!widget.isMainCat) {
-      appState.updateNewExpense('subCategory', widget.category);
-      recordState.isSubCatRecorded = true;
+      recordState.updateNewExpense('subCategory', widget.category);
     }
   }
 

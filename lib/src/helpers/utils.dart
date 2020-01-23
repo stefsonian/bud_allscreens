@@ -1,4 +1,8 @@
+import 'dart:async';
 import 'dart:math';
+import 'package:eatsleeptravel/src/services/records.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:eatsleeptravel/src/models/Location.dart';
@@ -25,5 +29,22 @@ class Utils {
     // var position = await Geolocator().getCurrentPosition();
 
     return location;
+  }
+
+  Future<void> completeAppInitialisation(FirebaseUser currentUser,
+      SessionData sessionData, Records records) async {
+    Completer completer = Completer();
+    sessionData.initialiseUserFromFirebaseUser(currentUser);
+    sessionData.initialiseTrips();
+    sessionData.initialiseUserCurrentTrip();
+    await sessionData.completeIntialisation();
+    records.maincats = sessionData.maincats;
+    records.subcats = sessionData.subcats;
+    records.currentTripId = sessionData.user.currentTrip;
+    records.initialiseRecords();
+    await records.completeIntialisation();
+    completer.complete();
+    print('all init is complete');
+    return completer.future;
   }
 }

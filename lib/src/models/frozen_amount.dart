@@ -3,6 +3,8 @@ class FrozenAmount {
   DateTime frozenDT = DateTime.now();
   double value, amountInUSD, amountInEUR, amountInAUD, amountInHome = 0.0;
 
+  FrozenAmount();
+
   FrozenAmount.withTestData(double amount) {
     currency = 'AUD';
     homeCurrency = 'AUD';

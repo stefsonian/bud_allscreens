@@ -1,10 +1,12 @@
 import 'package:eatsleeptravel/src/background/background.dart';
 import 'package:eatsleeptravel/src/components/loading_spinner.dart';
 import 'package:eatsleeptravel/src/components/some_alert_dialog.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/navigation/bottom_nav.dart';
 import 'package:eatsleeptravel/src/navigation/bottom_nav_providers.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/authentication_service.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,8 @@ class RegisterUser extends StatefulWidget {
 
 class _RegisterUserState extends State<RegisterUser> {
   AppState appState;
+  SessionData sessionData;
+  Records records;
   final _authService = AuthenticationService();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -25,6 +29,8 @@ class _RegisterUserState extends State<RegisterUser> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     appState = Provider.of<AppState>(context);
+    sessionData = Provider.of<SessionData>(context);
+    records = Provider.of<Records>(context);
   }
 
   onSignUpTap(BuildContext context) async {
@@ -39,18 +45,12 @@ class _RegisterUserState extends State<RegisterUser> {
     // or it is an error message emanating from the signup process.
     if (result is bool) {
       if (result) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Background(
-              child: BottomNavProviders(
-                user: _authService.user,
-                appState: appState,
-                child: BottomNav(),
-              ),
-            ),
-          ),
+        await Utils().completeAppInitialisation(
+          _authService.user,
+          sessionData,
+          records,
         );
+        appState.onLoginPath = false;
       } else {
         SomeAlertDialog(
           title: 'Oh no!',
@@ -58,7 +58,6 @@ class _RegisterUserState extends State<RegisterUser> {
         ).flashDialog(context);
       }
     }
-
     if (result is String) {
       SomeAlertDialog(
         title: 'Oh no, signup failure!',

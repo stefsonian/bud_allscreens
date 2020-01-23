@@ -17,25 +17,33 @@ class AppState with ChangeNotifier {
   double viewHeight;
   double viewWidth;
 
+  bool _onLoginPath = true;
+  bool get onLoginPath => _onLoginPath;
+  set onLoginPath(bool onLoginPath) {
+    _onLoginPath = onLoginPath;
+    notifyListeners();
+  }
+
   AppSettings _settings = AppSettings();
   AppSettings get settings => _settings;
   Cols get cols => settings.cols;
   void changeColor(String name, Color color) =>
       settings.changeColor(name, color);
 
-  NewExpense _newExpense;
-  NewExpense get newExpense => _newExpense;
-  void initaliseNewExpense(Trip trip, User user) {
-    if (_newExpense != null) return;
-    _newExpense = NewExpense();
-    _newExpense.initialise(trip: trip, user: user);
-    _newExpense.addListener(() => shareUpdate());
-    // _newExpense.addListener(() => notifyListeners());
-  }
+  // NewExpense _newExpense;
+  // NewExpense get newExpense => _newExpense;
+  // void initaliseNewExpense(Trip trip, User user) {
+  //   if (_newExpense != null) return;
+  //   _newExpense = NewExpense();
+  //   _newExpense.initialise(trip: trip, user: user);
+  //   _newExpense.addListener(() => shareUpdate());
+  //   notifyListeners();
+  //   // _newExpense.addListener(() => notifyListeners());
+  // }
 
-  void updateNewExpense(String property, dynamic value) {
-    newExpense.update(property, value);
-  }
+  // void updateNewExpense(String property, dynamic value) {
+  //   newExpense.update(property, value);
+  // }
 
   int _activeTabIndex = 0;
   int get activeTabIndex => _activeTabIndex;

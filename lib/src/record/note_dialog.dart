@@ -1,4 +1,5 @@
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,12 +11,14 @@ class NoteDialog extends StatefulWidget {
 class _NoteDialogState extends State<NoteDialog> {
   // TODO: Enable rich text editing for hashtags;
   AppState appState;
+  RecordState recordState;
   var _textctrl = TextEditingController();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     appState = Provider.of<AppState>(context);
+    recordState = Provider.of<RecordState>(context);
   }
 
   onTextChange() {
@@ -24,8 +27,8 @@ class _NoteDialogState extends State<NoteDialog> {
   }
 
   onTextSubmit(BuildContext context) {
-    appState.newExpense.note = _textctrl.text;
-    print('saved text: ${appState.newExpense.note}');
+    recordState.updateNewExpense('note', _textctrl.text);
+    print('saved text: ${recordState.newExpense.note}');
     Navigator.pop(context);
   }
 

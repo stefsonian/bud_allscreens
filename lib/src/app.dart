@@ -1,4 +1,11 @@
 import 'package:eatsleeptravel/src/login/login_screen.dart';
+import 'package:eatsleeptravel/src/navigation/bottom_nav.dart';
+import 'package:eatsleeptravel/src/navigation/bottom_nav_providers.dart';
+import 'package:eatsleeptravel/src/navigation/login_nav.dart';
+import 'package:eatsleeptravel/src/navigation/path_selector.dart';
+import 'package:eatsleeptravel/src/services/home_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +29,15 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<SessionData>.value(
           value: sessionData,
         ),
+        ChangeNotifierProvider<RecordState>.value(
+          value: RecordState(),
+        ),
+        ChangeNotifierProvider<HomeState>.value(
+          value: HomeState(),
+        ),
+        ChangeNotifierProvider<Records>.value(
+          value: Records(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -33,8 +49,7 @@ class App extends StatelessWidget {
           extendBody: true,
           body: Container(
             // color: Colors.white70,
-            // child: Background(child: BottomNav()),
-            child: Background(child: LoginScreen()),
+            child: Background(child: PathSelector()),
           ),
         ),
       ),

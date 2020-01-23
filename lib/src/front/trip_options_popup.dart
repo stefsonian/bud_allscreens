@@ -21,7 +21,7 @@ class TripOptionsPopup extends StatelessWidget {
             Navigator.pushNamed(context, 'select trip');
             break;
           case TripOption.add:
-            Navigator.pushNamed(context, 'edit trip');
+            Navigator.pushNamed(context, 'new trip', arguments: true);
             break;
           case TripOption.invite:
             Navigator.pushNamed(context, 'edit participants');

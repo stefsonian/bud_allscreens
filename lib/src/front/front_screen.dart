@@ -6,9 +6,9 @@ import 'package:eatsleeptravel/src/front/front_by_person.dart';
 import 'package:eatsleeptravel/src/front/front_recent.dart';
 import 'package:eatsleeptravel/src/front/front_stats.dart';
 import 'package:eatsleeptravel/src/front/trip_options_popup.dart';
-import 'package:eatsleeptravel/src/helpers/colors.dart';
-import 'package:eatsleeptravel/src/models/Trip.dart';
+
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,34 +21,25 @@ class FrontScreen extends StatefulWidget {
 class _FrontScreenState extends State<FrontScreen> {
   SessionData session;
   AppState appState;
+  Records records;
 
   @override
   void didChangeDependencies() {
     session = Provider.of<SessionData>(context);
     appState = Provider.of<AppState>(context);
+    records = Provider.of<Records>(context);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!session.isInitialisationComplete) return _buildTripRequired();
+    if (session.trip == null) return _buildTripRequired();
+    if (records.full.isEmpty) return _buildExpenseRequired(session.trip.name);
     return Container(
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            actions: <Widget>[
-              // IconButton(
-              //   padding: EdgeInsets.fromLTRB(8, 8, 18, 8),
-              //   icon: Icon(Icons.menu, color: appState.cols.content),
-              //   tooltip: 'User settings',
-              //   onPressed: () => Scaffold.of(context).openDrawer(),
-              // ),
-              // IconButton(
-              //   icon: Icon(Icons.settings, color: appState.cols.content),
-              //   tooltip: 'App settings',
-              //   onPressed: () {},
-              // ),
-            ],
+            actions: <Widget>[],
             floating: false,
             snap: false,
             backgroundColor: appState.cols.background2,
@@ -229,8 +220,59 @@ class _FrontScreenState extends State<FrontScreen> {
               borderRadius: BorderRadius.circular(360),
             ),
             color: appState.cols.action,
-            onPressed: () => Navigator.pushNamed(context, 'new trip'),
+            onPressed: () => Navigator.pushNamed(
+              context,
+              'new trip',
+              arguments: true,
+            ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpenseRequired(String tripName) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Text(
+              'Your trip',
+              style: TextStyle(
+                color: appState.cols.content,
+                fontSize: 18,
+                letterSpacing: 1.6,
+              ),
+            ),
+            SizedBox(height: 15),
+            Text(
+              tripName,
+              style: TextStyle(
+                color: appState.cols.content,
+                fontSize: 35,
+                letterSpacing: 1.6,
+              ),
+            ),
+            SizedBox(height: 15),
+            Text(
+              'is all set up',
+              style: TextStyle(
+                color: appState.cols.content,
+                fontSize: 18,
+                letterSpacing: 1.6,
+              ),
+            ),
+          ],
+        ),
+        Text(
+          'Tap + to record your\nfirst expense',
+          style: TextStyle(
+            color: appState.cols.content,
+            fontSize: 18,
+            letterSpacing: 1.6,
+          ),
+          textAlign: TextAlign.center,
         ),
       ],
     );

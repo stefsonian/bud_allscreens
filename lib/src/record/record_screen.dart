@@ -32,8 +32,8 @@ class _RecordScreenState extends State<RecordScreen>
     recordState = Provider.of<RecordState>(context);
     appState = Provider.of<AppState>(context);
     sessionData = Provider.of<SessionData>(context);
-    if (sessionData.isInitialisationComplete) {
-      appState.initaliseNewExpense(sessionData.trip, sessionData.user);
+    if (sessionData.trip != null) {
+      recordState.initaliseNewExpense(sessionData.trip, sessionData.user);
     }
   }
 
@@ -48,6 +48,11 @@ class _RecordScreenState extends State<RecordScreen>
       appState.activeTabIndex = appState.previousTabIndex;
     if (recordState.recordStage != 0) recordState.recordStage -= 1;
     setState(() {});
+  }
+
+  tapTrashButton() {
+    recordState.initaliseNewExpense(sessionData.trip, sessionData.user);
+    appState.activeTabIndex = appState.previousTabIndex;
   }
 
   Widget build(BuildContext context) {
@@ -95,7 +100,7 @@ class _RecordScreenState extends State<RecordScreen>
                     Expanded(
                       flex: 1,
                       child: buildNavButton(
-                        onTap: () {},
+                        onTap: tapTrashButton,
                         icon: Icons.delete,
                       ),
                     ),
@@ -115,7 +120,8 @@ class _RecordScreenState extends State<RecordScreen>
                           icon: recordState.recordStage < 1
                               ? Icons.arrow_forward_ios
                               : Icons.check,
-                          isEnabled: recordState.isSubCatRecorded),
+                          isEnabled:
+                              recordState.newExpense.subCategory != null),
                     ),
                   ],
                 ),

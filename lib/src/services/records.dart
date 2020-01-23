@@ -1,18 +1,82 @@
+import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/models/Frozen_amount.dart';
 import 'package:eatsleeptravel/src/models/Location.dart';
+import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 
 class Records with ChangeNotifier {
+  FirestoreService firestore = FirestoreService();
   List<Expense> _full = [];
   List<Expense> get full => _full;
+  Map<String, MainCategory> maincats;
+  Map<String, SubCategory> subcats;
+  bool isInitFull = false;
+
+  bool get isInitialisationComplete => isInitFull;
+
+  String _currentTripId = '';
+  String get currentTripId => _currentTripId;
+  set currentTripId(String currentTripId) {
+    _currentTripId = currentTripId;
+    // if (_currentTripId.isNotEmpty) {
+    //   initialiseRecords();
+    // }
+    notifyListeners();
+  }
 
   Records();
 
-  void createTestData(int n, int start, int end) {
+  void initialiseRecords() {
+    if (currentTripId.isEmpty) {
+      // only retrieve records if trip exists
+      if (!isInitFull) isInitFull = true;
+      return;
+    }
+
+    Firestore.instance
+        .collection('trips/$currentTripId/expenses')
+        .snapshots()
+        .listen((data) {
+      List<Expense> newExpenses = [];
+      data.documents.forEach((doc) {
+        final data = doc.data;
+        MainCategory mc = maincats[data['main_category']];
+        SubCategory sc = subcats[data['sub_category']];
+        newExpenses.add(Expense.fromFirestoreData(
+            expenseId: doc.documentID, data: data, mainCat: mc, subCat: sc));
+        // print('expense added: ${doc.documentID}');
+      });
+      _full = newExpenses;
+      notifyListeners();
+      if (!isInitFull) isInitFull = true;
+    }).onError((err) => print(err.toString()));
+  }
+
+  Future<bool> completeIntialisation() async {
+    Completer<bool> completer = Completer();
+    var attempts = 0;
+    Timer.periodic(Duration(milliseconds: 50), (Timer t) {
+      attempts += 1;
+      // print('attempt: $attempts, is init complete: $isInitialisationComplete');
+      if (isInitialisationComplete) {
+        completer.complete(true);
+        t.cancel();
+      }
+      if (attempts == 100) {
+        completer.complete(false);
+        t.cancel();
+      }
+    });
+    return completer.future;
+  }
+
+  void createTestData(String tripId, int n, int start, int end) {
     final sData = SessionData.withCatsOnly();
     for (var i = 0; i < n; i++) {
       var e = Expense();
@@ -32,7 +96,7 @@ class Records with ChangeNotifier {
       e.location = location;
       e.note = 'A quick note';
       e.paymentType = ['Cash', 'Credit', 'Debit'][Random().nextInt(2)];
-      e.tripId = 'demo trip';
+      e.tripId = tripId;
       int noteIndex = Random().nextInt(7);
       e.note = [
         '#fancydinner with text #beachday',
@@ -46,6 +110,12 @@ class Records with ChangeNotifier {
       _full.add(e);
     }
     notifyListeners();
+  }
+
+  Future createFirestoreTestData(String tripId) async {
+    return Future.wait(_full
+        .map((e) => firestore.createExpense(tripId: tripId, expense: e))
+        .toList());
   }
 
   void addRecord(Expense expense) {

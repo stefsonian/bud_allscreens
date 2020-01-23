@@ -41,7 +41,7 @@ class _BottomNavState extends State<BottomNav>
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButtonAnimator: null,
       floatingActionButton:
-          appState.showQuickAddButton && sessionData.isInitialisationComplete
+          appState.showQuickAddButton && sessionData.trip != null
               ? FloatingActionButton(
                   backgroundColor: appState.cols.action,
                   child: Icon(Icons.add, color: appState.cols.actioncontent),

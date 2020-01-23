@@ -1,31 +1,11 @@
+import 'package:eatsleeptravel/src/models/New_expense.dart';
 import 'package:eatsleeptravel/src/models/Numpad_input.dart';
+import 'package:eatsleeptravel/src/models/Trip.dart';
+import 'package:eatsleeptravel/src/models/User.dart';
 import 'package:flutter/material.dart';
 
 class RecordState with ChangeNotifier {
   RecordState();
-
-  bool _isAmountRecorded = false;
-  bool get isAmountRecorded => _isAmountRecorded;
-  set isAmountRecorded(bool isAmountRecorded) {
-    _isAmountRecorded = isAmountRecorded;
-    notifyListeners();
-  }
-
-  bool _isMainCatRecorded = false;
-  bool get isMainCatRecorded => _isMainCatRecorded;
-  set isMainCatRecorded(bool mainCatRecorded) {
-    _isMainCatRecorded = mainCatRecorded;
-    notifyListeners();
-  }
-
-  bool _isSubCatRecorded = false;
-  bool get isSubCatRecorded => _isSubCatRecorded;
-  set isSubCatRecorded(bool subCatRecorded) {
-    _isSubCatRecorded = subCatRecorded;
-    notifyListeners();
-  }
-
-  bool get isCategoriesRecorded => _isMainCatRecorded && _isSubCatRecorded;
 
   int _recordStage = 0;
   int get recordStage => _recordStage;
@@ -43,17 +23,23 @@ class RecordState with ChangeNotifier {
     notifyListeners();
   }
 
-  // int get recordStage {
-  //   if (!_isAmountRecorded) return 1;
-  //   if (!_isMainCatRecorded) return 2;
-  //   if (!_isSubCatRecorded) return 3;
-  //   return 1;
-  // }
+  NewExpense _newExpense = NewExpense();
+  NewExpense get newExpense => _newExpense;
+  void initaliseNewExpense(Trip trip, User user) {
+    if (_newExpense != null) return;
+    _newExpense = NewExpense();
+    _newExpense.initialise(trip: trip, user: user);
+    // _newExpense.addListener(() => shareUpdate());
+    notifyListeners();
+    // _newExpense.addListener(() => notifyListeners());
+  }
+
+  void updateNewExpense(String property, dynamic value) {
+    newExpense.update(property, value);
+    notifyListeners();
+  }
 
   reset() {
-    _isSubCatRecorded = false;
-    _isMainCatRecorded = false;
-    _isAmountRecorded = false;
     notifyListeners();
   }
 }

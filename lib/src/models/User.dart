@@ -14,14 +14,8 @@ class User {
   User.fromFirebaseUser(FirebaseUser user) {
     fireUser = user;
     id = user.uid;
-    name = user.displayName;
-    email = user.email;
-    homeCurrency = 'AUD';
-    trips = ['demotrip1', 'demotrip2'];
-    currentTrip = 'demotrip1';
-    currencyLastUsed = 'AUD';
-    countryLastIn = 'au';
-    paymentMethodLastUsed = 'card';
+    name = user?.displayName;
+    email = user?.email;
   }
 
   User.withDemoData(String id, String name) {

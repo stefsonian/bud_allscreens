@@ -18,7 +18,7 @@ class StartNav extends StatelessWidget {
                 return FrontScreen();
                 break;
               case 'new trip':
-                return ManageTripScreen();
+                return ManageTripScreen(isCreateMode: settings.arguments);
                 break;
               case 'edit trip':
                 return ManageTripScreen();

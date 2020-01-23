@@ -1,10 +1,13 @@
+import 'package:eatsleeptravel/src/app.dart';
 import 'package:eatsleeptravel/src/background/background.dart';
 import 'package:eatsleeptravel/src/components/loading_spinner.dart';
 import 'package:eatsleeptravel/src/components/some_alert_dialog.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/navigation/bottom_nav.dart';
 import 'package:eatsleeptravel/src/navigation/bottom_nav_providers.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/authentication_service.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +21,7 @@ class LoginUser extends StatefulWidget {
 class _LoginUserState extends State<LoginUser> {
   AppState appState;
   SessionData sessionData;
+  Records records;
   final _authService = AuthenticationService();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -26,22 +30,9 @@ class _LoginUserState extends State<LoginUser> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     appState = Provider.of<AppState>(context);
-    if (_authService.user != null) _onSuccessfulSignIn();
-  }
-
-  _onSuccessfulSignIn() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Background(
-          child: BottomNavProviders(
-            user: _authService.user,
-            appState: appState,
-            child: BottomNav(),
-          ),
-        ),
-      ),
-    );
+    sessionData = Provider.of<SessionData>(context);
+    records = Provider.of<Records>(context);
+    // if (_authService.user != null) _onSuccessfulSignIn();
   }
 
   onLoginTap() async {
@@ -80,13 +71,21 @@ class _LoginUserState extends State<LoginUser> {
         ).flashDialog(context);
       }
     }
-
     if (result is String) {
       SomeAlertDialog(
         title: 'Oh no, signup failure!',
         text: result,
       ).flashDialog(context);
     }
+  }
+
+  _onSuccessfulSignIn() async {
+    await Utils().completeAppInitialisation(
+      _authService.user,
+      sessionData,
+      records,
+    );
+    appState.onLoginPath = false;
   }
 
   Widget build(BuildContext context) {
