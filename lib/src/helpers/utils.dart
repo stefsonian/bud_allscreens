@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:eatsleeptravel/src/models/Category.dart';
+import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,5 +48,58 @@ class Utils {
     completer.complete();
     print('all init is complete');
     return completer.future;
+  }
+
+  List<String> getSmartCategories(List<Expense> expenses, int n) {
+    // get the sub category ids of the weighted top n expenses by sub category
+    final defaultList = [
+      'breakfast',
+      'lunch',
+      'dinner',
+      'hostel',
+      'hotel',
+      'bus',
+      'train',
+      'groceries',
+      'cafe',
+      'flight',
+      'tour',
+      'market',
+      'laundry',
+    ];
+
+    // first deal with corner cases
+    if (expenses.isEmpty) return defaultList.take(8).toList();
+
+    // then deal with normal cases
+    final now = DateTime.now();
+    Map<String, double> points = {};
+    expenses.forEach((e) {
+      final String subcatId = e.subCategory.id;
+      // the more recent the expense, the higher the score
+      final double score =
+          1.0 + 2.0 / (1.0 + now.difference(e.creationDT).inDays);
+      if (!points.containsKey(subcatId)) points[subcatId] = 0;
+      points[subcatId] = points[subcatId] + score;
+    });
+
+    // sort scores in descending order and store the score of the nth entry (where possible)
+    final List<double> scores = points.values.toList()
+      ..sort((a, b) => b.compareTo(a));
+    final double cutoffScore = scores[min((n - 1), (scores.length - 1))];
+    points.removeWhere((k, v) => v < cutoffScore);
+
+    // if less than n entries then add from defaultList
+    var idx = 0;
+    while ((points.length < n) && (idx < defaultList.length)) {
+      final newEntry = defaultList[idx];
+      if (!points.containsKey(newEntry)) {
+        points[newEntry] = 1.0;
+      }
+      idx++;
+    }
+
+    // return top n sub categories
+    return points.keys.take(n).toList();
   }
 }

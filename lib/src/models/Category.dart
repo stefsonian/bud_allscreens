@@ -4,8 +4,13 @@ class Category {
   String id;
   String name;
   IconData icon;
+  String groupId;
 
-  Category({@required this.id, @required this.name, @required this.icon});
+  Category(
+      {@required this.id,
+      @required this.name,
+      @required this.icon,
+      this.groupId});
 }
 
 class MainCategory extends Category {
@@ -13,8 +18,8 @@ class MainCategory extends Category {
 }
 
 class SubCategory extends Category {
-  String groupId;
+  // String groupId;
 
-  SubCategory({id, name, icon, @required this.groupId})
-      : super(id: id, name: name, icon: icon);
+  SubCategory({id, name, icon, groupId})
+      : super(id: id, name: name, icon: icon, groupId: groupId);
 }

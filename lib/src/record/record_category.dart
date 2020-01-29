@@ -1,7 +1,9 @@
 import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,14 +11,77 @@ import 'package:provider/provider.dart';
 const Color col_content = col_main1;
 const Color col_back = Colors.white;
 
-class RecordCategory extends StatelessWidget {
-  // static const IconData tags =
-  //     const IconData(0xe801, fontFamily: 'MyFlutterApp');
+class RecordCategory extends StatefulWidget {
   @override
+  _RecordCategoryState createState() => _RecordCategoryState();
+}
+
+class _RecordCategoryState extends State<RecordCategory> {
+  SessionData sessionData;
+  AppState appState;
+  RecordState recordState;
+  Records records;
+  List<String> smartCategories = [];
+  List<CatButton> mainCatButtons = [];
+  List<CatButton> subCatButtons = [];
+  List<CatButton> smartCatButtons = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    sessionData = Provider.of<SessionData>(context);
+    appState = Provider.of<AppState>(context);
+    recordState = Provider.of<RecordState>(context);
+    records = Provider.of<Records>(context);
+
+    if (mainCatButtons.isEmpty) _buildMainCategoryButtons();
+    if (subCatButtons.isEmpty) _buildSubCategoryButtons();
+    smartCategories = _getSmartCategories();
+  }
+
+  _buildMainCategoryButtons() {
+    mainCatButtons = sessionData.maincats.entries.map((c) {
+      return CatButton(
+        category: c.value,
+        showLabel: false,
+        isMainCat: true,
+      );
+    }).toList();
+
+    // Add the 'quick' category to main categories
+    mainCatButtons.insert(
+        0,
+        CatButton(
+          category: MainCategory(
+            icon: Icons.flash_on,
+            name: 'Smart',
+            id: 'quick',
+          ),
+          showLabel: true,
+          isMainCat: true,
+        ));
+  }
+
+  _buildSubCategoryButtons() {
+    subCatButtons = sessionData.subcats.entries.map((c) {
+      return CatButton(
+        category: c.value,
+        showLabel: false,
+        isMainCat: false,
+      );
+    }).toList();
+  }
+
+  List<String> _getSmartCategories() {
+    // build 8 buttons from the latest 30 days of expenses
+    final now = DateTime.now();
+    final expenseList = records.full
+        .where((record) => now.difference(record.creationDT).inDays <= 30)
+        .toList();
+    return Utils().getSmartCategories(expenseList, 8);
+  }
+
   Widget build(BuildContext context) {
-    final sessionData = Provider.of<SessionData>(context);
-    final appState = Provider.of<AppState>(context);
-    final recordState = Provider.of<RecordState>(context);
     // Sizing
     final h = appState.viewHeight;
     final w = appState.viewWidth;
@@ -30,44 +95,15 @@ class RecordCategory extends StatelessWidget {
     if (w < 400) {
       isNarrow = true;
     }
-    // ------
-    // Make catButtons from main categories
+
     var selectedMainCatId = recordState.newExpense?.mainCategory?.id ?? 'quick';
-    var selectedSubCatId = recordState.newExpense?.subCategory?.id ?? '';
-    List<CatButton> mainCatButtons = sessionData.maincats.entries.map((c) {
-      return CatButton(
-        category: c.value,
-        showLabel: false,
-        isMainCat: true,
-        isDimmed: c.value.id != selectedMainCatId,
-      );
-    }).toList();
-
-    // Add the 'quick' category to main categories
-    mainCatButtons.insert(
-        0,
-        CatButton(
-          category: MainCategory(
-            icon: Icons.flash_on,
-            name: '',
-            id: 'quick',
-          ),
-          showLabel: false,
-          isMainCat: true,
-          isDimmed: selectedMainCatId != 'quick',
-        ));
-
-    // Make CatButtons from subcategories belonging to the selected main category
-    List<CatButton> subCatButtons = sessionData.subcats.entries
-        .where((c) => c.value.groupId == selectedMainCatId)
-        .map((c) {
-      return CatButton(
-        category: c.value,
-        showLabel: false,
-        isMainCat: false,
-        isDimmed: c.value.id != selectedSubCatId,
-      );
-    }).toList();
+    List<CatButton> contextCategoryButtons = selectedMainCatId == 'quick'
+        ? subCatButtons
+            .where((btn) => smartCategories.contains(btn.category.id))
+            .toList()
+        : subCatButtons
+            .where((btn) => btn.category.groupId == selectedMainCatId)
+            .toList();
 
     return Container(
       // padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -90,7 +126,7 @@ class RecordCategory extends StatelessWidget {
             height: 55,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: subCatButtons,
+              children: contextCategoryButtons,
             ),
           ),
           Container(
@@ -105,18 +141,18 @@ class RecordCategory extends StatelessWidget {
 }
 
 class CatButton extends StatefulWidget {
-  const CatButton(
+  CatButton(
       {Key key,
       this.category,
       this.isMainCat = false,
-      this.isDimmed = false,
+      // this.isDimmed = false,
       this.showLabel = true})
       : super(key: key);
 
   final Category category;
   final bool isMainCat;
-  final isDimmed;
-  final showLabel;
+  // bool isDimmed;
+  final bool showLabel;
 
   @override
   _CatButtonState createState() => _CatButtonState();
@@ -134,7 +170,6 @@ class _CatButtonState extends State<CatButton> {
   }
 
   void handleTap() {
-    print('i was tapped');
     if (widget.isMainCat) {
       recordState.updateNewExpense('mainCategory', widget.category);
 
@@ -148,9 +183,13 @@ class _CatButtonState extends State<CatButton> {
 
   @override
   Widget build(BuildContext context) {
-    var iconOpacity = widget.isDimmed ? 0.8 : 1.0;
-    var labelOpacity = widget.isDimmed ? 0.8 : 1.0;
-    var color = widget.isDimmed
+    var selectedMainCatId = recordState.newExpense?.mainCategory?.id ?? 'quick';
+    var selectedSubCatId = recordState.newExpense?.subCategory?.id ?? '';
+    var selectedId = widget.isMainCat ? selectedMainCatId : selectedSubCatId;
+    var isDimmed = widget.category.id != selectedId;
+    var iconOpacity = isDimmed ? 0.8 : 1.0;
+    var labelOpacity = isDimmed ? 0.8 : 1.0;
+    var color = isDimmed
         ? appState.cols.content.withOpacity(0.9)
         : appState.cols.actionlight;
     if (widget.isMainCat && !widget.showLabel) labelOpacity = 0.0;
