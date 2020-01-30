@@ -66,7 +66,7 @@ class Utils {
       'tour',
       'market',
       'laundry',
-    ];
+    ]; // TODO: maybe use categories from session data here instead of hardcode
 
     // first deal with corner cases
     if (expenses.isEmpty) return defaultList.take(8).toList();
@@ -78,7 +78,7 @@ class Utils {
       final String subcatId = e.subCategory.id;
       // the more recent the expense, the higher the score
       final double score =
-          1.0 + 2.0 / (1.0 + now.difference(e.creationDT).inDays);
+          1.0 + 2.0 / (1.0 + now.difference(e.expenseDT).inDays.abs());
       if (!points.containsKey(subcatId)) points[subcatId] = 0;
       points[subcatId] = points[subcatId] + score;
     });

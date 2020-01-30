@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/models/Location.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/models/Frozen_amount.dart';
+import 'package:eatsleeptravel/src/models/New_expense.dart';
 import 'package:jiffy/jiffy.dart';
 
 class Expense {
@@ -62,6 +63,22 @@ class Expense {
     note = data['note'] ?? '';
     paymentType = data['payment_type'] ?? '';
     tripId = data['trip_id'] ?? '';
+  }
+
+  Expense.fromNewExpense(NewExpense ne) {
+    creationDT = ne.creationDT;
+    expenseDT = ne.expenseDT;
+    createdBy = ne.createdBy;
+    mainCategory = ne.mainCategory;
+    subCategory = ne.subCategory;
+    paidBy = ne.paidById;
+    note = ne.note;
+    // photo;
+    // location;
+    paymentType = ne.paymentType;
+    tripId = ne.tripId;
+    id = ne.id;
+    amount = FrozenAmount.withTestData(ne.amount);
   }
 
   Map<String, dynamic> toFirestoreMap() {

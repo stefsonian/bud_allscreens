@@ -41,6 +41,7 @@ class Records with ChangeNotifier {
 
     Firestore.instance
         .collection('trips/$currentTripId/expenses')
+        .orderBy('creation_dt')
         .snapshots()
         .listen((data) {
       List<Expense> newExpenses = [];
@@ -166,4 +167,9 @@ class Records with ChangeNotifier {
     });
     return result.toSet().toList();
   }
+
+  String get latestPaymentType =>
+      _full.isEmpty ? 'cash' : _full.last.paymentType;
+  String get latestCurrencyId =>
+      _full.isEmpty ? 'eur' : _full.last.amount.currency;
 }

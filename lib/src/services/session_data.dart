@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eatsleeptravel/src/models/Payment_type.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -18,6 +19,7 @@ import 'package:flutter/material.dart';
 class SessionData with ChangeNotifier {
   Map<String, MainCategory> maincats;
   Map<String, SubCategory> subcats;
+  Map<String, PaymentType> paymentTypes;
   List<Currency> currencies;
   User user;
   List<User> onDeviceUsers = [];
@@ -27,6 +29,7 @@ class SessionData with ChangeNotifier {
   bool isInitSubcats = false;
   bool isInitLocation = false;
   bool isInitCurrencies = false;
+  bool isInitPaymentTypes = false;
   bool isInitUser = false;
   bool isInitTrips = false;
   bool isInitUserCurrentTrip = false;
@@ -35,6 +38,7 @@ class SessionData with ChangeNotifier {
     return isInitMaincats &&
         isInitSubcats &&
         isInitCurrencies &&
+        isInitPaymentTypes &&
         isInitUser &&
         isInitTrips &&
         isInitUserCurrentTrip;
@@ -50,7 +54,7 @@ class SessionData with ChangeNotifier {
         completer.complete(true);
         t.cancel();
       }
-      if (attempts == 120) {
+      if (attempts == 200) {
         completer.complete(false);
         t.cancel();
       }
@@ -65,6 +69,7 @@ class SessionData with ChangeNotifier {
     _initialiseSubCats();
     // _initialiseLocation();
     _initialiseCurrencies();
+    _initialisePaymentTypes();
   }
 
   SessionData.withCatsOnly() {
@@ -363,6 +368,26 @@ class SessionData with ChangeNotifier {
       icon: Icons.scatter_plot,
     );
     if (!isInitSubcats) isInitSubcats = true;
+  }
+
+  _initialisePaymentTypes() {
+    paymentTypes = {};
+    paymentTypes['cash'] = PaymentType(
+      id: 'cash',
+      name: 'Cash',
+      icon: Icons.monetization_on,
+    );
+    paymentTypes['credit'] = PaymentType(
+      id: 'credit',
+      name: 'Credit',
+      icon: Icons.credit_card,
+    );
+    paymentTypes['debit'] = PaymentType(
+      id: 'debit',
+      name: 'Debit',
+      icon: Icons.credit_card,
+    );
+    if (!isInitPaymentTypes) isInitPaymentTypes = true;
   }
 }
 

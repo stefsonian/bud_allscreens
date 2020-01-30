@@ -34,6 +34,13 @@ class RecordState with ChangeNotifier {
     // _newExpense.addListener(() => notifyListeners());
   }
 
+  String _selectedMainCategory = 'quick';
+  String get selectedMainCategory => _selectedMainCategory;
+  set selectedMainCategory(String selectedMainCategory) {
+    _selectedMainCategory = selectedMainCategory;
+    notifyListeners();
+  }
+
   void updateNewExpense(String property, dynamic value) {
     newExpense.update(property, value);
     notifyListeners();

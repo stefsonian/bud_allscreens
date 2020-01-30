@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/background/background.dart';
 import 'package:eatsleeptravel/src/components/option_button.dart';
+import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/models/New_expense.dart';
 import 'package:eatsleeptravel/src/record/record_amount.dart';
 import 'package:eatsleeptravel/src/record/record_category.dart';
 import 'package:eatsleeptravel/src/record/record_details.dart';
 import 'package:eatsleeptravel/src/record/record_options.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:eatsleeptravel/src/helpers/colors.dart';
@@ -23,7 +27,9 @@ class _RecordScreenState extends State<RecordScreen>
   AppState appState;
   RecordState recordState;
   SessionData sessionData;
+  Records records;
   var isReady = false;
+  FirestoreService firestore = FirestoreService();
 
   final stages = [Stage0(), Stage1()];
 
@@ -32,15 +38,39 @@ class _RecordScreenState extends State<RecordScreen>
     recordState = Provider.of<RecordState>(context);
     appState = Provider.of<AppState>(context);
     sessionData = Provider.of<SessionData>(context);
+    records = Provider.of<Records>(context);
     if (sessionData.trip != null) {
       recordState.initaliseNewExpense(sessionData.trip, sessionData.user);
     }
   }
 
-  tapNextButton() {
-    if (recordState.recordStage == 1) recordState.recordStage = -1;
-    recordState.recordStage = recordState.recordStage + 1;
-    setState(() {});
+  tapNextButton() async {
+    // check if payment type was populated. if not, then the user chose 'same as last'
+    if (recordState.newExpense.paymentType == null) {
+      recordState.updateNewExpense('paymentType', records.latestPaymentType);
+    }
+
+    if (recordState.recordStage == 1) {
+      // If we're at the final stage
+      final user = sessionData.user;
+      recordState.updateNewExpense('createdBy', user.id);
+      recordState.updateNewExpense('paidById', user.id);
+      recordState.updateNewExpense('paidByName', user.name);
+      recordState.updateNewExpense('tripId', sessionData.trip.id);
+
+      // COMMIT EXPENSE:
+      final Expense expense = Expense.fromNewExpense(recordState.newExpense);
+      DocumentReference result = await firestore.createExpense(
+        tripId: sessionData.trip.id,
+        expense: expense,
+      );
+      print('trip id: ${sessionData.trip.id} | doc id: ${result.documentID}');
+    } else {
+      // else go to the next stage
+
+      recordState.recordStage = recordState.recordStage + 1;
+      // setState(() {});
+    }
   }
 
   tapPreviousButton() {

@@ -221,7 +221,7 @@ class RecordDetails extends StatelessWidget {
                 ),
               ),
               Text(
-                newExpense.amount.toStringAsFixed(2),
+                newExpense.amountAsString,
                 style: TextStyle(
                     color: color, fontSize: 30, fontWeight: FontWeight.bold),
               ),

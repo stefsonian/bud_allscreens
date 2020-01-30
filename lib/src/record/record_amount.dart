@@ -3,9 +3,12 @@ import 'dart:math';
 import 'package:eatsleeptravel/src/components/divider_grid.dart';
 import 'package:eatsleeptravel/src/components/option_button.dart';
 import 'package:eatsleeptravel/src/models/Numpad_input.dart';
+import 'package:eatsleeptravel/src/models/Payment_type.dart';
 import 'package:eatsleeptravel/src/record/numpad.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/record_state.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +20,12 @@ class RecordAmount extends StatefulWidget {
 class _RecordAmountState extends State<RecordAmount> {
   AppState appState;
   RecordState recordState;
+  Records records;
+  SessionData sessionData;
   NumpadInput numpad = NumpadInput();
   String amount = '0.00';
+  PaymentType paymentType;
+  String currencyId;
 
   onNumberTap(String value) {
     numpad.updateValue(value);
@@ -31,7 +38,30 @@ class _RecordAmountState extends State<RecordAmount> {
   void didChangeDependencies() {
     appState = Provider.of<AppState>(context);
     recordState = Provider.of<RecordState>(context);
+    records = Provider.of<Records>(context);
+    sessionData = Provider.of<SessionData>(context);
+    _initialiseVariables();
     super.didChangeDependencies();
+  }
+
+  _initialiseVariables() {
+    if (paymentType == null) {
+      final latestUsed = records.latestPaymentType.toLowerCase();
+      paymentType = sessionData.paymentTypes[latestUsed];
+      // recordState.updateNewExpense('paymentType', paymentType.id);
+    }
+    if (currencyId == null) {
+      currencyId = records.latestCurrencyId;
+    }
+  }
+
+  onPaymentTypeTap() {
+    // cycle state of paymentType to the next payment type
+    final types = sessionData.paymentTypes.keys.toList();
+    final currentIndex = types.indexOf(paymentType.id);
+    final nextTypeId = currentIndex == types.length - 1 ? 0 : currentIndex + 1;
+    setState(() => paymentType = sessionData.paymentTypes[types[nextTypeId]]);
+    recordState.updateNewExpense('paymentType', paymentType.id);
   }
 
   @override
@@ -83,9 +113,9 @@ class _RecordAmountState extends State<RecordAmount> {
                   padding: EdgeInsets.all(2),
                   child: DisplayPart(
                     appState: appState,
-                    onTap: () {},
-                    icon: Icons.credit_card,
-                    label: 'Credit',
+                    onTap: onPaymentTypeTap,
+                    icon: paymentType.icon,
+                    label: paymentType.name,
                     isSmall: isShort,
                   ),
                 ),

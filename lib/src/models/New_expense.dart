@@ -1,4 +1,5 @@
 import 'package:eatsleeptravel/src/helpers/utils.dart';
+import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';
 import 'package:eatsleeptravel/src/models/User.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +8,7 @@ import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:flutter/material.dart';
 
 class NewExpense extends ChangeNotifier {
+  String id;
   DateTime creationDT = DateTime.now();
   DateTime expenseDT = DateTime.now();
   String createdBy; // user id
@@ -59,18 +61,39 @@ class NewExpense extends ChangeNotifier {
       case 'currencyId':
         currencyId = value;
         break;
+      case 'paymentType':
+        paymentType = value;
+        break;
       case 'note':
         note = value;
+        break;
+      case 'paidById':
+        paidById = value;
+        break;
+      case 'paidByName':
+        paidByName = value;
+        break;
+      case 'createdBy':
+        createdBy = value;
+        break;
+      case 'tripId':
+        tripId = value;
         break;
       default:
     }
     notifyListeners();
   }
 
+  Expense asExpense() {
+    final e = Expense();
+  }
+
   void getLocation() async {
     location = await Utils().getCurrentLocation();
     notifyListeners();
   }
+
+  String get amountAsString => amount?.toStringAsFixed(2) ?? "0.00";
 
   void commit() {
     // commit the expense to db

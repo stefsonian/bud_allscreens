@@ -76,7 +76,7 @@ class _RecordCategoryState extends State<RecordCategory> {
     // build 8 buttons from the latest 30 days of expenses
     final now = DateTime.now();
     final expenseList = records.full
-        .where((record) => now.difference(record.creationDT).inDays <= 30)
+        .where((record) => now.difference(record.expenseDT).inDays.abs() <= 30)
         .toList();
     return Utils().getSmartCategories(expenseList, 8);
   }
@@ -96,14 +96,15 @@ class _RecordCategoryState extends State<RecordCategory> {
       isNarrow = true;
     }
 
-    var selectedMainCatId = recordState.newExpense?.mainCategory?.id ?? 'quick';
-    List<CatButton> contextCategoryButtons = selectedMainCatId == 'quick'
-        ? subCatButtons
-            .where((btn) => smartCategories.contains(btn.category.id))
-            .toList()
-        : subCatButtons
-            .where((btn) => btn.category.groupId == selectedMainCatId)
-            .toList();
+    List<CatButton> contextCategoryButtons =
+        recordState.selectedMainCategory == 'quick'
+            ? subCatButtons
+                .where((btn) => smartCategories.contains(btn.category.id))
+                .toList()
+            : subCatButtons
+                .where((btn) =>
+                    btn.category.groupId == recordState.selectedMainCategory)
+                .toList();
 
     return Container(
       // padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -161,29 +162,33 @@ class CatButton extends StatefulWidget {
 class _CatButtonState extends State<CatButton> {
   AppState appState;
   RecordState recordState;
+  SessionData sessionData;
 
   @override
   void didChangeDependencies() {
     appState = Provider.of<AppState>(context);
     recordState = Provider.of<RecordState>(context);
+    sessionData = Provider.of<SessionData>(context);
     super.didChangeDependencies();
   }
 
   void handleTap() {
     if (widget.isMainCat) {
-      recordState.updateNewExpense('mainCategory', widget.category);
-
-      // appState.newExpense.mainCategory = widget.category;
-      setState(() {});
+      // recordState.updateNewExpense('mainCategory', widget.category);
+      recordState.selectedMainCategory = widget.category.id;
     }
     if (!widget.isMainCat) {
+      // if sub category
+      final MainCategory maincat =
+          sessionData.maincats[widget.category.groupId];
+      recordState.updateNewExpense('mainCategory', maincat);
       recordState.updateNewExpense('subCategory', widget.category);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var selectedMainCatId = recordState.newExpense?.mainCategory?.id ?? 'quick';
+    var selectedMainCatId = recordState.selectedMainCategory;
     var selectedSubCatId = recordState.newExpense?.subCategory?.id ?? '';
     var selectedId = widget.isMainCat ? selectedMainCatId : selectedSubCatId;
     var isDimmed = widget.category.id != selectedId;
