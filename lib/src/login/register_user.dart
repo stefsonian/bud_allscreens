@@ -95,6 +95,7 @@ class _RegisterUserState extends State<RegisterUser> {
       letterSpacing: 1.6,
     );
     return ListView(
+      padding: EdgeInsets.all(20),
       physics: const NeverScrollableScrollPhysics(),
       children: <Widget>[
         SizedBox(height: 40),
