@@ -125,7 +125,7 @@ class Records with ChangeNotifier {
   }
 
   double get totalAmount =>
-      _full.fold(0.0, (curr, next) => curr + next.amount.value);
+      _full.fold(0.0, (curr, next) => curr + next.amount.amountInHome);
 
   List<Expense> expensesOnDate(DateTime date) {
     DateTime dStart = Jiffy(date).startOf('day');
@@ -170,6 +170,28 @@ class Records with ChangeNotifier {
 
   String get latestPaymentType =>
       _full.isEmpty ? 'cash' : _full.last.paymentType;
+
   String get latestCurrencyId =>
       _full.isEmpty ? 'eur' : _full.last.amount.currency;
+
+  double get maxAmountInHomeCur =>
+      _full.map((e) => e.amount.amountInHome).reduce(max);
+
+  List<List<Expense>> groupedByDay(
+      {DateTime start, DateTime end, bool includeEmptyDays = true}) {
+    final numDays = end.difference(start).inDays;
+    List<List<Expense>> result = [];
+    for (var i = 0; i <= numDays; i++) {
+      final d = start.add(Duration(days: i));
+      final expenses =
+          _full.where((e) => Jiffy(e.expenseDT).isSame(d, 'day')).toList();
+      result.add([]);
+      if (expenses.isNotEmpty) {
+        result.add(expenses);
+      } else {
+        if (includeEmptyDays) result.add([]);
+      }
+    }
+    return result;
+  }
 }

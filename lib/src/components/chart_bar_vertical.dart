@@ -10,42 +10,58 @@ import 'package:matrix4_transform/matrix4_transform.dart';
 class ChartBarVertical extends StatelessWidget {
   const ChartBarVertical(
       {Key key,
-      this.value,
-      this.threshold1,
-      this.threshold2,
-      this.complyColor = Colors.blue,
-      this.exceedColor = Colors.deepOrange,
-      this.labelLine1,
-      this.labelLine2,
-      this.valuePrefix,
+      this.exceedsChartMax,
+      this.barColor = Colors.blue,
       this.labelColor = Colors.white,
       this.valueColor = Colors.black,
       this.labelBackColor = Colors.black45,
+      this.value,
+      this.scaledBarHeight,
+      // this.threshold1,
+      // this.threshold2,
+      // this.complyColor = Colors.blue,
+      // this.exceedColor = Colors.deepOrange,
+      this.labelLine1,
+      this.labelLine2,
+      this.valuePrefix,
+      // this.labelColor = Colors.white,
+      // this.valueColor = Colors.black,
+      // this.labelBackColor = Colors.black45,
       this.showAmountAbove = false})
       : super(key: key);
+
+  final bool exceedsChartMax;
+  final Color barColor;
+  final Color labelColor;
+  final Color labelBackColor;
+  final Color valueColor;
+
   final double value;
-  final double threshold1;
-  final double threshold2;
-  final Color complyColor;
-  final Color exceedColor;
+  // final double threshold1;
+  // final double threshold2;
+  // final Color complyColor;
+  // final Color exceedColor;
   final String labelLine1;
   final String labelLine2;
   final String valuePrefix;
   final double width = 56;
-  final Color labelBackColor;
-  final Color labelColor;
-  final Color valueColor;
+  // final Color labelBackColor;
+  // final Color labelColor;
+  // final Color valueColor;
   final bool showAmountAbove;
   final double labelBoxHeight = 36;
+  final double scaledBarHeight; // a value between 0 and 1.
+
+  //   double ratio1 = value / threshold1;
+  // double ratio2 = value / threshold2;
+  // double heightRatio = min(1.0, ratio2);
+  // Color color = ratio1 > 1 ? exceedColor : complyColor;
+  // Widget bar =
+  //     ratio2 > 1.0 ? _excessBar(color: color) : _compliantBar(color: color);
 
   @override
   Widget build(BuildContext context) {
-    double ratio1 = value / threshold1;
-    double ratio2 = value / threshold2;
-    double heightRatio = min(1.0, ratio2);
-    Color color = ratio1 > 1 ? exceedColor : complyColor;
-    Widget bar =
-        ratio2 > 1.0 ? _excessBar(color: color) : _compliantBar(color: color);
+    Widget bar = exceedsChartMax ? _excessBar() : _compliantBar();
     return Container(
       width: width,
       child: Stack(
@@ -57,7 +73,7 @@ class ChartBarVertical extends StatelessWidget {
             right: 0,
             child: AlignPositioned(
               alignment: Alignment.bottomCenter,
-              childHeightRatio: heightRatio,
+              childHeightRatio: scaledBarHeight,
               childWidthRatio: 1.0,
               child: bar,
             ),
@@ -67,11 +83,7 @@ class ChartBarVertical extends StatelessWidget {
             bottom: labelBoxHeight,
             left: 0,
             right: 0,
-            child: _displayValue(
-              color: color,
-              amountAbove: showAmountAbove,
-              heightRatio: heightRatio,
-            ),
+            child: _displayValue(),
           ),
           Positioned(
             bottom: 0,
@@ -107,19 +119,18 @@ class ChartBarVertical extends StatelessWidget {
     );
   }
 
-  Widget _displayValue(
-      {Color color, bool amountAbove = false, double heightRatio}) {
-    var valueOffset = amountAbove ? 0.1 : -0.05;
+  Widget _displayValue() {
+    var valueOffset = showAmountAbove ? 0.1 : -0.05;
     return AlignPositioned(
       alignment: Alignment.bottomCenter,
-      childHeightRatio: heightRatio + valueOffset,
+      childHeightRatio: scaledBarHeight + valueOffset,
       childWidthRatio: 1.0,
       child: Container(
         alignment: Alignment.topCenter,
         child: Text(
           value.toStringAsFixed(0),
           style: TextStyle(
-            color: amountAbove ? color : valueColor,
+            color: showAmountAbove ? barColor : valueColor,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
@@ -128,7 +139,7 @@ class ChartBarVertical extends StatelessWidget {
     );
   }
 
-  Widget _compliantBar({Color color}) {
+  Widget _compliantBar() {
     return Container(
       width: width,
       alignment: Alignment.topCenter,
@@ -137,7 +148,7 @@ class ChartBarVertical extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           stops: [0, 1],
-          colors: [color, color.withOpacity(0.8)],
+          colors: [barColor, barColor.withOpacity(0.8)],
         ),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10),
@@ -147,7 +158,7 @@ class ChartBarVertical extends StatelessWidget {
     );
   }
 
-  Widget _excessBar({Color color}) {
+  Widget _excessBar() {
     return ClipPath(
       clipper: ExcessClipperBottom(),
       child: Container(
@@ -159,7 +170,7 @@ class ChartBarVertical extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             stops: [0, 1],
-            colors: [color, color.withOpacity(0.8)],
+            colors: [barColor, barColor.withOpacity(0.8)],
           ),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),

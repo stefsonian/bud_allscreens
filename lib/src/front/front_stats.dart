@@ -32,10 +32,38 @@ class _FrontStatsState extends State<FrontStats> {
     appState = Provider.of<AppState>(context);
     records = Provider.of<Records>(context);
     session = Provider.of<SessionData>(context);
-    createTestData();
+    createChartData();
   }
 
-  createTestData() {
+  createChartData() {
+    final maxAmount = max(records.maxAmountInHomeCur, 1.0);
+    final chartMax = maxAmount * 1.2;
+    final bars = records.full.map((r) {
+      final amount = r.amount.amountInHome;
+      return ChartBarVertical(
+        value: amount,
+        exceedsChartMax: amount > chartMax,
+        scaledBarHeight: (amount / chartMax),
+        barColor: amount > maxAmount ? appState.cols.chartbar1 : appState.cols.chartbar2,
+        valueColor: appState.cols.chartvalue,
+        labelColor: appState.cols.boxcontent,
+        labelBackColor: appState.cols.box,
+        labelLine1: ,
+
+      );
+    }).toList();
+    // for each expense, make a chart bar with:
+      // this.labelLine1,
+      // this.labelLine2,
+      // this.valuePrefix,
+      // this.showAmountAbove = false
+
+
+    records.full.forEach((r) {
+
+    });
+
+
     List<ChartBarVertical> bb = [];
     List<Expense> rs = List.from(records.full);
     rs.sort((curr, next) => curr.expenseDT.compareTo(next.expenseDT));

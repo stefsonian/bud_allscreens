@@ -105,6 +105,12 @@ class Expense {
 
   String get dayMonthYear =>
       '${expenseDT.day} ${Jiffy(expenseDT).MMM} ${expenseDT.year.toString().substring(2)}';
+  
+  String get chartDate {
+    final weekBefore
+    
+    Jiffy(expenseDT).E;
+  }
 
   List<String> get tags => note == null
       ? []
