@@ -41,28 +41,24 @@ class _FrontStatsState extends State<FrontStats> {
     final bars = records.full.map((r) {
       final amount = r.amount.amountInHome;
       return ChartBarVertical(
-        value: amount,
-        exceedsChartMax: amount > chartMax,
-        scaledBarHeight: (amount / chartMax),
-        barColor: amount > maxAmount ? appState.cols.chartbar1 : appState.cols.chartbar2,
-        valueColor: appState.cols.chartvalue,
-        labelColor: appState.cols.boxcontent,
-        labelBackColor: appState.cols.box,
-        labelLine1: ,
-
-      );
+          value: amount,
+          exceedsChartMax: amount > chartMax,
+          scaledBarHeight: (amount / chartMax),
+          barColor: amount > maxAmount
+              ? appState.cols.chartbar1
+              : appState.cols.chartbar2,
+          valueColor: appState.cols.chartvalue,
+          labelColor: appState.cols.boxcontent,
+          labelBackColor: appState.cols.box,
+          labelLine1: 'eu');
     }).toList();
     // for each expense, make a chart bar with:
-      // this.labelLine1,
-      // this.labelLine2,
-      // this.valuePrefix,
-      // this.showAmountAbove = false
+    // this.labelLine1,
+    // this.labelLine2,
+    // this.valuePrefix,
+    // this.showAmountAbove = false
 
-
-    records.full.forEach((r) {
-
-    });
-
+    records.full.forEach((r) {});
 
     List<ChartBarVertical> bb = [];
     List<Expense> rs = List.from(records.full);
@@ -79,14 +75,14 @@ class _FrontStatsState extends State<FrontStats> {
       var overRatio = min(1.2, budgetFactor);
       var label = Jiffy(date).format('d/M');
       bb.add(ChartBarVertical(
-        complyColor: appState.cols.chartbar1,
-        exceedColor: appState.cols.chartbar2,
-        labelLine1: label,
-        labelColor: appState.cols.boxcontent,
-        valueColor: appState.cols.chartvalue,
-        labelBackColor: appState.cols.box,
-        threshold1: threshold1,
-        threshold2: threshold2,
+        // complyColor: appState.cols.chartbar1,
+        // exceedColor: appState.cols.chartbar2,
+        // labelLine1: label,
+        // labelColor: appState.cols.boxcontent,
+        // valueColor: appState.cols.chartvalue,
+        // labelBackColor: appState.cols.box,
+        // threshold1: threshold1,
+        // threshold2: threshold2,
         showAmountAbove: amount < 0.15 * threshold1 ? true : false,
         value: amount,
       ));
