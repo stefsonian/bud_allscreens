@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
+import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:eatsleeptravel/src/models/Location.dart';
+import 'package:jiffy/jiffy.dart';
 
 class Utils {
   List<Map<String, double>> sortMapByDoubleValue(
@@ -38,7 +41,7 @@ class Utils {
     Completer completer = Completer();
     sessionData.initialiseUserFromFirebaseUser(currentUser);
     sessionData.initialiseTrips();
-    sessionData.initialiseUserCurrentTrip();
+    sessionData.updateUserData();
     await sessionData.completeIntialisation();
     records.maincats = sessionData.maincats;
     records.subcats = sessionData.subcats;
@@ -102,4 +105,60 @@ class Utils {
     // return top n sub categories
     return points.keys.take(n).toList();
   }
+
+  String shortDate(DateTime date) {
+    // if within the last 6 days, return day (eg 'Wed'). Else return date (eg 27 Jan)
+    final weekBefore = DateTime.now().subtract(Duration(days: 6));
+    if (Jiffy(date).isSameOrAfter(weekBefore, 'day')) return Jiffy(date).E;
+    return '${date.day}\n${Jiffy(date).MMM}';
+  }
+
+  DateTime getClosestDateBefore(DateTime date, List<DateTime> candidateDates) {
+    // get the closest candidate-date to the date (that's still before the date)
+    DateTime result;
+    final List<DateTime> candidates = [];
+    candidates.addAll(candidateDates);
+    candidates.sort((a, b) => b.compareTo(a)); // sort desc
+    result = candidates.first;
+    candidates.forEach((c) {
+      if (result.isAfter(date)) result = c;
+    });
+    return result;
+  }
+
+  double convertAmount({
+    double amount,
+    String fromCurrency,
+    String toCurrency,
+    Map<String, double> xRates,
+  }) {
+    final double fromRate = xRates[fromCurrency] ?? 1.0;
+    final double toRate = xRates[toCurrency] ?? 1.0;
+    final double amountInUsd = amount / fromRate;
+    return amountInUsd * toRate;
+  }
+
+  DateTime timestampToDate(Timestamp t) {
+    return DateTime.fromMillisecondsSinceEpoch(t.millisecondsSinceEpoch);
+  }
 }
+
+// fixFirestoreCurrencies() async {
+//   var start = DateTime.now().subtract(Duration(days: 1));
+//   var firestore = FirestoreService();
+//   QuerySnapshot qsnap = await firestore.getExchangeRates(start: start);
+//   var doc = qsnap.documents.first;
+//   Map<String, dynamic> rates = doc.data;
+//   for (var i = 90; i > 0; i--) {
+//     Map<String, dynamic> newRates = {};
+//     newRates.addAll(rates);
+//     var newTime = Jiffy(DateTime.now().subtract(Duration(days: i)).toUtc())
+//         .startOf('day')
+//         .toUtc();
+//     newRates['timestamp'] = newTime;
+//     newRates.updateAll((k, v) =>
+//         k == 'timestamp' ? v : v + (Random().nextDouble() / 10 - 0.05));
+//     print('${newTime.toString()}: ${newRates['AUD']}');
+//     await firestore.fire.collection('xrates').add(newRates);
+//   }
+// }

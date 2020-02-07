@@ -1,16 +1,14 @@
+import 'dart:math';
 import 'package:eatsleeptravel/src/components/chart_bar_vertical.dart';
 import 'package:eatsleeptravel/src/components/content_box.dart';
-import 'package:eatsleeptravel/src/components/info_bubble.dart';
-import 'package:eatsleeptravel/src/front/budget_bar.dart';
+
 import 'package:eatsleeptravel/src/front/budget_bar_box.dart';
-import 'package:eatsleeptravel/src/helpers/colors.dart';
-import 'package:eatsleeptravel/src/models/Expense.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'dart:math';
 
 import 'package:provider/provider.dart';
 
@@ -36,59 +34,68 @@ class _FrontStatsState extends State<FrontStats> {
   }
 
   createChartData() {
-    final maxAmount = max(records.maxAmountInHomeCur, 1.0);
-    final chartMax = maxAmount * 1.2;
-    final bars = records.full.map((r) {
-      final amount = r.amount.amountInHome;
-      return ChartBarVertical(
-          value: amount,
-          exceedsChartMax: amount > chartMax,
-          scaledBarHeight: (amount / chartMax),
-          barColor: amount > maxAmount
-              ? appState.cols.chartbar1
-              : appState.cols.chartbar2,
-          valueColor: appState.cols.chartvalue,
-          labelColor: appState.cols.boxcontent,
-          labelBackColor: appState.cols.box,
-          labelLine1: 'eu');
-    }).toList();
-    // for each expense, make a chart bar with:
-    // this.labelLine1,
-    // this.labelLine2,
-    // this.valuePrefix,
-    // this.showAmountAbove = false
+    final startDT = session.trip.startDT;
+    final endDT = DateTime.now();
+    double budgetAmount = session.trip.budgetAmount;
+    double maxAmount = 1.0;
+    double chartMax = 1.2;
+    List<ChartBarVertical> chartBars = [];
+    final expenseDays = records.groupedByDay(
+      // group expenses by day
+      start: startDT,
+      end: endDT,
+      includeEmptyDays: true,
+    );
 
-    records.full.forEach((r) {});
+    expenseDays.forEach((date, expenses) {
+      // find highest total expense amount for one day
+      double dayTotal = expenses.fold(
+          0.0,
+          (a, b) =>
+              a + b.getAmount('aud')); // TODO: change this to not just be aud
+      if (dayTotal > maxAmount) maxAmount = dayTotal;
+    });
 
-    List<ChartBarVertical> bb = [];
-    List<Expense> rs = List.from(records.full);
-    rs.sort((curr, next) => curr.expenseDT.compareTo(next.expenseDT));
-    double threshold1 = 100.0;
-    double threshold2 = 120.0;
-    for (var i = session.trip.travelDay - 1; i >= 0; i--) {
-      var date = session.trip.startDT.add(Duration(days: i));
-      var dateExpenses = records.expensesOnDate(date);
-      double amount = dateExpenses.fold(
-          0.0, (curr, next) => curr + next.amount.amountInHome);
-      double budgetFactor = amount / session.trip.budgetAmount;
-      var height = min(1.0, budgetFactor) * 100;
-      var overRatio = min(1.2, budgetFactor);
-      var label = Jiffy(date).format('d/M');
-      bb.add(ChartBarVertical(
-        // complyColor: appState.cols.chartbar1,
-        // exceedColor: appState.cols.chartbar2,
-        // labelLine1: label,
-        // labelColor: appState.cols.boxcontent,
-        // valueColor: appState.cols.chartvalue,
-        // labelBackColor: appState.cols.box,
-        // threshold1: threshold1,
-        // threshold2: threshold2,
-        showAmountAbove: amount < 0.15 * threshold1 ? true : false,
-        value: amount,
+    maxAmount = min(maxAmount, budgetAmount);
+    chartMax = maxAmount * 1.2;
+
+    expenseDays.forEach((date, expenses) {
+      // create bars for the chart
+      double dayTotal = expenses.fold(
+          0.0,
+          (a, b) =>
+              a + b.getAmount('aud')); // TODO: change this to not just be aud
+      chartBars.add(ChartBarVertical(
+        value: dayTotal,
+        exceedsChartMax: dayTotal > chartMax,
+        scaledBarHeight: (min(dayTotal, chartMax) / chartMax),
+        barColor: dayTotal > maxAmount
+            ? appState.cols.chartbar2
+            : appState.cols.chartbar1,
+        valueColor: appState.cols.chartvalue,
+        labelColor: appState.cols.boxcontent,
+        labelBackColor: appState.cols.box,
+        showAmountAbove: dayTotal < maxAmount * 0.15,
+        labelLine1: Utils().shortDate(date),
       ));
-    }
+    });
 
-    setState(() => budgetBars = bb);
+    // final bars2 = records.full.map((r) {
+    //   final amount = r.amount.amountInHome;
+    //   return ChartBarVertical(
+    //       value: amount,
+    //       exceedsChartMax: amount > chartMax,
+    //       scaledBarHeight: (amount / chartMax),
+    //       barColor: amount > maxAmount
+    //           ? appState.cols.chartbar2
+    //           : appState.cols.chartbar1,
+    //       valueColor: appState.cols.chartvalue,
+    //       labelColor: appState.cols.boxcontent,
+    //       labelBackColor: appState.cols.box,
+    //       labelLine1: r.chartDate);
+    // }).toList();
+
+    setState(() => budgetBars = chartBars.reversed.toList());
   }
 
   @override

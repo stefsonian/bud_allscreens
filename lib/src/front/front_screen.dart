@@ -61,8 +61,8 @@ class _FrontScreenState extends State<FrontScreen> {
                 taperedDivder(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  // child: FrontStats(),
-                  child: Container(),
+                  child: FrontStats(),
+                  // child: Container(),
                 ),
                 taperedDivder(),
                 // Padding(
@@ -71,12 +71,14 @@ class _FrontScreenState extends State<FrontScreen> {
                 // ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FrontByCategory(),
+                  // child: FrontByCategory(),
+                  child: Container(),
                 ),
                 taperedDivder(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FrontByHashtag(),
+                  // child: FrontByHashtag(),
+                  child: Container(),
                 ),
 
                 // Padding(

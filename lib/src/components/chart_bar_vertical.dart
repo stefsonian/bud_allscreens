@@ -17,16 +17,9 @@ class ChartBarVertical extends StatelessWidget {
       this.labelBackColor = Colors.black45,
       this.value,
       this.scaledBarHeight,
-      // this.threshold1,
-      // this.threshold2,
-      // this.complyColor = Colors.blue,
-      // this.exceedColor = Colors.deepOrange,
       this.labelLine1,
       this.labelLine2,
       this.valuePrefix,
-      // this.labelColor = Colors.white,
-      // this.valueColor = Colors.black,
-      // this.labelBackColor = Colors.black45,
       this.showAmountAbove = false})
       : super(key: key);
 
@@ -37,27 +30,13 @@ class ChartBarVertical extends StatelessWidget {
   final Color valueColor;
 
   final double value;
-  // final double threshold1;
-  // final double threshold2;
-  // final Color complyColor;
-  // final Color exceedColor;
   final String labelLine1;
   final String labelLine2;
   final String valuePrefix;
   final double width = 56;
-  // final Color labelBackColor;
-  // final Color labelColor;
-  // final Color valueColor;
   final bool showAmountAbove;
-  final double labelBoxHeight = 36;
+  final double labelBoxHeight = 42;
   final double scaledBarHeight; // a value between 0 and 1.
-
-  //   double ratio1 = value / threshold1;
-  // double ratio2 = value / threshold2;
-  // double heightRatio = min(1.0, ratio2);
-  // Color color = ratio1 > 1 ? exceedColor : complyColor;
-  // Widget bar =
-  //     ratio2 > 1.0 ? _excessBar(color: color) : _compliantBar(color: color);
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +94,7 @@ class ChartBarVertical extends StatelessWidget {
           fontWeight: FontWeight.bold,
           fontSize: 14,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }

@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Payment_type.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';
+import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'package:eatsleeptravel/src/components/currency_selector.dart';
 import 'package:eatsleeptravel/src/models/Location.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/models/User.dart';
@@ -20,7 +21,6 @@ class SessionData with ChangeNotifier {
   Map<String, MainCategory> maincats;
   Map<String, SubCategory> subcats;
   Map<String, PaymentType> paymentTypes;
-  List<Currency> currencies;
   User user;
   List<User> onDeviceUsers = [];
   List<Trip> trips = [];
@@ -28,20 +28,19 @@ class SessionData with ChangeNotifier {
   bool isInitMaincats = false;
   bool isInitSubcats = false;
   bool isInitLocation = false;
-  bool isInitCurrencies = false;
   bool isInitPaymentTypes = false;
   bool isInitUser = false;
+  bool isInitUserData = false;
   bool isInitTrips = false;
   bool isInitUserCurrentTrip = false;
 
   bool get isInitialisationComplete {
     return isInitMaincats &&
         isInitSubcats &&
-        isInitCurrencies &&
         isInitPaymentTypes &&
         isInitUser &&
-        isInitTrips &&
-        isInitUserCurrentTrip;
+        isInitUserData &&
+        isInitTrips;
   }
 
   Future<bool> completeIntialisation() async {
@@ -49,7 +48,8 @@ class SessionData with ChangeNotifier {
     var attempts = 0;
     Timer.periodic(Duration(milliseconds: 50), (Timer t) {
       attempts += 1;
-      print('attempt: $attempts, is init complete: $isInitialisationComplete');
+      print(
+          'SessionData | attempt: $attempts, is init complete: $isInitialisationComplete');
       if (isInitialisationComplete) {
         completer.complete(true);
         t.cancel();
@@ -68,7 +68,6 @@ class SessionData with ChangeNotifier {
     _initialiseMainCats();
     _initialiseSubCats();
     // _initialiseLocation();
-    _initialiseCurrencies();
     _initialisePaymentTypes();
   }
 
@@ -77,16 +76,16 @@ class SessionData with ChangeNotifier {
     _initialiseSubCats();
   }
 
-  void _initialiseCurrencies() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    currencies = [];
-    String data = await rootBundle.loadString('assets/currencies.json');
+  // void _initialiseCurrencies() async {
+  //   WidgetsFlutterBinding.ensureInitialized();
+  //   currencies = [];
+  //   String data = await rootBundle.loadString('assets/currencies.json');
 
-    Map currencyMap = json.decode(data);
-    currencyMap.forEach((k, v) => currencies.add(Currency.fromMap({k: v})));
-    currencies.sort((Currency a, Currency b) => a.id.compareTo(b.id));
-    if (!isInitCurrencies) isInitCurrencies = true;
-  }
+  //   Map currencyMap = json.decode(data);
+  //   currencyMap.forEach((k, v) => currencies.add(Currency.fromMap({k: v})));
+  //   currencies.sort((Currency a, Currency b) => a.id.compareTo(b.id));
+  //   if (!isInitCurrencies) isInitCurrencies = true;
+  // }
 
   void initialiseUserFromFirebaseUser(FirebaseUser fUser) {
     user = User.fromFirebaseUser(fUser);
@@ -104,8 +103,6 @@ class SessionData with ChangeNotifier {
         .where('roles.${user.id}', isGreaterThan: "")
         .snapshots()
         .listen((data) {
-      // print(data.documents.map((doc) => doc.documentID).toString());
-      // print('document count: ${data.documents.length}');
       List<Trip> newTrips = [];
       data.documents.forEach((doc) =>
           newTrips.add(Trip.fromFirestoreData(doc.documentID, doc.data)));
@@ -115,20 +112,18 @@ class SessionData with ChangeNotifier {
     }).onError((err) => print(err.toString()));
   }
 
-  void initialiseUserCurrentTrip() {
+  void updateUserData() {
     Firestore.instance
         .collection('users')
         .document(user.id)
         .snapshots()
         .listen((doc) {
       if (doc.exists) {
-        final String curTripId = doc.data['current_trip'] ?? '';
-        user.currentTrip = curTripId;
-        print("User's current trip changed to: $curTripId");
+        user.updateData(doc.data);
+        print("User's current trip changed to: ${user.currentTrip}");
         notifyListeners();
       }
-      if (!isInitUserCurrentTrip) isInitUserCurrentTrip = true;
-      // print('Is initialisation complete: $isInitialisationComplete');
+      if (!isInitUserData) isInitUserData = true;
     });
   }
 

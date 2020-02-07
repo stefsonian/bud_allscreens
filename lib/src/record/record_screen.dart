@@ -59,7 +59,11 @@ class _RecordScreenState extends State<RecordScreen>
       recordState.updateNewExpense('tripId', sessionData.trip.id);
 
       // COMMIT EXPENSE:
-      final Expense expense = Expense.fromNewExpense(recordState.newExpense);
+      final Expense expense = Expense.fromNewExpense(
+        recordState.newExpense,
+        records.latestXrates(),
+        sessionData.user,
+      );
       DocumentReference result = await firestore.createExpense(
         tripId: sessionData.trip.id,
         expense: expense,

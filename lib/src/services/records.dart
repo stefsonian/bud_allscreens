@@ -1,40 +1,94 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/models/Frozen_amount.dart';
 import 'package:eatsleeptravel/src/models/Location.dart';
+import 'package:eatsleeptravel/src/models/User.dart';
 import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jiffy/jiffy.dart';
 
 class Records with ChangeNotifier {
-  FirestoreService firestore = FirestoreService();
+  // FirestoreService firestore = FirestoreService();
   List<Expense> _full = [];
   List<Expense> get full => _full;
   Map<String, MainCategory> maincats;
   Map<String, SubCategory> subcats;
+  List<Currency> currencies = [];
+  Map<DateTime, Map<String, double>> xrates = {};
+  bool isInitCurrencies = false;
+  bool isInitExchangeRates = false;
   bool isInitFull = false;
 
-  bool get isInitialisationComplete => isInitFull;
+  bool get isInitialisationComplete =>
+      isInitCurrencies && isInitExchangeRates && isInitFull;
 
   String _currentTripId = '';
   String get currentTripId => _currentTripId;
   set currentTripId(String currentTripId) {
     _currentTripId = currentTripId;
-    // if (_currentTripId.isNotEmpty) {
-    //   initialiseRecords();
-    // }
     notifyListeners();
   }
 
   Records();
 
-  void initialiseRecords() {
+  Future<void> initialiseCurrencies() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    currencies = [];
+    String data = await rootBundle.loadString('assets/currencies.json');
+
+    Map currencyMap = json.decode(data);
+    currencyMap.forEach((k, v) => currencies.add(Currency.fromMap({k: v})));
+    currencies.sort((Currency a, Currency b) => a.id.compareTo(b.id));
+    if (!isInitCurrencies) isInitCurrencies = true;
+  }
+
+  void initialiseExchangeRates() {
+    Firestore.instance.collection('xrates').snapshots().listen((data) {
+      // var count = 0;
+      data.documents.forEach((doc) {
+        final docData = Map<String, dynamic>.from(doc.data);
+        final timestamp = docData['timestamp'] ?? DateTime.now();
+        final timestampDT = Utils().timestampToDate(timestamp);
+        docData.remove('timestamp');
+        xrates[timestampDT] = {};
+        docData.forEach((k, v) {
+          double rate;
+          if (v.runtimeType is double) {
+            rate = v;
+          } else {
+            rate = double.tryParse(v.toString()) ?? 1.0;
+          }
+          xrates[timestampDT][k] = rate;
+        });
+        // print('added exchange rate number $count');
+        // count++;
+      });
+      if (!isInitExchangeRates) isInitExchangeRates = true;
+    }).onError((err) => print(err.toString()));
+  }
+
+  void initialiseRecords() async {
     if (currentTripId.isEmpty) {
-      // only retrieve records if trip exists
+      if (!isInitFull) isInitFull = true;
+      return;
+    }
+
+    // wait for data needed to create expense record objects
+    var attempts = 0;
+    while (attempts < 100 && !isInitExchangeRates) {
+      await Future.delayed(Duration(milliseconds: 50));
+      attempts++;
+    }
+
+    if (attempts >= 100) {
       if (!isInitFull) isInitFull = true;
       return;
     }
@@ -47,11 +101,20 @@ class Records with ChangeNotifier {
       List<Expense> newExpenses = [];
       data.documents.forEach((doc) {
         final data = doc.data;
+        final Timestamp timestamp = doc.data['creation_dt'];
+        final timestampDT = timestamp.toDate();
+        final xrateDate =
+            Utils().getClosestDateBefore(timestampDT, xrates.keys.toList());
+        Map<String, double> usdRates = xrates[xrateDate];
         MainCategory mc = maincats[data['main_category']];
         SubCategory sc = subcats[data['sub_category']];
         newExpenses.add(Expense.fromFirestoreData(
-            expenseId: doc.documentID, data: data, mainCat: mc, subCat: sc));
-        // print('expense added: ${doc.documentID}');
+          expenseId: doc.documentID,
+          data: data,
+          mainCat: mc,
+          subCat: sc,
+          usdRates: usdRates,
+        ));
       });
       _full = newExpenses;
       notifyListeners();
@@ -64,12 +127,13 @@ class Records with ChangeNotifier {
     var attempts = 0;
     Timer.periodic(Duration(milliseconds: 50), (Timer t) {
       attempts += 1;
-      // print('attempt: $attempts, is init complete: $isInitialisationComplete');
+      print(
+          'Records | attempt: $attempts, is init complete: $isInitialisationComplete');
       if (isInitialisationComplete) {
         completer.complete(true);
         t.cancel();
       }
-      if (attempts == 100) {
+      if (attempts == 120) {
         completer.complete(false);
         t.cancel();
       }
@@ -77,55 +141,57 @@ class Records with ChangeNotifier {
     return completer.future;
   }
 
-  void createTestData(String tripId, int n, int start, int end) {
-    final sData = SessionData.withCatsOnly();
-    for (var i = 0; i < n; i++) {
-      var e = Expense();
-      var y = Random().nextInt(start + end) - start;
-      e.expenseDT = DateTime.now().add(Duration(days: y));
-      var x = Random().nextInt(sData.subcats.length);
-      var subCats = sData.subcats.keys.toList();
-      var subCat = subCats[x];
-      e.subCategory = sData.subcats[subCat];
-      e.mainCategory = sData.maincats[sData.subcats[subCat].groupId];
-      var amount = Random().nextDouble() * 100;
-      var fa = FrozenAmount.withTestData(amount);
-      e.amount = fa;
-      e.createdBy = 'Stefan';
-      e.paidBy = 'Stefan';
-      var location = Location.withDemoData();
-      e.location = location;
-      e.note = 'A quick note';
-      e.paymentType = ['Cash', 'Credit', 'Debit'][Random().nextInt(2)];
-      e.tripId = tripId;
-      int noteIndex = Random().nextInt(7);
-      e.note = [
-        '#fancydinner with text #beachday',
-        'a #beachday',
-        'a #coffeefix wt',
-        '',
-        '',
-        '',
-        ''
-      ].elementAt(noteIndex);
-      _full.add(e);
-    }
-    notifyListeners();
-  }
+  // void createTestData(String tripId, int n, int start, int end) {
+  //   final sData = SessionData.withCatsOnly();
+  //   for (var i = 0; i < n; i++) {
+  //     var e = Expense();
+  //     var y = Random().nextInt(start + end) - start;
+  //     e.expenseDT = DateTime.now().add(Duration(days: y));
+  //     var x = Random().nextInt(sData.subcats.length);
+  //     var subCats = sData.subcats.keys.toList();
+  //     var subCat = subCats[x];
+  //     e.subCategory = sData.subcats[subCat];
+  //     e.mainCategory = sData.maincats[sData.subcats[subCat].groupId];
+  //     var amount = Random().nextDouble() * 100;
+  //     var fa = FrozenAmount.withTestData(amount);
+  //     e.amount = fa;
+  //     e.createdBy = 'Stefan';
+  //     e.paidBy = 'Stefan';
+  //     var location = Location.withDemoData();
+  //     e.location = location;
+  //     e.note = 'A quick note';
+  //     e.paymentType = ['Cash', 'Credit', 'Debit'][Random().nextInt(2)];
+  //     e.tripId = tripId;
+  //     int noteIndex = Random().nextInt(7);
+  //     e.note = [
+  //       '#fancydinner with text #beachday',
+  //       'a #beachday',
+  //       'a #coffeefix wt',
+  //       '',
+  //       '',
+  //       '',
+  //       ''
+  //     ].elementAt(noteIndex);
+  //     _full.add(e);
+  //   }
+  //   notifyListeners();
+  // }
 
-  Future createFirestoreTestData(String tripId) async {
-    return Future.wait(_full
-        .map((e) => firestore.createExpense(tripId: tripId, expense: e))
-        .toList());
-  }
+  // Future createFirestoreTestData(String tripId) async {
+  //   return Future.wait(_full
+  //       .map((e) => firestore.createExpense(tripId: tripId, expense: e))
+  //       .toList());
+  // }
 
   void addRecord(Expense expense) {
     _full.add(expense);
     notifyListeners();
   }
 
-  double get totalAmount =>
-      _full.fold(0.0, (curr, next) => curr + next.amount.amountInHome);
+  double get totalAmount => _full.fold(
+      0.0,
+      (curr, next) =>
+          curr + next.getAmount('aud')); //TODO change to add currency parameter
 
   List<Expense> expensesOnDate(DateTime date) {
     DateTime dStart = Jiffy(date).startOf('day');
@@ -141,7 +207,8 @@ class Records with ChangeNotifier {
     Map<String, double> result = {};
     full.forEach((e) {
       var cat = e.mainCategory.id;
-      var updateAmount = e.amount.amountInHome;
+      var updateAmount =
+          e.getAmount('aud'); //TODO change to add currency parameter
       if (!result.containsKey(cat)) result[cat] = 0.0;
       result.update(cat, (current) => current + updateAmount);
     });
@@ -152,7 +219,8 @@ class Records with ChangeNotifier {
     Map<String, double> result = {};
     full.forEach((e) {
       e.tags.forEach((tag) {
-        var updateAmount = e.amount.amountInHome;
+        var updateAmount =
+            e.getAmount('aud'); //TODO change to add currency parameter
         if (!result.containsKey(tag)) result[tag] = 0.0;
         result.update(tag, (current) => current + updateAmount);
       });
@@ -168,29 +236,50 @@ class Records with ChangeNotifier {
     return result.toSet().toList();
   }
 
+  Map<String, double> latestXrates() {
+    var rateDates = xrates.keys.toList();
+    rateDates.sort();
+    return xrates[rateDates.last];
+  }
+
   String get latestPaymentType =>
       _full.isEmpty ? 'cash' : _full.last.paymentType;
 
-  String get latestCurrencyId =>
-      _full.isEmpty ? 'eur' : _full.last.amount.currency;
+  String get latestCurrencyId => _full.isEmpty ? 'aud' : _full.last.currencyId;
 
-  double get maxAmountInHomeCur =>
-      _full.map((e) => e.amount.amountInHome).reduce(max);
+  double get maxAmountInHomeCur => _full
+      .map((e) => e.getAmount('aud'))
+      .reduce(max); //TODO change to add currency parameter
 
-  List<List<Expense>> groupedByDay(
-      {DateTime start, DateTime end, bool includeEmptyDays = true}) {
+  // List<List<Expense>> groupedByDay(
+  //     {DateTime start, DateTime end, bool includeEmptyDays = true}) {
+  //   final numDays = end.difference(start).inDays;
+  //   List<List<Expense>> result = [];
+  //   for (var i = 0; i <= numDays; i++) {
+  //     final d = start.add(Duration(days: i));
+  //     final expenses =
+  //         _full.where((e) => Jiffy(e.expenseDT).isSame(d, 'day')).toList();
+  //     if (expenses.isNotEmpty) {
+  //       result.add(expenses);
+  //     } else {
+  //       if (includeEmptyDays) result.add([]);
+  //     }
+  //   }
+  //   return result;
+  // }
+
+  Map<DateTime, List<Expense>> groupedByDay({
+    DateTime start,
+    DateTime end,
+    bool includeEmptyDays = true,
+  }) {
     final numDays = end.difference(start).inDays;
-    List<List<Expense>> result = [];
+    Map<DateTime, List<Expense>> result = {};
     for (var i = 0; i <= numDays; i++) {
       final d = start.add(Duration(days: i));
-      final expenses =
+      result[d] =
           _full.where((e) => Jiffy(e.expenseDT).isSame(d, 'day')).toList();
-      result.add([]);
-      if (expenses.isNotEmpty) {
-        result.add(expenses);
-      } else {
-        if (includeEmptyDays) result.add([]);
-      }
+      if (!includeEmptyDays && result[d].isEmpty) result.remove(d);
     }
     return result;
   }

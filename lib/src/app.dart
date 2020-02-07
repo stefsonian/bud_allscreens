@@ -16,11 +16,14 @@ import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 class App extends StatelessWidget {
   final appState = AppState();
   final sessionData = SessionData();
+  final records = Records();
 
   @override
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     FlutterStatusbarcolor.setNavigationBarColor(appState.cols.background2);
+    records.initialiseCurrencies();
+    records.initialiseExchangeRates();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AppState>.value(
@@ -36,8 +39,15 @@ class App extends StatelessWidget {
           value: HomeState(),
         ),
         ChangeNotifierProvider<Records>.value(
-          value: Records(),
+          value: records,
         ),
+// ChangeNotifierProxyProvider<SessionData, Records>(
+//   create: (_) => records,
+//   update: (_, sd, r) {
+//     r.user = sd.user;
+//     return r;
+//     }
+// );
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -46,6 +56,7 @@ class App extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(
+          drawerEdgeDragWidth: 0,
           extendBody: true,
           body: Container(
             // color: Colors.white70,

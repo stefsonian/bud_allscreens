@@ -28,39 +28,39 @@ class _PlaygroundState extends State<Playground> {
     super.didChangeDependencies();
     records = Provider.of<Records>(context);
     session = Provider.of<SessionData>(context);
-    createTestData();
+    // createTestData();
   }
 
-  createTestData() {
-    List<ChartBarHorizontal> bb = [];
-    List<Expense> rs = List.from(records.full);
-    rs.sort((curr, next) => curr.expenseDT.compareTo(next.expenseDT));
-    double threshold1 = 100.0;
-    double threshold2 = 120.0;
-    for (var i = session.trip.travelDay - 1; i >= 0; i--) {
-      var date = session.trip.startDT.add(Duration(days: i));
-      var dateExpenses = records.expensesOnDate(date);
-      double amount = dateExpenses.fold(
-          0.0, (curr, next) => curr + next.amount.amountInHome);
-      double budgetFactor = amount / session.trip.budgetAmount;
-      var height = min(1.0, budgetFactor) * 100;
-      var overRatio = min(1.2, budgetFactor);
-      var label = Jiffy(date).format('d/M');
-      bb.add(ChartBarHorizontal(
-        complyColor: Colors.white,
-        exceedColor: col_main2,
-        label: Icon(Icons.flight, color: Colors.white),
-        labelColor: Colors.white,
-        valueColor: col_main1,
-        threshold1: threshold1,
-        threshold2: threshold2,
-        showAmountAbove: amount < 0.15 * threshold1 ? true : false,
-        value: amount,
-      ));
-    }
+  // createTestData() {
+  //   List<ChartBarHorizontal> bb = [];
+  //   List<Expense> rs = List.from(records.full);
+  //   rs.sort((curr, next) => curr.expenseDT.compareTo(next.expenseDT));
+  //   double threshold1 = 100.0;
+  //   double threshold2 = 120.0;
+  //   for (var i = session.trip.travelDay - 1; i >= 0; i--) {
+  //     var date = session.trip.startDT.add(Duration(days: i));
+  //     var dateExpenses = records.expensesOnDate(date);
+  //     double amount = dateExpenses.fold(
+  //         0.0, (curr, next) => curr + next.amount.amountInHome);
+  //     double budgetFactor = amount / session.trip.budgetAmount;
+  //     var height = min(1.0, budgetFactor) * 100;
+  //     var overRatio = min(1.2, budgetFactor);
+  //     var label = Jiffy(date).format('d/M');
+  //     bb.add(ChartBarHorizontal(
+  //       complyColor: Colors.white,
+  //       exceedColor: col_main2,
+  //       label: Icon(Icons.flight, color: Colors.white),
+  //       labelColor: Colors.white,
+  //       valueColor: col_main1,
+  //       threshold1: threshold1,
+  //       threshold2: threshold2,
+  //       showAmountAbove: amount < 0.15 * threshold1 ? true : false,
+  //       value: amount,
+  //     ));
+  //   }
 
-    setState(() => budgetBars = bb);
-  }
+  //   setState(() => budgetBars = bb);
+  // }
 
   @override
   Widget build(BuildContext context) {

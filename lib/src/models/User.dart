@@ -8,6 +8,7 @@ class User {
   String currencyLastUsed; // id of the last currency they used
   String countryLastIn; // id of the country they were in at last expense
   String paymentMethodLastUsed;
+  Map<String, double> userRates = {};
 
   User();
 
@@ -28,5 +29,11 @@ class User {
     currencyLastUsed = 'AUD';
     countryLastIn = 'au';
     paymentMethodLastUsed = 'card';
+  }
+
+  updateData(Map<String, dynamic> data) {
+    homeCurrency = data['home_currency'] ?? null;
+    currentTrip = data['current_trip'] ?? null;
+    userRates = data['user_rates'] ?? {};
   }
 }

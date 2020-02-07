@@ -59,7 +59,7 @@ class NewExpense extends ChangeNotifier {
         amount = value;
         break;
       case 'currencyId':
-        currencyId = value;
+        currencyId = value.toString().toLowerCase();
         break;
       case 'paymentType':
         paymentType = value;

@@ -30,4 +30,39 @@ class FirestoreService {
         .document(userId)
         .setData({'current_trip': tripId}, merge: true);
   }
+
+  Future<QuerySnapshot> getExchangeRates({DateTime start}) {
+    return fire
+        .collection('xrates')
+        .where('timestamp', isGreaterThanOrEqualTo: start)
+        .getDocuments();
+  }
+
+  Future<DocumentSnapshot> getUserData({String userId}) {
+    return fire.collection('users').document(userId).get();
+  }
+
+  Future<void> setUserHomeCurrency({String userId, String currencyId}) {
+    return fire
+        .collection('users')
+        .document(userId)
+        .setData({'home_currency': currencyId}, merge: true);
+  }
+
+  Future<void> setUserCurrencyValue({
+    String userId,
+    String currencyId,
+    double usdRate,
+  }) {
+    return fire.collection('users').document(userId).setData({
+      'currencies': {currencyId: usdRate}
+    }, merge: true);
+  }
+
+  Future<void> resetUserCurrencyValues({String userId}) {
+    return fire
+        .collection('users')
+        .document(userId)
+        .setData({'currencies': null}, merge: true);
+  }
 }

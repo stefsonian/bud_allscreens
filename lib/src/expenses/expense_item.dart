@@ -70,7 +70,7 @@ class ExpenseItem extends StatelessWidget {
             width: 90,
             alignment: Alignment.centerRight,
             child: Text(
-              '\$${expense.amount.value.toStringAsFixed(2)}',
+              '\$${expense.amount.toStringAsFixed(2)}', //TODO: fix this.. it's the wrong info being retrieved
               style: TextStyle(
                 fontSize: 18,
                 color: appState.cols.content,

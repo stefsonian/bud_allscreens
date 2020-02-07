@@ -1,7 +1,7 @@
 class Currency {
-  var id, symbol, name, symbolNative, code, namePlural = '';
-  var decimals = 2;
-  var rounding = 0.0;
+  String id, symbol, name, symbolNative, code, namePlural = '';
+  int decimals = 2;
+  double rounding = 0.0;
 
   Currency();
 
@@ -14,5 +14,6 @@ class Currency {
     namePlural = cur[id]['name_plural'] ?? '';
     decimals = cur[id]['decimal_digits'] ?? 2;
     rounding = double.tryParse(cur[id]['rounding'].toString()) ?? 0.0;
+    id = id.toLowerCase();
   }
 }

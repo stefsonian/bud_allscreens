@@ -4,6 +4,7 @@ import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/firestore_service.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,10 +24,12 @@ class _ManageTripFormState extends State<ManageTripForm> {
   var data = ManageTripModel();
   SessionData sessionData;
   AppState appState;
+  Records records;
 
   void didChangeDependencies() {
     appState = Provider.of<AppState>(context);
     sessionData = Provider.of<SessionData>(context);
+    records = Provider.of<Records>(context);
     // only populate fields if in manage mode (leave empty if in create mode)
     if (!widget.isCreateMode) {
       if (data.name == '' && sessionData.trip != null) {
@@ -97,6 +100,7 @@ class _ManageTripFormState extends State<ManageTripForm> {
       userId: userId,
       tripId: newTripId.documentID,
     );
+    records.currentTripId = newTripId.documentID;
     // TODO: maybe show pop-up confirmation
   }
 
