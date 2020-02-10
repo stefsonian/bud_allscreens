@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class FullModalOk extends ModalRoute<void> {
@@ -13,7 +15,7 @@ class FullModalOk extends ModalRoute<void> {
   final Color buttonColor;
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 500);
+  Duration get transitionDuration => Duration(milliseconds: 300);
 
   @override
   bool get opaque => false;
@@ -42,12 +44,17 @@ class FullModalOk extends ModalRoute<void> {
       // make sure that the overlay content is not cut off
       child: SafeArea(
         child: Container(
-          child: Column(
-            children: <Widget>[
-              header,
-              Expanded(child: body),
-              _buttons(context),
-            ],
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaY: 10.0, sigmaX: 10.0),
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  header,
+                  Expanded(child: body),
+                  _buttons(context),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -98,26 +105,26 @@ class FullModalOk extends ModalRoute<void> {
     letterSpacing: 1.8,
   );
 
-  @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
-    // You can add your own animations for the overlay content
-    return FadeTransition(
-      opacity: animation,
-      child: child,
-    );
-  }
-
   // @override
   // Widget buildTransitions(BuildContext context, Animation<double> animation,
   //     Animation<double> secondaryAnimation, Widget child) {
   //   // You can add your own animations for the overlay content
   //   return FadeTransition(
   //     opacity: animation,
-  //     child: ScaleTransition(
-  //       scale: animation,
-  //       child: child,
-  //     ),
+  //     child: child,
   //   );
   // }
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    // You can add your own animations for the overlay content
+    return FadeTransition(
+      opacity: animation,
+      child: ScaleTransition(
+        scale: animation,
+        child: child,
+      ),
+    );
+  }
 }

@@ -45,7 +45,7 @@ class Trip {
     id = data.tripId;
     name = data.name;
     budgetAmount = double.tryParse(data.budgetAmount) ?? 1.0;
-    // budgetCurrency = data.budgetCurrency;
+    budgetCurrency = data.budgetCurrency;
     budgetType = data.budgetType;
     startDT = data.startDate;
     endDT = data.endDate;

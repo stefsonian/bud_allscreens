@@ -1,9 +1,12 @@
 import 'package:eatsleeptravel/src/components/currency_selector.dart';
+import 'package:eatsleeptravel/src/components/full_modal_ok.dart';
 import 'package:eatsleeptravel/src/front/manage_trip/manage_trip_model.dart';
+import 'package:eatsleeptravel/src/front/user_settings/set_home_currency.dart';
 import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/firestore_service.dart';
+import 'package:eatsleeptravel/src/services/home_state.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +28,13 @@ class _ManageTripFormState extends State<ManageTripForm> {
   SessionData sessionData;
   AppState appState;
   Records records;
+  HomeState homeState;
 
   void didChangeDependencies() {
     appState = Provider.of<AppState>(context);
     sessionData = Provider.of<SessionData>(context);
     records = Provider.of<Records>(context);
+    homeState = Provider.of<HomeState>(context);
     // only populate fields if in manage mode (leave empty if in create mode)
     if (!widget.isCreateMode) {
       if (data.name == '' && sessionData.trip != null) {
@@ -40,15 +45,21 @@ class _ManageTripFormState extends State<ManageTripForm> {
   }
 
   _springCurrencyDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => SimpleDialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        children: <Widget>[
-          CurrencySelector(),
-        ],
+    _submitFunction() {
+      var curId = homeState.currencyPickerValue;
+      // data.budgetCurrency = curId;
+      // var newData = data;
+      // setState(() => data = newData);
+      setState(() => data.budgetCurrency = curId);
+      Navigator.pop(context);
+    }
+
+    Navigator.of(context).push(
+      FullModalOk(
+        header: SetBudgetCurrencyHeader(),
+        body: SelectCurrency(initialCurrencyId: data.budgetCurrency),
+        buttonColor: appState.cols.content,
+        onOkTap: _submitFunction,
       ),
     );
   }
@@ -90,6 +101,7 @@ class _ManageTripFormState extends State<ManageTripForm> {
   }
 
   onCreateNewTrip() async {
+    if (!data.isReadyForCommit()) return; // TODO: notify user
     var userId = sessionData.user.id;
     Trip trip = Trip();
     trip.updateFromManageTrip(data);
@@ -101,15 +113,26 @@ class _ManageTripFormState extends State<ManageTripForm> {
       tripId: newTripId.documentID,
     );
     records.currentTripId = newTripId.documentID;
-    // TODO: maybe show pop-up confirmation
+    // TODO: show pop-up confirmation
   }
 
   onUpdateExistingTrip() async {
+    if (!data.isReadyForCommit()) return; // TODO: notify user
     var userId = sessionData.user.id;
     Trip trip = sessionData.trip;
     trip.updateFromManageTrip(data);
     await _firestore.updateExistingTrip(trip: trip);
-    // TODO: maybe show pop-up confirmation
+    // TODO: show pop-up confirmation
+  }
+
+  String _getBudgetCurrency() {
+    if (data.budgetCurrency == null || data.budgetCurrency.isEmpty) {
+      return 'Select currency';
+    }
+
+    var curId = data.budgetCurrency;
+    var cur = records.getCurrency(curId);
+    return ('${cur.name} (${cur.id.toUpperCase()})');
   }
 
   Widget build(BuildContext context) {
@@ -199,40 +222,37 @@ class _ManageTripFormState extends State<ManageTripForm> {
             SizedBox(height: 26),
             SizedBox(
               height: 90,
-              child: Container(
-                child: Row(
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('Budget currency', style: _textStyleHint),
-                        // SizedBox(height: 6),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              'AUD (Australian Dollars)',
-                              style: _textStyleLarge,
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.arrow_downward,
-                                color: appState.cols.content,
+              child: GestureDetector(
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('Budget currency', style: _textStyleHint),
+                          // SizedBox(height: 6),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                _getBudgetCurrency(),
+                                style: _textStyleLarge,
                               ),
-                              onPressed: _springCurrencyDialog,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    // FloatingActionButton(
-                    //   child: Icon(Icons.edit, color: col_aqua),
-                    //   backgroundColor: Colors.white,
-                    //   onPressed: _springCurrencyDialog,
-                    // ),
-                  ],
+                              IconButton(
+                                icon: Icon(
+                                  Icons.arrow_downward,
+                                  color: appState.cols.content,
+                                ),
+                                onPressed: _springCurrencyDialog,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
+                onTap: _springCurrencyDialog,
               ),
             ),
             SizedBox(height: 26),

@@ -1,9 +1,11 @@
 import 'package:eatsleeptravel/src/background/background.dart';
+import 'package:eatsleeptravel/src/components/full_modal_ok.dart';
 import 'package:eatsleeptravel/src/front/user_settings/set_home_currency.dart';
 import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/login/login_screen.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/firestore_service.dart';
+import 'package:eatsleeptravel/src/services/home_state.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,24 +19,39 @@ class AppSettingsDrawer extends StatefulWidget {
 class _AppSettingsDrawerState extends State<AppSettingsDrawer> {
   AppState appState;
   SessionData sessionData;
+  HomeState homeState;
 
   void didChangeDependencies() {
     super.didChangeDependencies();
     appState = Provider.of<AppState>(context);
     sessionData = Provider.of<SessionData>(context);
+    homeState = Provider.of<HomeState>(context);
   }
 
   onSetHomeCurrencyTap() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-            ),
-            children: <Widget>[SetHomeCurrency()],
-          );
-        });
+    _submitFunction() async {
+      var curId = homeState.currencyPickerValue;
+      var firestore = FirestoreService();
+      await firestore.setUserHomeCurrency(
+        userId: sessionData.user.id,
+        currencyId: curId,
+      );
+
+      firestore.resetUserCurrencyValues(
+        userId: sessionData.user.id,
+      );
+
+      Navigator.pop(context);
+    }
+
+    Navigator.of(context).push(
+      FullModalOk(
+        header: SetHomeCurrencyHeader(),
+        body: SelectCurrency(initialCurrencyId: sessionData.user.homeCurrency),
+        buttonColor: appState.cols.content,
+        onOkTap: _submitFunction,
+      ),
+    );
   }
 
   onEditExchangeRatesTap() {}
@@ -92,6 +109,14 @@ class _AppSettingsDrawerState extends State<AppSettingsDrawer> {
                   sessionData.user.email ?? 'Not signed up',
                   style: TextStyle(
                     color: appState.cols.content,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  sessionData.user.id ?? 'Not signed up',
+                  style: TextStyle(
+                    color: appState.cols.content.withOpacity(0.3),
                     fontSize: 16,
                   ),
                 ),

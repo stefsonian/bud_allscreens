@@ -29,4 +29,15 @@ class ManageTripModel {
 
   String get startDateString => formatter.format(startDate);
   String get endDateString => formatter.format(endDate);
+
+  isReadyForCommit() {
+    var valid = true;
+    if (budgetType == null || budgetType.isEmpty) valid = false;
+    if (name == null || name.isEmpty) valid = false;
+    if (budgetAmount == null || budgetAmount.isEmpty) valid = false;
+    if (budgetCurrency == null || budgetCurrency.isEmpty) valid = false;
+    if (startDate == null) valid = false;
+    if (endDate == null) valid = false;
+    return valid;
+  }
 }

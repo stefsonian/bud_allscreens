@@ -34,6 +34,7 @@ class Records with ChangeNotifier {
   String get currentTripId => _currentTripId;
   set currentTripId(String currentTripId) {
     _currentTripId = currentTripId;
+    initialiseRecords();
     notifyListeners();
   }
 
@@ -250,6 +251,10 @@ class Records with ChangeNotifier {
   double get maxAmountInHomeCur => _full
       .map((e) => e.getAmount('aud'))
       .reduce(max); //TODO change to add currency parameter
+
+  Currency getCurrency(String curId) {
+    return currencies.where((c) => c.id == curId).single;
+  }
 
   // List<List<Expense>> groupedByDay(
   //     {DateTime start, DateTime end, bool includeEmptyDays = true}) {

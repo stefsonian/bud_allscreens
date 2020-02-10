@@ -2,7 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class User {
   FirebaseUser fireUser;
-  String id, email, name, homeCurrency, currentTrip = '';
+  String id = '';
+  String email = '';
+  String name = '';
+  String homeCurrency = '';
+  String currentTrip = '';
   List<String> trips = [];
   bool isAnonymous = true;
   String currencyLastUsed; // id of the last currency they used
@@ -32,8 +36,8 @@ class User {
   }
 
   updateData(Map<String, dynamic> data) {
-    homeCurrency = data['home_currency'] ?? null;
-    currentTrip = data['current_trip'] ?? null;
+    homeCurrency = data['home_currency'] ?? '';
+    currentTrip = data['current_trip'] ?? '';
     userRates = data['user_rates'] ?? {};
   }
 }
