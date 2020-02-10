@@ -65,4 +65,11 @@ class FirestoreService {
         .document(userId)
         .setData({'currencies': null}, merge: true);
   }
+
+  Future<QuerySnapshot> getUserTrips({String userId}) {
+    return fire
+        .collection('trips')
+        .where('roles.$userId', isGreaterThan: '')
+        .getDocuments();
+  }
 }
