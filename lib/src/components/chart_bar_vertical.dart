@@ -29,7 +29,7 @@ class ChartBarVertical extends StatelessWidget {
   final Color labelBackColor;
   final Color valueColor;
 
-  final double value;
+  final String value;
   final String labelLine1;
   final String labelLine2;
   final String valuePrefix;
@@ -108,7 +108,7 @@ class ChartBarVertical extends StatelessWidget {
       child: Container(
         alignment: Alignment.topCenter,
         child: Text(
-          value.toStringAsFixed(0),
+          value,
           style: TextStyle(
             color: showAmountAbove ? barColor : valueColor,
             fontWeight: FontWeight.bold,
@@ -239,17 +239,3 @@ class NoClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(NoClipper oldClipper) => false;
 }
-
-//  AnimatedSpacer(begin: 1000, end: 101 - min(100, pct2)),
-//         Expanded(
-//           flex: min(100, pct2),
-//           child: pct2 > 100
-//               ? _excessBar(color, valueColor)
-//               : _compliantBar(color: color, amountAbove: showAmountAbove),
-//         ),
-// Expanded(
-//   flex: min(100, pct2),
-//   child: pct2 > 100
-//       ? _excessBar(color, valueColor)
-//       : _compliantBar(color: color, amountAbove: showAmountAbove),
-// ),

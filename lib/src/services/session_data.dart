@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Payment_type.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
@@ -140,6 +141,64 @@ class Utils {
 
   DateTime timestampToDate(Timestamp t) {
     return DateTime.fromMillisecondsSinceEpoch(t.millisecondsSinceEpoch);
+  }
+
+  String formattedAmount(double amount) {
+    String s = '';
+    s = amount.toStringAsFixed(2);
+    if (amount >= 100) s = amount.toStringAsFixed(0);
+    if (amount >= 10000) s = '${(amount / 1000).toStringAsFixed(1)}K';
+    if (amount >= 100000) s = '${(amount / 1000).toStringAsFixed(0)}K';
+    if (amount >= 1000000) s = '${(amount / 1000000).toStringAsFixed(2)}M';
+    return s;
+  }
+
+  String formattedCurrency(double amount, Currency currency) {
+    return '${currency.symbolNative} ${formattedAmount(amount)}';
+  }
+
+  void createTestRecords(
+      {DateTime start,
+      DateTime end,
+      int n,
+      String tripId,
+      String userId,
+      List<SubCategory> subcats}) {
+    final firestore = FirestoreService();
+
+    final periodSpan = end.difference(start).inDays;
+    for (var i = 0; i < n; i++) {
+      var e = Expense();
+      var y = Random().nextInt(periodSpan);
+      e.creationDT = start.add(Duration(days: y));
+      e.expenseDT = start.add(Duration(days: y));
+      var x = Random().nextInt(subcats.length - 1);
+      var subcat = subcats[x];
+      e.subCategory = subcat;
+      e.mainCategory = MainCategory();
+      e.mainCategory.id = subcat.groupId;
+      e.amount = Random().nextDouble() * 20;
+      e.currencyId = 'aud';
+      e.homeCurrency = 'aud';
+      e.createdBy = userId;
+      e.paidBy = userId;
+      // e.location = 'unknown';
+      e.note = Random().nextBool() ? 'A quick note' : '';
+      e.paymentType = ['cash', 'credit', 'debit'][Random().nextInt(2)];
+      e.tripId = tripId;
+      int noteIndex = Random().nextInt(7);
+      e.note = [
+        '#fancydinner with text #beachday',
+        'a #beachday',
+        'a #coffeefix wt',
+        '#shopamok',
+        '#kayaking',
+        '',
+        ''
+      ].elementAt(noteIndex);
+
+      firestore.createExpense(tripId: tripId, expense: e);
+    }
   }
 }
 

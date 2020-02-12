@@ -13,6 +13,7 @@ class User {
   String countryLastIn; // id of the country they were in at last expense
   String paymentMethodLastUsed;
   Map<String, double> userRates = {};
+  Map<String, String> displayCurrencies = {};
 
   User();
 
@@ -38,6 +39,15 @@ class User {
   updateData(Map<String, dynamic> data) {
     homeCurrency = data['home_currency'] ?? '';
     currentTrip = data['current_trip'] ?? '';
-    userRates = data['user_rates'] ?? {};
+    if (data.containsKey('user_rates')) {
+      Map tmp = data['user_rates'];
+      tmp.forEach(
+        (k, v) => userRates[k] = double.tryParse(v.toString()) ?? 1.0,
+      );
+    }
+    if (data.containsKey('display_currencies')) {
+      Map tmp = data['display_currencies'];
+      tmp.forEach((k, v) => displayCurrencies[k] = v.toString());
+    }
   }
 }

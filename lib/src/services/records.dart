@@ -21,7 +21,7 @@ class Records with ChangeNotifier {
   List<Expense> get full => _full;
   Map<String, MainCategory> maincats;
   Map<String, SubCategory> subcats;
-  List<Currency> currencies = [];
+  List<Currency> currencies;
   Map<DateTime, Map<String, double>> xrates = {};
   bool isInitCurrencies = false;
   bool isInitExchangeRates = false;
@@ -42,12 +42,13 @@ class Records with ChangeNotifier {
 
   Future<void> initialiseCurrencies() async {
     WidgetsFlutterBinding.ensureInitialized();
-    currencies = [];
+    List<Currency> tmp = [];
     String data = await rootBundle.loadString('assets/currencies.json');
 
     Map currencyMap = json.decode(data);
-    currencyMap.forEach((k, v) => currencies.add(Currency.fromMap({k: v})));
-    currencies.sort((Currency a, Currency b) => a.id.compareTo(b.id));
+    currencyMap.forEach((k, v) => tmp.add(Currency.fromMap({k: v})));
+    tmp.sort((Currency a, Currency b) => a.id.compareTo(b.id));
+    currencies = List.unmodifiable(tmp);
     if (!isInitCurrencies) isInitCurrencies = true;
   }
 
@@ -67,7 +68,7 @@ class Records with ChangeNotifier {
           } else {
             rate = double.tryParse(v.toString()) ?? 1.0;
           }
-          xrates[timestampDT][k] = rate;
+          xrates[timestampDT][k.toLowerCase()] = rate;
         });
         // print('added exchange rate number $count');
         // count++;
@@ -142,48 +143,6 @@ class Records with ChangeNotifier {
     return completer.future;
   }
 
-  // void createTestData(String tripId, int n, int start, int end) {
-  //   final sData = SessionData.withCatsOnly();
-  //   for (var i = 0; i < n; i++) {
-  //     var e = Expense();
-  //     var y = Random().nextInt(start + end) - start;
-  //     e.expenseDT = DateTime.now().add(Duration(days: y));
-  //     var x = Random().nextInt(sData.subcats.length);
-  //     var subCats = sData.subcats.keys.toList();
-  //     var subCat = subCats[x];
-  //     e.subCategory = sData.subcats[subCat];
-  //     e.mainCategory = sData.maincats[sData.subcats[subCat].groupId];
-  //     var amount = Random().nextDouble() * 100;
-  //     var fa = FrozenAmount.withTestData(amount);
-  //     e.amount = fa;
-  //     e.createdBy = 'Stefan';
-  //     e.paidBy = 'Stefan';
-  //     var location = Location.withDemoData();
-  //     e.location = location;
-  //     e.note = 'A quick note';
-  //     e.paymentType = ['Cash', 'Credit', 'Debit'][Random().nextInt(2)];
-  //     e.tripId = tripId;
-  //     int noteIndex = Random().nextInt(7);
-  //     e.note = [
-  //       '#fancydinner with text #beachday',
-  //       'a #beachday',
-  //       'a #coffeefix wt',
-  //       '',
-  //       '',
-  //       '',
-  //       ''
-  //     ].elementAt(noteIndex);
-  //     _full.add(e);
-  //   }
-  //   notifyListeners();
-  // }
-
-  // Future createFirestoreTestData(String tripId) async {
-  //   return Future.wait(_full
-  //       .map((e) => firestore.createExpense(tripId: tripId, expense: e))
-  //       .toList());
-  // }
-
   void addRecord(Expense expense) {
     _full.add(expense);
     notifyListeners();
@@ -253,25 +212,15 @@ class Records with ChangeNotifier {
       .reduce(max); //TODO change to add currency parameter
 
   Currency getCurrency(String curId) {
-    return currencies.where((c) => c.id == curId).single;
+    var index = currencies.indexWhere((c) => c.id == curId);
+    return currencies[index];
   }
 
-  // List<List<Expense>> groupedByDay(
-  //     {DateTime start, DateTime end, bool includeEmptyDays = true}) {
-  //   final numDays = end.difference(start).inDays;
-  //   List<List<Expense>> result = [];
-  //   for (var i = 0; i <= numDays; i++) {
-  //     final d = start.add(Duration(days: i));
-  //     final expenses =
-  //         _full.where((e) => Jiffy(e.expenseDT).isSame(d, 'day')).toList();
-  //     if (expenses.isNotEmpty) {
-  //       result.add(expenses);
-  //     } else {
-  //       if (includeEmptyDays) result.add([]);
-  //     }
-  //   }
-  //   return result;
-  // }
+  Currency someCurrency(String curId) {
+    Currency cur;
+    cur = currencies[5];
+    return cur;
+  }
 
   Map<DateTime, List<Expense>> groupedByDay({
     DateTime start,

@@ -57,6 +57,30 @@ class SetBudgetCurrencyHeader extends StatelessWidget {
   }
 }
 
+class SetDisplayCurrencyHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: appState.cols.content.withOpacity(0.4),
+          ),
+        ),
+      ),
+      height: 120,
+      child: DialogHeader(
+        mainHeader: 'Set display currency',
+        subHeader: 'Amounts are displayed in this currency',
+        color: appState.cols.content,
+      ),
+    );
+  }
+}
+
 class SelectCurrency extends StatefulWidget {
   const SelectCurrency({Key key, this.initialCurrencyId}) : super(key: key);
   final String initialCurrencyId;
@@ -70,7 +94,7 @@ class _SelectCurrencyState extends State<SelectCurrency> {
   AppState appState;
   Records records;
   HomeState homeState;
-  List<Currency> currencies;
+  // List<Currency> currencies = [];
   int selectedIndex = -1;
 
   @override
@@ -80,13 +104,13 @@ class _SelectCurrencyState extends State<SelectCurrency> {
     sessionData = Provider.of<SessionData>(context);
     records = Provider.of<Records>(context);
     homeState = Provider.of<HomeState>(context);
-    currencies = records.currencies;
-    currencies.sort((a, b) => a.id.compareTo(b.id));
+    // records.currencies.addAll(records.currencies);
+    // records.currencies.sort((a, b) => a.id.compareTo(b.id));
     if (selectedIndex == -1 &&
         widget.initialCurrencyId != null &&
         widget.initialCurrencyId.isNotEmpty) {
-      selectedIndex =
-          currencies.indexWhere((cur) => cur.id == widget.initialCurrencyId);
+      selectedIndex = records.currencies
+          .indexWhere((cur) => cur.id == widget.initialCurrencyId);
     }
   }
 
@@ -104,7 +128,7 @@ class _SelectCurrencyState extends State<SelectCurrency> {
             ? Colors.green.withOpacity(0.6)
             : Colors.transparent;
         return _buildCurrencyItem(
-          currency: currencies[index],
+          currency: records.currencies[index],
           color: color,
           onTap: () => _updateSelectedIndex(index),
         );

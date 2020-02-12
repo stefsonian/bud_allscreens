@@ -91,12 +91,12 @@
     },
     "BAM": {
         "symbol": "KM",
-        "name": "Bosnia-Herzegovina Convertible Mark",
+        "name": "Bosnia-Herzegovina Mark",
         "symbol_native": "KM",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "BAM",
-        "name_plural": "Bosnia-Herzegovina convertible marks"
+        "name_plural": "Bosnia-Herzegovina marks"
     },
     "BDT": {
         "symbol": "Tk",

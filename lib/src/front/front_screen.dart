@@ -4,10 +4,14 @@ import 'package:eatsleeptravel/src/front/front_by_category.dart';
 import 'package:eatsleeptravel/src/front/front_by_hashtag.dart';
 import 'package:eatsleeptravel/src/front/front_by_person.dart';
 import 'package:eatsleeptravel/src/front/front_recent.dart';
+import 'package:eatsleeptravel/src/front/front_select_currency.dart';
 import 'package:eatsleeptravel/src/front/front_stats.dart';
 import 'package:eatsleeptravel/src/front/trip_options_popup.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
 
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/home_state.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +26,38 @@ class _FrontScreenState extends State<FrontScreen> {
   SessionData session;
   AppState appState;
   Records records;
+  HomeState homeState;
+  double budgetAmount;
+  Currency budgetCurrency;
 
   @override
   void didChangeDependencies() {
     session = Provider.of<SessionData>(context);
     appState = Provider.of<AppState>(context);
     records = Provider.of<Records>(context);
+    homeState = Provider.of<HomeState>(context);
+    _updateBudgetCurrency();
+    _updateBudgetAmount();
     super.didChangeDependencies();
+  }
+
+  _updateBudgetCurrency() {
+    var curId = session.user.displayCurrencies.containsKey('home')
+        ? session.user.displayCurrencies['home']
+        : session.user.homeCurrency;
+    setState(() => budgetCurrency = records.getCurrency(curId));
+    // budgetCurrency = records.getCurrency(curId);
+  }
+
+  _updateBudgetAmount() {
+    var amount = Utils().convertAmount(
+      amount: session.trip.budgetAmount,
+      xRates: records.latestXrates(),
+      fromCurrency: session.trip.budgetCurrency,
+      toCurrency: budgetCurrency.id,
+    );
+    setState(() => budgetAmount = amount);
+    // budgetAmount = amount;
   }
 
   @override
@@ -60,8 +89,19 @@ class _FrontScreenState extends State<FrontScreen> {
                 ),
                 taperedDivder(),
                 Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: FrontSelectCurrency(
+                    currency: budgetCurrency,
+                  ),
+                  // child: Container(),
+                ),
+                taperedDivder(),
+                Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FrontStats(),
+                  child: FrontStats(
+                      // budgetAmount: budgetAmount,
+                      // budgetCurrency: budgetCurrency,
+                      ),
                   // child: Container(),
                 ),
                 taperedDivder(),

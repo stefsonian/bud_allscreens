@@ -66,6 +66,16 @@ class FirestoreService {
         .setData({'currencies': null}, merge: true);
   }
 
+  Future<void> setUserDisplayCurrency({
+    String userId,
+    String screenName,
+    String currencyId,
+  }) {
+    return fire.collection('users').document(userId).setData({
+      'display_currencies': {screenName: currencyId}
+    }, merge: true);
+  }
+
   Future<QuerySnapshot> getUserTrips({String userId}) {
     return fire
         .collection('trips')

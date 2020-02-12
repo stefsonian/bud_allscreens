@@ -3,6 +3,7 @@ import 'package:eatsleeptravel/src/components/full_modal_ok.dart';
 import 'package:eatsleeptravel/src/front/user_settings/set_home_currency.dart';
 import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/login/login_screen.dart';
+import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/home_state.dart';
@@ -75,13 +76,21 @@ class _AppSettingsDrawerState extends State<AppSettingsDrawer> {
     //   currencyId: 'NOK',
     // );
 
-    await firestore.setUserHomeCurrency(
-      userId: sessionData.user.id,
-      currencyId: 'aud',
-    );
+    // await firestore.setUserHomeCurrency(
+    //   userId: sessionData.user.id,
+    //   currencyId: 'aud',
+    // );
 
-    firestore.resetUserCurrencyValues(
+    // firestore.resetUserCurrencyValues(
+    //   userId: sessionData.user.id,
+    // );
+    Utils().createTestRecords(
+      start: sessionData.trip.startDT,
+      end: sessionData.trip.endDT,
+      n: 100,
+      tripId: sessionData.trip.id,
       userId: sessionData.user.id,
+      subcats: sessionData.subcats.values.toList(),
     );
   }
 
@@ -144,7 +153,7 @@ class _AppSettingsDrawerState extends State<AppSettingsDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.developer_mode),
-            title: Text('script: fix firestore cur'),
+            title: Text('script: create test records'),
             onTap: onDevScriptTap,
           ),
         ],

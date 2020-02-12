@@ -1,5 +1,10 @@
 class Currency {
-  String id, symbol, name, symbolNative, code, namePlural = '';
+  String id = '';
+  String symbol = '';
+  String name = '';
+  String symbolNative = '';
+  String code = '';
+  String namePlural = '';
   int decimals = 2;
   double rounding = 0.0;
 

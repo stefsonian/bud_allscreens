@@ -1,3 +1,4 @@
+import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:flutter/material.dart';
 
 class HomeState with ChangeNotifier {
@@ -9,8 +10,6 @@ class HomeState with ChangeNotifier {
     _currencyPickerValue = currencyPickerValue;
     notifyListeners();
   }
-
-  String pete = '';
 
   reset() {
     // reset values
