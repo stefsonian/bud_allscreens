@@ -1,11 +1,5 @@
-import 'dart:math';
-
 import 'package:align_positioned/align_positioned.dart';
-import 'package:eatsleeptravel/src/components/animated_spacer.dart';
-import 'package:clip_shadow/clip_shadow.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix4_transform/matrix4_transform.dart';
-// import 'package:matrix4_transform/matrix4_transform.dart';
 
 class ChartBarVertical extends StatelessWidget {
   const ChartBarVertical(
@@ -17,6 +11,7 @@ class ChartBarVertical extends StatelessWidget {
       this.labelBackColor = Colors.black45,
       this.value,
       this.scaledBarHeight,
+      this.barWidth = 56,
       this.labelLine1,
       this.labelLine2,
       this.valuePrefix,
@@ -28,12 +23,11 @@ class ChartBarVertical extends StatelessWidget {
   final Color labelColor;
   final Color labelBackColor;
   final Color valueColor;
-
   final String value;
   final String labelLine1;
   final String labelLine2;
   final String valuePrefix;
-  final double width = 56;
+  final double barWidth;
   final bool showAmountAbove;
   final double labelBoxHeight = 42;
   final double scaledBarHeight; // a value between 0 and 1.
@@ -42,7 +36,7 @@ class ChartBarVertical extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget bar = exceedsChartMax ? _excessBar() : _compliantBar();
     return Container(
-      width: width,
+      width: barWidth,
       child: Stack(
         children: <Widget>[
           Positioned(
@@ -78,7 +72,7 @@ class ChartBarVertical extends StatelessWidget {
   Widget _displayLabel() {
     return Container(
       height: labelBoxHeight,
-      width: width,
+      width: barWidth,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: labelBackColor,
@@ -121,7 +115,7 @@ class ChartBarVertical extends StatelessWidget {
 
   Widget _compliantBar() {
     return Container(
-      width: width,
+      width: barWidth,
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -142,7 +136,7 @@ class ChartBarVertical extends StatelessWidget {
     return ClipPath(
       clipper: ExcessClipperBottom(),
       child: Container(
-        width: width,
+        width: barWidth,
         alignment: Alignment.topCenter,
         padding: EdgeInsets.only(top: 10),
         decoration: BoxDecoration(

@@ -112,8 +112,8 @@ class _RecordCategoryState extends State<RecordCategory> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: mainCatButtons,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: mainCatButtons.map((b) => Expanded(child: b)).toList(),
           ),
           isShort ? SizedBox(height: 5) : SizedBox(height: 20),
           Container(
@@ -201,6 +201,10 @@ class _CatButtonState extends State<CatButton> {
     return GestureDetector(
       onTap: handleTap,
       child: Container(
+        // decoration: BoxDecoration(
+        //   color: Colors.green,
+        //   border: Border.all(color: Colors.red),
+        // ),
         width: widget.isMainCat ? null : 85,
         child: Column(
           verticalDirection:
@@ -209,13 +213,18 @@ class _CatButtonState extends State<CatButton> {
           children: <Widget>[
             Icon(
               widget.category.icon,
-              size: 30,
+              size: 34,
               color: color,
             ),
             SizedBox(height: 5),
             Text(
               widget.category.name,
-              style: TextStyle(color: color, fontSize: 12),
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: isDimmed ? FontWeight.normal : FontWeight.bold,
+                letterSpacing: 0.4,
+              ),
               maxLines: 1,
               overflow: TextOverflow.clip,
             ),

@@ -1,52 +1,41 @@
-import 'dart:math';
-
 import 'package:align_positioned/align_positioned.dart';
-import 'package:eatsleeptravel/src/components/animated_spacer.dart';
-import 'package:clip_shadow/clip_shadow.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix4_transform/matrix4_transform.dart';
-// import 'package:matrix4_transform/matrix4_transform.dart';
 
 class ChartBarHorizontal extends StatelessWidget {
   const ChartBarHorizontal(
       {Key key,
-      this.value,
-      this.threshold1,
-      this.threshold2,
-      this.complyColor = Colors.blue,
-      this.exceedColor = Colors.deepOrange,
-      this.label,
-      this.valuePrefix,
+      this.exceedsChartMax,
+      this.barColor = Colors.blue,
       this.labelColor = Colors.white,
       this.valueColor = Colors.black,
       this.labelBackColor = Colors.black45,
-      this.showAmountAbove = false,
-      this.labelBoxWidth = 46.0})
+      this.labelBoxWidth = 46,
+      this.barHeight = 56,
+      this.label,
+      this.formattedValue,
+      this.scaledBarWidth,
+      this.valuePrefix,
+      this.showAmountAbove = false})
       : super(key: key);
-  final double value;
-  final double threshold1;
-  final double threshold2;
-  final Color complyColor;
-  final Color exceedColor;
+
+  final bool exceedsChartMax;
+  final Color barColor;
+  final Color labelColor;
+  final Color labelBackColor;
+  final Color valueColor;
+  final String formattedValue;
   final Widget label;
   final String valuePrefix;
-  final double height = 46.0;
-  final Color labelBackColor;
-  final Color labelColor;
-  final Color valueColor;
+  final double barHeight;
   final bool showAmountAbove;
   final double labelBoxWidth;
+  final double scaledBarWidth; // a value between 0 and 1.
 
   @override
   Widget build(BuildContext context) {
-    double ratio1 = value / threshold1;
-    double ratio2 = value / threshold2;
-    double widthRatio = min(1.0, ratio2);
-    Color color = ratio1 > 1 ? exceedColor : complyColor;
-    Widget bar =
-        ratio2 > 1.0 ? _excessBar(color: color) : _compliantBar(color: color);
+    Widget bar = exceedsChartMax ? _excessBar() : _compliantBar();
     return Container(
-      height: height,
+      height: barHeight,
       child: Stack(
         children: <Widget>[
           Positioned(
@@ -56,7 +45,7 @@ class ChartBarHorizontal extends StatelessWidget {
             right: 0,
             child: AlignPositioned(
               alignment: Alignment.centerLeft,
-              childWidthRatio: widthRatio,
+              childWidthRatio: scaledBarWidth,
               childHeightRatio: 1.0,
               child: bar,
             ),
@@ -66,11 +55,7 @@ class ChartBarHorizontal extends StatelessWidget {
             bottom: 0,
             left: labelBoxWidth,
             right: 0,
-            child: _displayValue(
-              color: color,
-              amountAbove: showAmountAbove,
-              widthRatio: widthRatio,
-            ),
+            child: _displayValue(),
           ),
           Positioned(
             top: 0,
@@ -86,7 +71,7 @@ class ChartBarHorizontal extends StatelessWidget {
   Widget _displayLabel() {
     return Container(
       width: labelBoxWidth,
-      height: height,
+      height: barHeight,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: labelBackColor,
@@ -99,19 +84,19 @@ class ChartBarHorizontal extends StatelessWidget {
     );
   }
 
-  Widget _displayValue(
-      {Color color, bool amountAbove = false, double widthRatio}) {
-    var valueOffset = amountAbove ? 0.12 : -0.05;
+  Widget _displayValue() {
+    var valueOffset = showAmountAbove ? 0.27 : -0.05;
+    if (scaledBarWidth < 0.01) valueOffset = 0.2;
     return AlignPositioned(
       alignment: Alignment.centerLeft,
-      childWidthRatio: widthRatio + valueOffset,
+      childWidthRatio: scaledBarWidth + valueOffset,
       // childWidthRatio: 1.0,
       child: Container(
         alignment: Alignment.centerRight,
         child: Text(
-          value.toStringAsFixed(0),
+          formattedValue,
           style: TextStyle(
-            color: amountAbove ? color : valueColor,
+            color: showAmountAbove ? barColor : valueColor,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
@@ -120,16 +105,16 @@ class ChartBarHorizontal extends StatelessWidget {
     );
   }
 
-  Widget _compliantBar({Color color}) {
+  Widget _compliantBar() {
     return Container(
-      height: height,
+      height: barHeight,
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.centerRight,
           end: Alignment.centerLeft,
           stops: [0, 1],
-          colors: [color, color.withOpacity(0.8)],
+          colors: [barColor, barColor.withOpacity(0.8)],
         ),
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(10),
@@ -139,19 +124,18 @@ class ChartBarHorizontal extends StatelessWidget {
     );
   }
 
-  Widget _excessBar({Color color}) {
+  Widget _excessBar() {
     return ClipPath(
       clipper: ExcessClipperBottom(),
       child: Container(
-        height: height,
+        height: barHeight,
         alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerRight,
             end: Alignment.centerLeft,
             stops: [0, 1],
-            colors: [color, color.withOpacity(0.8)],
+            colors: [barColor, barColor.withOpacity(0.8)],
           ),
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(10),

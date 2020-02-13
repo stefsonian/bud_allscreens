@@ -6,8 +6,10 @@ import 'package:provider/provider.dart';
 // import 'package:splitsi/src/services/appState.dart';
 
 class Numpad extends StatelessWidget {
-  const Numpad({Key key, this.onTap}) : super(key: key);
+  const Numpad({Key key, this.onTap, this.hasDecimalPoint = true})
+      : super(key: key);
   final Function onTap;
+  final bool hasDecimalPoint;
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +102,8 @@ class Numpad extends StatelessWidget {
               Expanded(
                 child: _Item(
                   onTap: onTap,
-                  number: '·',
-                  value: '.',
+                  number: hasDecimalPoint ? '·' : '000',
+                  value: hasDecimalPoint ? '.' : '000',
                 ),
               ),
               Expanded(

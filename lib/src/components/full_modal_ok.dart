@@ -24,7 +24,7 @@ class FullModalOk extends ModalRoute<void> {
   bool get barrierDismissible => false;
 
   @override
-  Color get barrierColor => Colors.black.withOpacity(0.8);
+  Color get barrierColor => Colors.black.withOpacity(0.65);
 
   @override
   String get barrierLabel => null;

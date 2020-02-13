@@ -163,24 +163,34 @@ class Records with ChangeNotifier {
         .toList();
   }
 
-  Map<String, double> totalByMainCat() {
+  Map<String, double> totalByMainCat({
+    String currencyId,
+    DateTime start,
+    DateTime end,
+  }) {
     Map<String, double> result = {};
-    full.forEach((e) {
+    full
+        .where((e) => e.expenseDT.isAfter(start) && e.expenseDT.isBefore(end))
+        .forEach((e) {
       var cat = e.mainCategory.id;
-      var updateAmount =
-          e.getAmount('aud'); //TODO change to add currency parameter
+      var updateAmount = e.getAmount(currencyId);
       if (!result.containsKey(cat)) result[cat] = 0.0;
       result.update(cat, (current) => current + updateAmount);
     });
     return result;
   }
 
-  Map<String, double> totalByHashtag() {
+  Map<String, double> totalByHashtag({
+    String currencyId,
+    DateTime start,
+    DateTime end,
+  }) {
     Map<String, double> result = {};
-    full.forEach((e) {
+    full
+        .where((e) => e.expenseDT.isAfter(start) && e.expenseDT.isBefore(end))
+        .forEach((e) {
       e.tags.forEach((tag) {
-        var updateAmount =
-            e.getAmount('aud'); //TODO change to add currency parameter
+        var updateAmount = e.getAmount(currencyId);
         if (!result.containsKey(tag)) result[tag] = 0.0;
         result.update(tag, (current) => current + updateAmount);
       });
@@ -205,10 +215,10 @@ class Records with ChangeNotifier {
   String get latestPaymentType =>
       _full.isEmpty ? 'cash' : _full.last.paymentType;
 
-  String get latestCurrencyId => _full.isEmpty ? 'aud' : _full.last.currencyId;
+  String get latestCurrencyId => _full.isEmpty ? 'eur' : _full.last.currencyId;
 
   double get maxAmountInHomeCur => _full
-      .map((e) => e.getAmount('aud'))
+      .map((e) => e.getAmount('eur'))
       .reduce(max); //TODO change to add currency parameter
 
   Currency getCurrency(String curId) {
@@ -236,5 +246,14 @@ class Records with ChangeNotifier {
       if (!includeEmptyDays && result[d].isEmpty) result.remove(d);
     }
     return result;
+  }
+
+  List<Currency> recentlyUsedCurrencies() {
+    var now = DateTime.now();
+    var candidates = full
+        .where((e) => e.expenseDT.isAfter(now.subtract(Duration(days: 30))))
+        .toList();
+    var curIdList = candidates.map((e) => e.currencyId).toSet().toList();
+    return curIdList.map((c) => getCurrency(c)).toList();
   }
 }

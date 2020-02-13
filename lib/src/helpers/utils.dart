@@ -144,6 +144,7 @@ class Utils {
   }
 
   String formattedAmount(double amount) {
+    if (amount == null) return '0.0';
     String s = '';
     s = amount.toStringAsFixed(2);
     if (amount >= 100) s = amount.toStringAsFixed(0);

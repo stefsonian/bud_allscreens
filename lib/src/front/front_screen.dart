@@ -1,8 +1,8 @@
 import 'package:eatsleeptravel/src/components/tapered_divider_h.dart';
-import 'package:eatsleeptravel/src/front/front_averages.dart';
+// import 'package:eatsleeptravel/src/front/front_averages.dart';
 import 'package:eatsleeptravel/src/front/front_by_category.dart';
 import 'package:eatsleeptravel/src/front/front_by_hashtag.dart';
-import 'package:eatsleeptravel/src/front/front_by_person.dart';
+// import 'package:eatsleeptravel/src/front/front_by_person.dart';
 import 'package:eatsleeptravel/src/front/front_recent.dart';
 import 'package:eatsleeptravel/src/front/front_select_currency.dart';
 import 'package:eatsleeptravel/src/front/front_stats.dart';
@@ -98,10 +98,7 @@ class _FrontScreenState extends State<FrontScreen> {
                 taperedDivder(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FrontStats(
-                      // budgetAmount: budgetAmount,
-                      // budgetCurrency: budgetCurrency,
-                      ),
+                  child: FrontStats(),
                   // child: Container(),
                 ),
                 taperedDivder(),
@@ -111,14 +108,14 @@ class _FrontScreenState extends State<FrontScreen> {
                 // ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  // child: FrontByCategory(),
-                  child: Container(),
+                  child: FrontByCategory(currency: budgetCurrency),
+                  // child: Container(),
                 ),
                 taperedDivder(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  // child: FrontByHashtag(),
-                  child: Container(),
+                  child: FrontByHashtag(currency: budgetCurrency),
+                  // child: Container(),
                 ),
 
                 // Padding(
@@ -192,7 +189,7 @@ class _FrontScreenState extends State<FrontScreen> {
           Text(
             session.trip == null
                 ? ''
-                : '${session.trip.startDayMonth} - ${session.trip.endDayMonth}  •  day ${session.trip.travelDay}',
+                : '${session.trip.startDayMonth} - ${session.trip.endDayMonth}  •  day ${session.trip.travelDay + 1}',
             style: TextStyle(
                 fontSize: 12, letterSpacing: 1.1, color: appState.cols.content),
           ),

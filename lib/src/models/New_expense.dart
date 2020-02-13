@@ -1,4 +1,5 @@
 import 'package:eatsleeptravel/src/helpers/utils.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/models/Trip.dart';
 import 'package:eatsleeptravel/src/models/User.dart';
@@ -13,7 +14,7 @@ class NewExpense extends ChangeNotifier {
   DateTime expenseDT = DateTime.now();
   String createdBy; // user id
   double amount;
-  String currencyId;
+  Currency currency;
   MainCategory mainCategory;
   SubCategory subCategory;
   String paidById; // user id
@@ -36,10 +37,9 @@ class NewExpense extends ChangeNotifier {
 
   void initialise({Trip trip, User user}) {
     createdBy = user.id;
-    currencyId = user.currencyLastUsed;
     paidById = user.id;
     paidByName = user.name;
-    paymentType = user.paymentMethodLastUsed;
+    // paymentType = user.paymentMethodLastUsed;
     tripId = trip.id;
     //TODO: The initial main category should be the quick/speed category
 
@@ -58,8 +58,8 @@ class NewExpense extends ChangeNotifier {
       case 'amount':
         amount = value;
         break;
-      case 'currencyId':
-        currencyId = value.toString().toLowerCase();
+      case 'currency':
+        currency = value;
         break;
       case 'paymentType':
         paymentType = value;

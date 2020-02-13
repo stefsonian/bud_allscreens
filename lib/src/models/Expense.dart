@@ -84,7 +84,7 @@ class Expense {
     subCategory = ne.subCategory;
     paidBy = ne.paidById;
     note = ne.note;
-    currencyId = ne.currencyId;
+    currencyId = ne.currency.id;
     // photo;
     // location;
     // tags;

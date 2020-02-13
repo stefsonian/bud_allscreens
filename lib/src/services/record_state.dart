@@ -14,6 +14,13 @@ class RecordState with ChangeNotifier {
     notifyListeners();
   }
 
+  String _currencyPickerValue = '';
+  String get currencyPickerValue => _currencyPickerValue;
+  set currencyPickerValue(String currencyPickerValue) {
+    _currencyPickerValue = currencyPickerValue;
+    notifyListeners();
+  }
+
   NumpadInput _numpad = NumpadInput();
   NumpadInput get numpad => _numpad;
   String get numpadValue => numpad.displayValue();

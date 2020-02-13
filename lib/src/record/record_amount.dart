@@ -1,7 +1,11 @@
 import 'dart:math';
 
 import 'package:eatsleeptravel/src/components/divider_grid.dart';
+import 'package:eatsleeptravel/src/components/full_modal_ok.dart';
 import 'package:eatsleeptravel/src/components/option_button.dart';
+import 'package:eatsleeptravel/src/front/user_settings/set_home_currency.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Numpad_input.dart';
 import 'package:eatsleeptravel/src/models/Payment_type.dart';
 import 'package:eatsleeptravel/src/record/numpad.dart';
@@ -25,14 +29,8 @@ class _RecordAmountState extends State<RecordAmount> {
   NumpadInput numpad = NumpadInput();
   String amount = '0.00';
   PaymentType paymentType;
-  String currencyId;
-
-  onNumberTap(String value) {
-    numpad.updateValue(value);
-    setState(() => amount = numpad.displayValue());
-    recordState.updateNewExpense('amount', numpad.valueDouble);
-    recordState.updateNewExpense('currencyId', 'AUD');
-  }
+  Currency currency;
+  bool allowDecimals = true;
 
   @override
   void didChangeDependencies() {
@@ -44,14 +42,23 @@ class _RecordAmountState extends State<RecordAmount> {
     super.didChangeDependencies();
   }
 
+  onNumberTap(String value) {
+    numpad.updateValue(value);
+    setState(() => amount = numpad.displayValue());
+    recordState.updateNewExpense('amount', numpad.valueDouble);
+    recordState.updateNewExpense('currencyId', 'AUD');
+  }
+
   _initialiseVariables() {
     if (paymentType == null) {
       final latestUsed = records.latestPaymentType.toLowerCase();
       paymentType = sessionData.paymentTypes[latestUsed];
       // recordState.updateNewExpense('paymentType', paymentType.id);
     }
-    if (currencyId == null) {
-      currencyId = records.latestCurrencyId;
+    if (currency == null) {
+      currency = records.getCurrency(records.latestCurrencyId);
+      recordState.newExpense.update('currency', currency);
+      _setAllowDecimals();
     }
   }
 
@@ -62,6 +69,39 @@ class _RecordAmountState extends State<RecordAmount> {
     final nextTypeId = currentIndex == types.length - 1 ? 0 : currentIndex + 1;
     setState(() => paymentType = sessionData.paymentTypes[types[nextTypeId]]);
     recordState.updateNewExpense('paymentType', paymentType.id);
+  }
+
+  _setAllowDecimals() {
+    var usdRate = Utils().convertAmount(
+      amount: 1.0,
+      fromCurrency: 'usd',
+      toCurrency: currency.id,
+      xRates: records.latestXrates(),
+    );
+    if (usdRate > 100) allowDecimals = false;
+  }
+
+  onCurrencyTap() {
+    _submitFunction() {
+      var selectedId = recordState.currencyPickerValue;
+      Currency selectedCurrency = records.getCurrency(selectedId);
+      setState(() => currency = selectedCurrency);
+      recordState.newExpense.update('currency', selectedCurrency);
+      _setAllowDecimals();
+      Navigator.pop(context);
+    }
+
+    Navigator.of(context).push(
+      FullModalOk(
+        header: SetRecordCurrencyHeader(),
+        body: SelectCurrency(
+          initialCurrencyId: currency.id,
+          stateToUpdate: 'record',
+        ),
+        buttonColor: appState.cols.content,
+        onOkTap: _submitFunction,
+      ),
+    );
   }
 
   @override
@@ -127,9 +167,9 @@ class _RecordAmountState extends State<RecordAmount> {
                   padding: EdgeInsets.all(2),
                   child: DisplayPart(
                     appState: appState,
-                    onTap: () {},
-                    icon: Icons.monetization_on,
-                    label: 'AUD',
+                    onTap: onCurrencyTap,
+                    iconReplacement: currency.symbolNative,
+                    label: currency.code,
                     isSmall: isShort,
                   ),
                 ),
@@ -160,7 +200,7 @@ class _RecordAmountState extends State<RecordAmount> {
             height: isShort ? 180 : 220,
             child: Stack(
               children: <Widget>[
-                Numpad(onTap: onNumberTap),
+                Numpad(onTap: onNumberTap, hasDecimalPoint: allowDecimals),
                 DividerGrid(
                   horizontalDividers: 3,
                   verticalDividers: 2,
@@ -177,33 +217,66 @@ class _RecordAmountState extends State<RecordAmount> {
 }
 
 class DisplayPart extends StatelessWidget {
-  const DisplayPart({
-    Key key,
-    @required this.appState,
-    this.onTap,
-    this.icon,
-    this.label,
-    this.isSmall,
-  }) : super(key: key);
+  const DisplayPart(
+      {Key key,
+      @required this.appState,
+      this.onTap,
+      this.icon,
+      this.label,
+      this.isSmall,
+      this.iconReplacement})
+      : super(key: key);
 
   final AppState appState;
   final Function onTap;
   final IconData icon;
   final String label;
   final bool isSmall;
+  final String iconReplacement;
 
   @override
   Widget build(BuildContext context) {
+    Widget textWidget = Container();
+    if (iconReplacement != null) {
+      textWidget = Container(
+        alignment: Alignment.center,
+        height: 28,
+        width: 28,
+        // padding: EdgeInsets.all(4),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(360),
+            color: appState.cols.content),
+        child: Center(
+          child: Text(
+            iconReplacement,
+            style: TextStyle(
+              color: appState.cols.background2,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Icon(
-              icon,
-              color: appState.cols.content,
-            ),
+            icon == null
+                ? textWidget
+                : Container(
+                    height: 28,
+                    width: 28,
+                    child: FittedBox(
+                      child: Icon(
+                        icon,
+                        color: appState.cols.content,
+                        size: 24,
+                      ),
+                    ),
+                  ),
             Text(
               label,
               style: TextStyle(

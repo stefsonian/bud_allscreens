@@ -1,5 +1,6 @@
 import 'package:eatsleeptravel/src/components/splitter.dart';
 import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/models/New_expense.dart';
 import 'package:eatsleeptravel/src/record/note_dialog.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
@@ -207,23 +208,41 @@ class RecordDetails extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: <Widget>[
+                  Text(
+                    newExpense.currency.symbolNative,
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 22,
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                  Text(
+                    newExpense.amountAsString,
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 15, 2, 0),
                 child: Text(
-                  '${newExpense.currencyId}  \$',
+                  '${newExpense.currency.code}',
                   style: TextStyle(
                     color: color,
                     fontSize: 18,
                   ),
                 ),
-              ),
-              Text(
-                newExpense.amountAsString,
-                style: TextStyle(
-                    color: color, fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ],
           ),

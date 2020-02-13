@@ -3,6 +3,7 @@ import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/home_state.dart';
+import 'package:eatsleeptravel/src/services/record_state.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
@@ -81,9 +82,36 @@ class SetDisplayCurrencyHeader extends StatelessWidget {
   }
 }
 
+class SetRecordCurrencyHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: appState.cols.content.withOpacity(0.4),
+          ),
+        ),
+      ),
+      height: 120,
+      child: DialogHeader(
+        mainHeader: 'Set expense currency',
+        subHeader: '',
+        color: appState.cols.content,
+      ),
+    );
+  }
+}
+
 class SelectCurrency extends StatefulWidget {
-  const SelectCurrency({Key key, this.initialCurrencyId}) : super(key: key);
+  const SelectCurrency(
+      {Key key, this.initialCurrencyId, this.stateToUpdate = 'home'})
+      : super(key: key);
   final String initialCurrencyId;
+  final String stateToUpdate; // which state to update of ('home', 'record')
 
   @override
   _SelectCurrencyState createState() => _SelectCurrencyState();
@@ -94,7 +122,8 @@ class _SelectCurrencyState extends State<SelectCurrency> {
   AppState appState;
   Records records;
   HomeState homeState;
-  // List<Currency> currencies = [];
+  RecordState recordState;
+  List<Currency> currencies = [];
   int selectedIndex = -1;
 
   @override
@@ -104,19 +133,51 @@ class _SelectCurrencyState extends State<SelectCurrency> {
     sessionData = Provider.of<SessionData>(context);
     records = Provider.of<Records>(context);
     homeState = Provider.of<HomeState>(context);
+    recordState = Provider.of<RecordState>(context);
     // records.currencies.addAll(records.currencies);
     // records.currencies.sort((a, b) => a.id.compareTo(b.id));
+    _initialiseCurrencies();
+  }
+
+  _initialiseCurrencies() {
+    if (currencies.isNotEmpty) return; // only run once
+    // throw away currencies with no exchange rate
+    var latestX = records.latestXrates();
+    currencies.addAll(records.currencies);
+    currencies.retainWhere((c) => latestX.containsKey(c.id));
+    // add recently used currencies. start list with usd and eur.
+    var recent = records.recentlyUsedCurrencies();
+    // var latestDisplayed = sessionData.user.displayCurrencies.values
+    //     .toList()
+    //     .map((cId) => records.getCurrency(cId))
+    //     .toList();
+    // latestDisplayed.removeWhere(
+    //     (c) => c.id == 'usd' || c.id == 'eur'); // avoid duplicates in recent
+    // var latestDisplayedIds = latestDisplayed.map((c) => c.id).toList();
+    // recent.removeWhere(
+    //     (c) => latestDisplayedIds.contains(c.id)); // avoid duplicates in recent
+    recent.removeWhere(
+        (c) => c.id == 'usd' || c.id == 'eur'); // avoid duplicates in recent
+    // recent.insertAll(0, latestDisplayed);
+    currencies.insertAll(0, recent);
+    currencies.insert(0, records.getCurrency('eur'));
+    currencies.insert(0, records.getCurrency('usd'));
+
+    // set starting selection
     if (selectedIndex == -1 &&
         widget.initialCurrencyId != null &&
         widget.initialCurrencyId.isNotEmpty) {
-      selectedIndex = records.currencies
-          .indexWhere((cur) => cur.id == widget.initialCurrencyId);
+      selectedIndex =
+          currencies.indexWhere((cur) => cur.id == widget.initialCurrencyId);
     }
   }
 
   _updateSelectedIndex(int index) {
     setState(() => selectedIndex = index);
-    homeState.currencyPickerValue = records.currencies[index].id;
+    if (widget.stateToUpdate == 'home')
+      homeState.currencyPickerValue = currencies[index].id;
+    if (widget.stateToUpdate == 'record')
+      recordState.currencyPickerValue = currencies[index].id;
   }
 
   @override
@@ -128,13 +189,13 @@ class _SelectCurrencyState extends State<SelectCurrency> {
             ? Colors.green.withOpacity(0.6)
             : Colors.transparent;
         return _buildCurrencyItem(
-          currency: records.currencies[index],
+          currency: currencies[index],
           color: color,
           onTap: () => _updateSelectedIndex(index),
         );
       },
       separatorBuilder: (BuildContext context, int index) => Divider(),
-      itemCount: records.currencies.length,
+      itemCount: currencies.length,
     );
   }
 
