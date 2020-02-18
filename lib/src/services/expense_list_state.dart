@@ -1,19 +1,54 @@
 import 'package:flutter/material.dart';
 
 class ExpenseListState with ChangeNotifier {
-  ExpenseListState();
+  // ExpenseListState({@required List<String> htags}) {
+  //   _hashtags = htags;
+  // }
 
-  double _dayBudget = 200;
-  double get dayBudget => _dayBudget;
-  set dayBudget(double dayBudget) {
-    _dayBudget = dayBudget;
+  List<String> _hashtags = [];
+  List<String> get hashtags => _hashtags;
+  set hashtags(List<String> hashtags) {
+    _hashtags = hashtags;
+    _hashtags.forEach((t) {
+      _filterHashtags.putIfAbsent(t, () => true);
+    });
     notifyListeners();
   }
 
-  double _daySpend = 140;
-  double get daySpend => _daySpend;
-  set daySpend(double daySpend) {
-    _daySpend = daySpend;
+  Future<void> setHashtags(List<String> htags) async {
+    return Future.delayed(Duration(milliseconds: 1), () => hashtags = htags);
+  }
+
+  DateTime _filterStartDate;
+  DateTime get filterStartDate => _filterStartDate;
+  set filterStartDate(DateTime filterStartDate) {
+    _filterStartDate = filterStartDate;
+    notifyListeners();
+  }
+
+  DateTime _filterEndDate;
+  DateTime get filterEndDate => _filterEndDate;
+  set filterEndDate(DateTime filterEndDate) {
+    _filterEndDate = filterEndDate;
+    notifyListeners();
+  }
+
+  List<String> _filterMainCats;
+  List<String> get filterMainCats => _filterMainCats;
+  set filterMainCats(List<String> filterMainCats) {
+    _filterMainCats = filterMainCats;
+    notifyListeners();
+  }
+
+  Map<String, bool> _filterHashtags = {};
+  Map<String, bool> get filterHashtags => _filterHashtags;
+  set filterHashtags(Map<String, bool> filterHashtags) {
+    _filterHashtags = filterHashtags;
+    notifyListeners();
+  }
+
+  void updateFilterHashtag(String hashtag, bool value) {
+    _filterHashtags[hashtag] = value;
     notifyListeners();
   }
 

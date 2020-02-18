@@ -1,18 +1,21 @@
 import 'dart:ui';
 
+import 'package:eatsleeptravel/src/services/expense_list_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FullModalOk extends ModalRoute<void> {
-  FullModalOk({
-    @required this.header,
-    @required this.body,
-    @required this.onOkTap,
-    @required this.buttonColor,
-  });
+  FullModalOk(
+      {@required this.header,
+      @required this.body,
+      @required this.onOkTap,
+      @required this.buttonColor,
+      this.parentContext});
   final Widget header;
   final Widget body;
   final Function onOkTap;
   final Color buttonColor;
+  final BuildContext parentContext;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 300);
@@ -31,6 +34,9 @@ class FullModalOk extends ModalRoute<void> {
 
   @override
   bool get maintainState => true;
+
+  // @override
+  // BuildContext get subtreeContext => parentContext;
 
   @override
   Widget buildPage(

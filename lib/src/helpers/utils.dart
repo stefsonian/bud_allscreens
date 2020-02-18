@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
+import 'package:eatsleeptravel/src/services/expense_list_state.dart';
 import 'package:eatsleeptravel/src/services/firestore_service.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
@@ -49,6 +50,7 @@ class Utils {
     records.currentTripId = sessionData.user.currentTrip;
     records.initialiseRecords();
     await records.completeIntialisation();
+
     completer.complete();
     print('all init is complete');
     return completer.future;

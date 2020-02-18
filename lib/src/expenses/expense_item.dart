@@ -14,7 +14,7 @@ class ExpenseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
-    return ContentBox(
+    return Container(
       padding: EdgeInsets.fromLTRB(0, 6, 12, 6),
       child: Row(
         children: <Widget>[
@@ -60,7 +60,7 @@ class ExpenseItem extends StatelessWidget {
                           color: appState.cols.content,
                           letterSpacing: 1.1,
                         ),
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
               ],

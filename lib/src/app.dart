@@ -3,6 +3,7 @@ import 'package:eatsleeptravel/src/navigation/bottom_nav.dart';
 import 'package:eatsleeptravel/src/navigation/bottom_nav_providers.dart';
 import 'package:eatsleeptravel/src/navigation/login_nav.dart';
 import 'package:eatsleeptravel/src/navigation/path_selector.dart';
+import 'package:eatsleeptravel/src/services/expense_list_state.dart';
 import 'package:eatsleeptravel/src/services/home_state.dart';
 import 'package:eatsleeptravel/src/services/record_state.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
@@ -40,6 +41,9 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<Records>.value(
           value: records,
+        ),
+        ChangeNotifierProvider<ExpenseListState>(
+          create: (_) => ExpenseListState(),
         ),
 // ChangeNotifierProxyProvider<SessionData, Records>(
 //   create: (_) => records,

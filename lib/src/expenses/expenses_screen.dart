@@ -1,4 +1,5 @@
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/expense_list_state.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +11,10 @@ class ExpensesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final records = Provider.of<Records>(context);
     final appState = Provider.of<AppState>(context);
+    final listState = Provider.of<ExpenseListState>(context);
     if (records.full.isEmpty) return buildExpensesRequired(appState);
-    return Container(
-      child: ExpensesList(),
-    );
+    listState.setHashtags(records.uniqueHashtags());
+    return ExpensesList();
   }
 
   Widget buildExpensesRequired(AppState appState) {

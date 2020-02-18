@@ -226,11 +226,8 @@ class Records with ChangeNotifier {
     return currencies[index];
   }
 
-  Currency someCurrency(String curId) {
-    Currency cur;
-    cur = currencies[5];
-    return cur;
-  }
+  List<String> get uniqueSubCategoryIds =>
+      _full.map((e) => e.subCategory.id).toSet().toList();
 
   Map<DateTime, List<Expense>> groupedByDay({
     DateTime start,

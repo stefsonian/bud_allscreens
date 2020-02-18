@@ -1,19 +1,64 @@
+import 'package:eatsleeptravel/src/components/dialog_header.dart';
+import 'package:eatsleeptravel/src/components/full_modal_ok.dart';
+import 'package:eatsleeptravel/src/expenses/expense_filters.dart';
 import 'package:eatsleeptravel/src/expenses/expense_item.dart';
-import 'package:eatsleeptravel/src/helpers/colors.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/expense_list_state.dart';
 import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:provider/provider.dart';
 
-class ExpensesList extends StatelessWidget {
+class ExpensesList extends StatefulWidget {
+  @override
+  _ExpensesListState createState() => _ExpensesListState();
+}
+
+class _ExpensesListState extends State<ExpensesList> {
+  Records records;
+  AppState appState;
+  ExpenseListState listState;
+
+  void didChangeDependencies() {
+    records = Provider.of<Records>(context);
+    appState = Provider.of<AppState>(context);
+    listState = Provider.of<ExpenseListState>(context);
+    super.didChangeDependencies();
+  }
+
+  onFilterTap() {
+    _submitFunction() {
+      Navigator.pop(context);
+    }
+
+    // Navigator.push(
+    //   context,
+    //   FullModalOk(
+    //     parentContext: context,
+    //     header: SetFiltersHeader(),
+    //     // body: ExpensesFilters(),
+    //     body: Text('hihuhihihihihi'),
+    //     buttonColor: appState.cols.content,
+    //     onOkTap: _submitFunction,
+    //   ),
+    // );
+
+    Navigator.of(context).push(
+      FullModalOk(
+        header: SetFiltersHeader(),
+        body: ExpensesFilters(),
+        buttonColor: appState.cols.content,
+        onOkTap: _submitFunction,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Records records = Provider.of<Records>(context);
-    final appState = Provider.of<AppState>(context);
-    return Container(
+    return SafeArea(
+      top: false,
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -27,7 +72,7 @@ class ExpensesList extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.filter_list),
                 tooltip: 'Filter',
-                onPressed: () {},
+                onPressed: onFilterTap,
               ),
               IconButton(
                 icon: Icon(Icons.more_horiz),
@@ -37,7 +82,7 @@ class ExpensesList extends StatelessWidget {
             ],
             floating: true,
             snap: true,
-            backgroundColor: appState.cols.background1,
+            backgroundColor: appState.cols.background2,
             expandedHeight: 70.0,
             // flexibleSpace: FlexibleSpaceBar(
             //   background: FlutterLogo(),
@@ -49,8 +94,8 @@ class ExpensesList extends StatelessWidget {
                 final keyString = Random().nextDouble().toString();
                 return Dismissible(
                   key: Key(keyString),
-                  background: dismissCopy(),
-                  secondaryBackground: dismissEditDelete(appState),
+                  background: dismissEdit(),
+                  secondaryBackground: dismissDelete(appState),
                   onDismissed: (direction) {
                     // setState(() {
                     //   items.removeAt(index);
@@ -58,7 +103,8 @@ class ExpensesList extends StatelessWidget {
                     Scaffold.of(context).showSnackBar(
                         SnackBar(content: Text("item dismissed")));
                   },
-                  child: expenseSliver(records.full[index]),
+                  child:
+                      expenseSliver(records.full[index], appState.cols.content),
                 );
               },
               childCount: records.full.length,
@@ -70,16 +116,20 @@ class ExpensesList extends StatelessWidget {
   }
 }
 
-Widget expenseSliver(Expense expense) {
+Widget expenseSliver(Expense expense, Color color) {
   final double rand = Random().nextDouble();
   expense.note = rand > 0.5 ? expense.note : null;
-  return Padding(
-    padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
+  return Container(
+    decoration: BoxDecoration(
+      border:
+          Border(bottom: BorderSide(width: 1, color: color.withOpacity(0.3))),
+    ),
+    padding: EdgeInsets.fromLTRB(4, 6, 4, 6),
     child: ExpenseItem(expense: expense),
   );
 }
 
-Widget dismissEditDelete(AppState appState) {
+Widget dismissDelete(AppState appState) {
   return Row(
     children: <Widget>[
       Expanded(
@@ -104,7 +154,7 @@ Widget dismissEditDelete(AppState appState) {
   );
 }
 
-Widget dismissCopy() {
+Widget dismissEdit() {
   return Row(
     children: <Widget>[
       Expanded(
@@ -116,7 +166,7 @@ Widget dismissCopy() {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'View day',
+              'Edit',
               style: TextStyle(
                 color: Colors.black87,
                 fontSize: 20,
@@ -127,4 +177,27 @@ Widget dismissCopy() {
       ),
     ],
   );
+}
+
+class SetFiltersHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: appState.cols.content.withOpacity(0.4),
+          ),
+        ),
+      ),
+      height: 80,
+      child: DialogHeader(
+        mainHeader: 'Filter expenses',
+        color: appState.cols.content,
+      ),
+    );
+  }
 }
