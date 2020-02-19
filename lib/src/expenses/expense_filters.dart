@@ -1,7 +1,5 @@
 import 'package:eatsleeptravel/src/services/app_state.dart';
 import 'package:eatsleeptravel/src/services/expense_list_state.dart';
-import 'package:eatsleeptravel/src/services/records.dart';
-import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,19 +7,30 @@ import 'package:provider/provider.dart';
 class ExpensesFilters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ExpandableTheme(
-      data: ExpandableThemeData(
-        iconColor: Colors.red,
-        animationDuration: const Duration(milliseconds: 500),
-        iconSize: 30,
-        tapHeaderToExpand: true,
-      ),
-      child: ExpandableNotifier(
-        child: ScrollOnExpand(
-          child: ListView(
-            children: <Widget>[
-              FilterHashtags(),
-            ],
+    final appState = Provider.of<AppState>(context);
+    final hashtagController = ExpandableController(initialExpanded: false);
+    final categoriesController = ExpandableController(initialExpanded: false);
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: ExpandableTheme(
+        data: ExpandableThemeData(
+          iconPadding: EdgeInsets.only(bottom: 3),
+          iconColor: appState.cols.content,
+          animationDuration: const Duration(milliseconds: 500),
+          iconSize: 30,
+          tapHeaderToExpand: true,
+          tapBodyToCollapse: false,
+          tapBodyToExpand: false,
+        ),
+        child: ExpandableNotifier(
+          child: ScrollOnExpand(
+            child: ListView(
+              children: <Widget>[
+                FilterHashtags(controller: hashtagController),
+                SizedBox(height: 30),
+                FilterMainCategories(controller: categoriesController),
+              ],
+            ),
           ),
         ),
       ),
@@ -30,20 +39,52 @@ class ExpensesFilters extends StatelessWidget {
 }
 
 class FilterHashtags extends StatelessWidget {
+  const FilterHashtags({Key key, this.controller}) : super(key: key);
+  final ExpandableController controller;
+
   @override
   Widget build(BuildContext context) {
     final listState = Provider.of<ExpenseListState>(context);
     return ExpandablePanel(
-      header: FilterHeader(label: 'Hashtags'),
+      controller: controller,
+      header: FilterHeader(label: 'Hashtags', key: UniqueKey()),
       collapsed: Container(),
       expanded: Column(
-        // shrinkWrap: true,
         children: listState.filterHashtags.entries
             .map((t) => FilterCheckBox(
                   label: t.key,
                   icon: Icons.label_outline,
                   id: t.key,
                   isChecked: t.value,
+                  onChanged: (newVal) =>
+                      listState.updateFilterHashtag(t.key, newVal),
+                ))
+            .toList(),
+      ),
+    );
+  }
+}
+
+class FilterMainCategories extends StatelessWidget {
+  const FilterMainCategories({Key key, this.controller}) : super(key: key);
+  final ExpandableController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final listState = Provider.of<ExpenseListState>(context);
+    return ExpandablePanel(
+      controller: controller,
+      header: FilterHeader(label: 'Categories', key: UniqueKey()),
+      collapsed: Container(),
+      expanded: Column(
+        children: listState.filterMainCategories.entries
+            .map((mc) => FilterCheckBox(
+                  label: mc.key.name,
+                  icon: mc.key.icon,
+                  id: mc.key.id,
+                  isChecked: mc.value,
+                  onChanged: (newVal) =>
+                      listState.updateFilterMainCategory(mc.key, newVal),
                 ))
             .toList(),
       ),
@@ -60,7 +101,6 @@ class FilterHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     return Container(
-      // padding: EdgeInsets.only(left: 12),
       alignment: Alignment.centerLeft,
       child: Text(
         label,
@@ -81,21 +121,18 @@ class FilterCheckBox extends StatelessWidget {
       this.label,
       this.icon,
       this.id,
+      this.onChanged,
       this.isGroupLeader = false})
       : super(key: key);
   final bool isChecked;
   final String label;
   final IconData icon;
   final String id;
+  final Function onChanged;
   final bool isGroupLeader;
-
-  onChanged(ExpenseListState listState, String id, bool newVal) {
-    listState.filterHashtags[id] = newVal;
-  }
 
   @override
   Widget build(BuildContext context) {
-    final listState = Provider.of<ExpenseListState>(context);
     final appState = Provider.of<AppState>(context);
     return Theme(
       data: ThemeData(
@@ -104,7 +141,7 @@ class FilterCheckBox extends StatelessWidget {
       child: CheckboxListTile(
         title: Text(label, style: TextStyle(color: appState.cols.content)),
         value: isChecked,
-        onChanged: (bool value) => listState.filterHashtags[id] = value,
+        onChanged: (bool value) => onChanged(value),
         checkColor: appState.cols.background2,
         activeColor: appState.cols.content,
         secondary: Icon(icon, color: appState.cols.content),

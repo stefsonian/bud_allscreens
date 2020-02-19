@@ -22,6 +22,7 @@ class Expense {
   String currencyId;
   double amount;
   String homeCurrency;
+  List<String> hashtags = [];
   Map<String, double> userRates = {};
   Map<String, double> xRates = {};
 
@@ -74,6 +75,7 @@ class Expense {
     paymentType = data['payment_type'] ?? '';
     tripId = data['trip_id'] ?? '';
     homeCurrency = data['home_currency'];
+    hashtags.addAll(tags);
   }
 
   Expense.fromNewExpense(NewExpense ne, Map<String, double> xrates, User user) {

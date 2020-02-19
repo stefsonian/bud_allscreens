@@ -1,8 +1,11 @@
 import 'package:eatsleeptravel/src/components/Ikon_button.dart';
 import 'package:eatsleeptravel/src/components/content_box.dart';
 import 'package:eatsleeptravel/src/helpers/colors.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
 import 'package:eatsleeptravel/src/services/app_state.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
 import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +17,8 @@ class ExpenseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
+    final records = Provider.of<Records>(context);
+    final sessionData = Provider.of<SessionData>(context);
     return Container(
       padding: EdgeInsets.fromLTRB(0, 6, 12, 6),
       child: Row(
@@ -51,13 +56,13 @@ class ExpenseItem extends StatelessWidget {
                 //   print('w2: ${constraints.maxWidth}');
                 //   return Container();
                 // }),
-                expense.note == null
+                (expense.note == null || expense.note.isEmpty)
                     ? Container()
                     : Text(
-                        "I'm just a little note but I'm very important. It's good I'm here",
+                        expense.note,
                         style: TextStyle(
                           fontSize: 13,
-                          color: appState.cols.content,
+                          color: appState.cols.content.withOpacity(0.7),
                           letterSpacing: 1.1,
                         ),
                         maxLines: 1,
@@ -66,16 +71,76 @@ class ExpenseItem extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            width: 90,
-            alignment: Alignment.centerRight,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              _buildAmountLocalCur(records, appState),
+              _buildAmountHomeCur(records, appState, sessionData),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAmountLocalCur(Records records, AppState appState) {
+    Currency currency = records.getCurrency(expense.currencyId);
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: 2),
             child: Text(
-              '\$${expense.amount.toStringAsFixed(2)}', //TODO: fix this.. it's the wrong info being retrieved
+              '${currency.code} ${currency.symbolNative}',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 10,
                 color: appState.cols.content,
-                fontWeight: FontWeight.bold,
               ),
+            ),
+          ),
+          Text(
+            Utils().formattedAmount(
+              amount: expense.amount,
+              // preferredDecimals: 2,
+            ),
+            style: TextStyle(
+              fontSize: 18,
+              color: appState.cols.content,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAmountHomeCur(
+      Records records, AppState appState, SessionData sessionData) {
+    Currency currency = records.getCurrency(sessionData.user.homeCurrency);
+    return Container(
+      padding: EdgeInsets.only(right: 1),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: 1),
+            child: Text(
+              '${currency.code} ${currency.symbolNative} ',
+              style: TextStyle(
+                fontSize: 8,
+                color: appState.cols.content.withOpacity(0.65),
+              ),
+            ),
+          ),
+          Text(
+            Utils().formattedAmount(
+              amount: expense.getAmount(currency.id),
+            ),
+            style: TextStyle(
+              fontSize: 12,
+              color: appState.cols.content.withOpacity(0.65),
+              // fontWeight: FontWeight.bold,
             ),
           ),
         ],

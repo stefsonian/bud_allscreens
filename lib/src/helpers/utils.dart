@@ -145,11 +145,11 @@ class Utils {
     return DateTime.fromMillisecondsSinceEpoch(t.millisecondsSinceEpoch);
   }
 
-  String formattedAmount(double amount) {
+  String formattedAmount({double amount, int preferredDecimals = 0}) {
     if (amount == null) return '0.0';
     String s = '';
     s = amount.toStringAsFixed(2);
-    if (amount >= 100) s = amount.toStringAsFixed(0);
+    if (amount >= 100) s = amount.toStringAsFixed(preferredDecimals);
     if (amount >= 10000) s = '${(amount / 1000).toStringAsFixed(1)}K';
     if (amount >= 100000) s = '${(amount / 1000).toStringAsFixed(0)}K';
     if (amount >= 1000000) s = '${(amount / 1000000).toStringAsFixed(2)}M';
@@ -157,7 +157,7 @@ class Utils {
   }
 
   String formattedCurrency(double amount, Currency currency) {
-    return '${currency.symbolNative} ${formattedAmount(amount)}';
+    return '${currency.symbolNative} ${formattedAmount(amount: amount)}';
   }
 
   void createTestRecords(

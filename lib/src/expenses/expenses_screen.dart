@@ -11,9 +11,7 @@ class ExpensesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final records = Provider.of<Records>(context);
     final appState = Provider.of<AppState>(context);
-    final listState = Provider.of<ExpenseListState>(context);
     if (records.full.isEmpty) return buildExpensesRequired(appState);
-    listState.setHashtags(records.uniqueHashtags());
     return ExpensesList();
   }
 

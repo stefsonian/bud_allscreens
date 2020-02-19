@@ -36,6 +36,7 @@ dependencies:
   geolocator: ^5.1.5
   page_transition: ^1.1.5
   expandable: ^4.1.2
+  liquid_pull_to_refresh: ^1.1.1
   # Add the dependency for the Firebase and Firestore
   # firebase_core: ^0.4.3+2
   # firebase_analytics: ^5.0.9

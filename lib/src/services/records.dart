@@ -201,7 +201,7 @@ class Records with ChangeNotifier {
   List<String> uniqueHashtags() {
     List<String> result = [];
     full.forEach((e) {
-      e.tags.forEach((t) => result.add(t));
+      e.hashtags.forEach((t) => result.add(t));
     });
     return result.toSet().toList();
   }

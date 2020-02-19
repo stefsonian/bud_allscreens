@@ -9,11 +9,13 @@ class FullModalOk extends ModalRoute<void> {
       {@required this.header,
       @required this.body,
       @required this.onOkTap,
+      this.onCancelTap,
       @required this.buttonColor,
       this.parentContext});
   final Widget header;
   final Widget body;
   final Function onOkTap;
+  final Function onCancelTap;
   final Color buttonColor;
   final BuildContext parentContext;
 
@@ -37,6 +39,11 @@ class FullModalOk extends ModalRoute<void> {
 
   // @override
   // BuildContext get subtreeContext => parentContext;
+
+  _onCancelTap(BuildContext context) {
+    if (onCancelTap == null) Navigator.pop(context);
+    if (onCancelTap != null) onCancelTap();
+  }
 
   @override
   Widget buildPage(
@@ -84,7 +91,7 @@ class FullModalOk extends ModalRoute<void> {
         children: <Widget>[
           Expanded(
             child: FlatButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => _onCancelTap(context),
               child: Icon(Icons.close, color: buttonColor, size: 34),
               // child: Text('Cancel',
               //     style: _textStyle.copyWith(color: buttonColor)),

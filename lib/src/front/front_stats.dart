@@ -80,7 +80,7 @@ class _FrontStatsState extends State<FrontStats> {
       double dayTotal =
           expenses.fold(0.0, (a, b) => a + b.getAmount(budgetCurrency.id));
       chartBars.add(ChartBarVertical(
-        value: Utils().formattedAmount(dayTotal),
+        value: Utils().formattedAmount(amount: dayTotal),
         exceedsChartMax: dayTotal > chartMax,
         scaledBarHeight: (min(dayTotal, chartMax) / chartMax),
         barColor: dayTotal > maxAmount
