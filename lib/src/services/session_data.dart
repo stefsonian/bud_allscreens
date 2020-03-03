@@ -34,6 +34,7 @@ class SessionData with ChangeNotifier {
   bool isInitUserData = false;
   bool isInitTrips = false;
   bool isInitUserCurrentTrip = false;
+  DateTime userDataRefreshed = DateTime.now();
 
   bool get isInitialisationComplete {
     return isInitMaincats &&
@@ -124,6 +125,7 @@ class SessionData with ChangeNotifier {
         print("User's current trip changed to: ${user.currentTrip}");
         notifyListeners();
       }
+      userDataRefreshed = DateTime.now();
       if (!isInitUserData) isInitUserData = true;
     });
   }

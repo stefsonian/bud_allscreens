@@ -6,11 +6,6 @@ import 'package:eatsleeptravel/src/helpers/utils.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Expense.dart';
-import 'package:eatsleeptravel/src/models/Frozen_amount.dart';
-import 'package:eatsleeptravel/src/models/Location.dart';
-import 'package:eatsleeptravel/src/models/User.dart';
-import 'package:eatsleeptravel/src/services/firestore_service.dart';
-import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jiffy/jiffy.dart';
@@ -26,6 +21,7 @@ class Records with ChangeNotifier {
   bool isInitCurrencies = false;
   bool isInitExchangeRates = false;
   bool isInitFull = false;
+  DateTime fullRefreshed = DateTime.now();
 
   bool get isInitialisationComplete =>
       isInitCurrencies && isInitExchangeRates && isInitFull;
@@ -102,6 +98,7 @@ class Records with ChangeNotifier {
         .listen((data) {
       List<Expense> newExpenses = [];
       data.documents.forEach((doc) {
+        // TODO: validate record before proceeding
         final data = doc.data;
         final Timestamp timestamp = doc.data['creation_dt'];
         final timestampDT = timestamp.toDate();
@@ -110,17 +107,20 @@ class Records with ChangeNotifier {
         Map<String, double> usdRates = xrates[xrateDate];
         MainCategory mc = maincats[data['main_category']];
         SubCategory sc = subcats[data['sub_category']];
+        // Currency cur = getCurrency(data['currency'].toString().toLowerCase());
         newExpenses.add(Expense.fromFirestoreData(
           expenseId: doc.documentID,
           data: data,
           mainCat: mc,
           subCat: sc,
           usdRates: usdRates,
+          // cur: cur,
         ));
       });
       _full = newExpenses;
       notifyListeners();
       if (!isInitFull) isInitFull = true;
+      fullRefreshed = DateTime.now();
     }).onError((err) => print(err.toString()));
   }
 
@@ -140,6 +140,7 @@ class Records with ChangeNotifier {
         t.cancel();
       }
     });
+    fullRefreshed = DateTime.now();
     return completer.future;
   }
 

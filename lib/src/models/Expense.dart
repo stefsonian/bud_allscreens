@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eatsleeptravel/src/helpers/utils.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
 import 'package:eatsleeptravel/src/models/Location.dart';
 import 'package:eatsleeptravel/src/models/Category.dart';
 import 'package:eatsleeptravel/src/models/New_expense.dart';
@@ -20,6 +21,7 @@ class Expense {
   String tripId = '';
   String id;
   String currencyId;
+  Currency currency;
   double amount;
   String homeCurrency;
   List<String> hashtags = [];
@@ -33,6 +35,7 @@ class Expense {
       Map<String, dynamic> data,
       MainCategory mainCat,
       SubCategory subCat,
+      Currency cur,
       Map<String, double> usdRates}) {
     Timestamp dataCreationDT = data['creation_dt'] ?? null;
     Timestamp dataExpenseDT = data['expense_dt'] ?? null;
@@ -59,6 +62,7 @@ class Expense {
     }
 
     currencyId = data['currency'] ?? null;
+    currency = cur ?? null;
 
     var dataAmount = data['amount'] ?? 0;
     amount = double.tryParse(dataAmount.toString());

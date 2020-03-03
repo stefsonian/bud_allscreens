@@ -1,24 +1,71 @@
 import 'dart:math';
-
-import 'package:eatsleeptravel/src/components/Ikon_button.dart';
-import 'package:eatsleeptravel/src/components/content_box.dart';
 import 'package:eatsleeptravel/src/day/day_box.dart';
+import 'package:eatsleeptravel/src/helpers/utils.dart';
+import 'package:eatsleeptravel/src/models/Currency.dart';
+import 'package:eatsleeptravel/src/models/Expense.dart';
+import 'package:eatsleeptravel/src/services/records.dart';
+import 'package:eatsleeptravel/src/services/session_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class ExpenseData {
+  double amountInHome = 0.0;
+  Currency homeCurrency;
+  List<Expense> expenses;
+
+  ExpenseData({this.expenses, this.homeCurrency}) {
+    expenses.forEach((e) {
+      amountInHome += e.getAmount(homeCurrency.id);
+    });
+  }
+}
 
 class DayItem extends StatelessWidget {
   const DayItem(
-      {Key key, this.itemHeight, this.color, this.altColor, this.maxWidth})
+      {Key key,
+      this.color,
+      this.altColor,
+      this.maxWidth,
+      this.date,
+      this.homeCurrency,
+      this.expenses})
       : super(key: key);
-  final double itemHeight;
   final Color color;
   final Color altColor;
   final double maxWidth;
+  final DateTime date;
+  final Currency homeCurrency;
+  final List<Expense> expenses;
+
+  // Map<String, ExpenseData> getData(Records records) {
+  //   final hc = homeCurrency;
+  //   Map<String, ExpenseData> result = {};
+  //   var bf = expenses.where((e) => e.subCategory.id == 'breakfast').toList();
+  //   result['breakfast'] = ExpenseData(expenses: bf, homeCurrency: hc);
+  //   var lunch = expenses.where((e) => e.subCategory.id == 'lunch').toList();
+  //   result['lunch'] = ExpenseData(expenses: lunch, homeCurrency: hc);
+  //   var dinner = expenses.where((e) => e.subCategory.id == 'dinner').toList();
+  //   result['dinner'] = ExpenseData(expenses: dinner, homeCurrency: hc);
+  //   var explore = expenses.where((e) => e.subCategory.id == 'explore').toList();
+  //   result['explore'] = ExpenseData(expenses: explore, homeCurrency: hc);
+  //   var sleep = expenses.where((e) => e.subCategory.id == 'sleep').toList();
+  //   result['sleep'] = ExpenseData(expenses: sleep, homeCurrency: hc);
+  //   var other = expenses.where((e) => e.mainCategory.id == 'other').toList();
+  //   result['other'] = ExpenseData(expenses: other, homeCurrency: hc);
+  //   return result;
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final records = Provider.of<Records>(context);
+    final totalAmount =
+        expenses.fold(0.0, (a, b) => a + b.getAmount(homeCurrency.id));
+    // final data = getData(records);
+
     return Container(
       // padding: EdgeInsets.only(top: topPadding),
-      height: itemHeight,
+      // height: itemHeight,
+      height: 650,
       width: maxWidth,
       decoration: BoxDecoration(
         color: altColor,
@@ -33,7 +80,7 @@ class DayItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 _dateBox(color, altColor),
-                _totalBox(color, altColor),
+                _totalBox(color, altColor, totalAmount, homeCurrency),
               ],
             ),
             Expanded(
@@ -41,20 +88,51 @@ class DayItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _expenseEntry(altColor, color, Icons.camera, 'Breakfast',
-                      '\$18.00', "I'm just a little note"),
-                  _expenseEntry(altColor, color, Icons.camera, 'Lunch', '', ""),
-                  _expenseEntry(altColor, color, Icons.camera, 'Dinner',
-                      '\$50.00', "I'm just a little note"),
                   _expenseEntry(
-                      altColor,
-                      color,
-                      Icons.camera,
-                      'Sleep',
-                      '\$48.00',
-                      "I'm just a little note - and this is what happens when I'm a lot bigger than the other little notes"),
-                  _expenseEntry(altColor, color, Icons.camera, 'Other',
-                      '\$37.00', "Train 12 | Bus 4 | Tour 21"),
+                    color: altColor,
+                    btnColor: color,
+                    label: 'Eat',
+                    icon: Icons.restaurant,
+                    exps: expenses
+                        .where((e) => e.mainCategory.id == 'eat')
+                        .toList(),
+                  ),
+                  _expenseEntry(
+                    color: altColor,
+                    btnColor: color,
+                    label: 'Sleep',
+                    icon: Icons.hotel,
+                    exps: expenses
+                        .where((e) => e.mainCategory.id == 'sleep')
+                        .toList(),
+                  ),
+                  _expenseEntry(
+                    color: altColor,
+                    btnColor: color,
+                    label: 'Travel',
+                    icon: Icons.local_dining,
+                    exps: expenses
+                        .where((e) => e.mainCategory.id == 'travel')
+                        .toList(),
+                  ),
+                  _expenseEntry(
+                    color: altColor,
+                    btnColor: color,
+                    label: 'Explore',
+                    icon: Icons.camera_alt,
+                    exps: expenses
+                        .where((e) => e.mainCategory.id == 'explore')
+                        .toList(),
+                  ),
+                  _expenseEntry(
+                    color: altColor,
+                    btnColor: color,
+                    label: 'Other',
+                    icon: Icons.scatter_plot,
+                    exps: expenses
+                        .where((e) => e.mainCategory.id == 'other')
+                        .toList(),
+                  ),
                   SizedBox(height: 40),
                 ],
               ),
@@ -65,73 +143,79 @@ class DayItem extends StatelessWidget {
     );
   }
 
-  Widget _expenseEntry(Color color, Color btnColor, IconData icon, String label,
-      String amount, String note) {
-    String rdm = Random().nextDouble().toString();
-    var heroString = 'add item ($rdm)';
+  Widget _expenseEntry({
+    Color color,
+    Color btnColor,
+    String label,
+    IconData icon,
+    List<Expense> exps,
+  }) {
+    double totalAmount =
+        exps.fold(0.0, (a, b) => a + b.getAmount(homeCurrency.id));
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      padding: EdgeInsets.symmetric(horizontal: 14),
+      child: Column(
         children: <Widget>[
-          Icon(icon, color: color, size: 44),
-          SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // LayoutBuilder(builder: (context, constraints) {
-                //   print('h2: ${constraints.maxHeight}');
-                //   print('w2: ${constraints.maxWidth}');
-                //   return Container();
-                // }),
-                Text(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Icon(icon, color: color, size: 34),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
                   label,
                   style: TextStyle(
                     fontSize: 22,
                     color: color,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 2),
-                  child: note == ""
-                      ? Container()
-                      : Text(
-                          note,
-                          style: TextStyle(
-                              fontSize: 14, color: color.withOpacity(0.7)),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
+              ),
+              Container(
+                // width: 90,
+                alignment: Alignment.centerRight,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Text(
+                        '${homeCurrency.symbolNative} ',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: color,
+                          // fontWeight: FontWeight.bold,
                         ),
-                ),
-              ],
-            ),
-          ),
-          amount == ""
-              ? Container(
-                  width: 90,
-                  alignment: Alignment.center,
-                  constraints: BoxConstraints.tightFor(width: 42, height: 42),
-                  child: FloatingActionButton(
-                    heroTag: heroString,
-                    child: Icon(Icons.add),
-                    backgroundColor: color,
-                    foregroundColor: btnColor,
-                    onPressed: () {},
-                  ),
-                )
-              : Container(
-                  width: 90,
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    amount,
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: color,
+                      ),
                     ),
-                  ),
+                    Text(
+                      Utils().formattedAmount(
+                          amount: totalAmount, preferredDecimals: 2),
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: color,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+            ],
+          ),
+          SizedBox(height: 7),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Wrap(
+                  alignment: WrapAlignment.start,
+                  runSpacing: 8,
+                  spacing: 12,
+                  children:
+                      exps.map((e) => expensePill(color, btnColor, e)).toList(),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -152,16 +236,19 @@ class DayItem extends StatelessWidget {
         child: Text(
           'Fri 27 Aug 19',
           style: TextStyle(
-              fontSize: 22,
-              letterSpacing: 1.1,
-              wordSpacing: 1.5,
-              color: textColor),
+            fontSize: 22,
+            letterSpacing: 1.1,
+            wordSpacing: 1.5,
+            color: textColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
   }
 
-  Widget _totalBox(Color textColor, Color backColor) {
+  Widget _totalBox(
+      Color textColor, Color backColor, double amount, Currency homeCurrency) {
     return FittedBox(
       fit: BoxFit.contain,
       child: Container(
@@ -173,14 +260,83 @@ class DayItem extends StatelessWidget {
               bottomLeft: Radius.circular(100),
             ),
             color: backColor),
-        child: Text(
-          '\$175.50',
-          style: TextStyle(
-              fontSize: 22,
-              letterSpacing: 1.1,
-              wordSpacing: 1.5,
-              color: textColor),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                '${homeCurrency.code} ${homeCurrency.symbolNative} ',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: color,
+                  // fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Text(
+              Utils().formattedAmount(amount: amount, preferredDecimals: 2),
+              style: TextStyle(
+                fontSize: 22,
+                color: color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget expensePill(Color color1, Color color2, Expense exp) {
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            height: 24,
+            width: 28,
+            padding: EdgeInsets.fromLTRB(7, 3, 4, 3),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(90),
+                bottomLeft: Radius.circular(90),
+              ),
+              color: color1,
+              border: Border.all(width: 1, color: color1),
+            ),
+            // child: Text(
+            //   exp.subCategory.name,
+            //   style: TextStyle(
+            //     color: color2,
+            //     fontSize: 10,
+            //   ),
+            // ),
+            child: FittedBox(child: Icon(exp.subCategory.icon, color: color2)),
+          ),
+          Container(
+            height: 24,
+            width: 70,
+            padding: EdgeInsets.fromLTRB(6, 5, 6, 4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(90),
+                bottomRight: Radius.circular(90),
+              ),
+              color: color2,
+              border: Border.all(width: 1, color: color1),
+            ),
+            child: Center(
+              child: Text(
+                '${exp.currency.code} ${exp.getAmountString(exp.currencyId)}',
+                style: TextStyle(
+                  color: color1,
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

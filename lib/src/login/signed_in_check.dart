@@ -34,7 +34,7 @@ class _SignedInCheckState extends State<SignedInCheck> {
 
   _attemptCurrentUserSignIn(BuildContext context) async {
     setState(() => signInWasAttempted = true);
-    // await _fireAuth.signOut();
+    await _fireAuth.signOut();
     var currentUser = await _fireAuth.currentUser();
     if (currentUser != null) {
       // sessionData.initialiseUserFromFirebaseUser(currentUser);
